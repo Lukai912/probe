@@ -5,6 +5,8 @@ import com.csmijo.probbugtags.bean.MyMessage;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.RequestBody;
@@ -30,8 +32,8 @@ public class RetrofitClient {
     public static Retrofit retrofit() {
         if (mRetrofit == null) {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                 /*   .readTimeout(, TimeUnit.SECONDS)
-                    .connectTimeout(,TimeUnit.SECONDS)*/
+                    .readTimeout(15, TimeUnit.SECONDS)
+                    .connectTimeout(15,TimeUnit.SECONDS)
                     .retryOnConnectionFailure(false)
                     .build();
 
