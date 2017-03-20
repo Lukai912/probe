@@ -63,9 +63,5 @@ public class Constants {
     public static boolean isOpenWindow = false;
 
     //Server URL prefix
-    //for debug
-   // public static String urlPrefix = "http://10.16.12.45/tanzhen_client/";
     public static String urlPrefix = "http://211.151.122.244/";
-    //for release
-//    public static String urlPrefix = "http://211.151.122.244:80/";
 }

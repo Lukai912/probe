@@ -58,7 +58,7 @@ public final class LeakCanary {
                 application, listenerServiceClass);
         RefWatcher refWatcher = androidWatcher(application, heapDumpListener,
                 excludedRefs);
-        ActivityRefWatcher.installOnIcsPlus(application, refWatcher);
+        // ActivityRefWatcher.installOnIcsPlus(application, refWatcher);
         return refWatcher;
     }
 

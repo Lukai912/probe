@@ -18,13 +18,16 @@ package com.squareup.leakcanary;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
+import android.os.Build;
 import android.os.Bundle;
+
+import com.csmijo.probbugtags.BugTagAgent;
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static com.squareup.leakcanary.Preconditions.checkNotNull;
 
-@TargetApi(ICE_CREAM_SANDWICH)
+@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public final class ActivityRefWatcher {
 
     private final Application application;
@@ -42,10 +45,12 @@ public final class ActivityRefWatcher {
 
         @Override
         public void onActivityResumed(Activity activity) {
+            BugTagAgent.onResume(activity);
         }
 
         @Override
         public void onActivityPaused(Activity activity) {
+            BugTagAgent.onPause(activity);
         }
 
         @Override
@@ -87,6 +92,7 @@ public final class ActivityRefWatcher {
     void onActivityDestroyed(Activity activity) {
         refWatcher.watch(activity);
     }
+
 
     public void watchActivities() {
         // Make sure you don't get installed twice.

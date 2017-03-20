@@ -422,7 +422,7 @@ public class DeviceInfo {
             availableBlocks = statFs.getAvailableBlocks();
         }
 
-        return availableBlocks * blockSize/ 1024 / 1024;
+        return availableBlocks * blockSize / 1024 / 1024;
     }
 
 
@@ -448,7 +448,7 @@ public class DeviceInfo {
             totalBlocks = statFs.getBlockCount();
         }
 
-        return totalBlocks * blockSize/ 1024 / 1024;
+        return totalBlocks * blockSize / 1024 / 1024;
     }
 
 
@@ -588,16 +588,13 @@ public class DeviceInfo {
      */
     @Nullable
     public static Boolean isCharging(Context appContext) {
-        try {
-            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-            Intent batteryStatus = appContext.registerReceiver(null, ifilter);
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = appContext.registerReceiver(null, ifilter);
 
-            int status = batteryStatus.getIntExtra("status", -1);
-            return (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL);
-        } catch (Exception e) {
-            Log.w(TAG, "Could not get charging status");
-        }
-        return null;
+        int status = batteryStatus.getIntExtra("status", -1);
+        return (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL);
+
+
     }
 
     /**

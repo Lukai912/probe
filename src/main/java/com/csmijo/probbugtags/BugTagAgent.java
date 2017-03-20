@@ -41,8 +41,6 @@ import java.io.FileFilter;
 import java.lang.ref.WeakReference;
 
 import static android.content.ContentValues.TAG;
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 
 
 public class BugTagAgent {
@@ -112,7 +110,7 @@ public class BugTagAgent {
         BugTagAgent.handler.post(new Runnable() {
             @Override
             public void run() {
-                if (existsFiles.length >= 3) {
+                if (existsFiles!=null && existsFiles.length >= 3) {
                     //AlertDialog提示
                     AlertDialog.Builder builder = new AlertDialog.Builder(ApplicationInit.getCurrentActivity());
                     builder.setMessage("存在多个dump文件，请打开wifi并重启App完成上传，否则会删除文件！是否上传？");
@@ -197,9 +195,9 @@ public class BugTagAgent {
 
                 Activity activity = wActivity.get();
                 ApplicationInit.clearReferences(activity);
-                if (SDK_INT < ICE_CREAM_SANDWICH) {
+               /* if (SDK_INT < ICE_CREAM_SANDWICH) {
                     ApplicationInit.watch(activity.getApplicationContext());
-                }
+                }*/
             }
         };
         handler.post(runnable);

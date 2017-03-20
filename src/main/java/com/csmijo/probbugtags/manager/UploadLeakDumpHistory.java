@@ -5,13 +5,10 @@ import android.content.Intent;
 
 import com.csmijo.probbugtags.service.UploadLeakDumpService;
 import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.ZipCompress;
 import com.squareup.leakcanary.internal.LeakCanaryInternals;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by chengqianqian-xy on 2016/8/29.
@@ -38,38 +35,20 @@ public class UploadLeakDumpHistory extends Thread {
                     }
                 });
 
-       /* final File[] existsZipFiles = leakCanaryDirectory
-                .listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File file) {
-                        return !file.isDirectory()
-                                && (file.getName().endsWith(".zip"));
-                    }
-                });
 
-        final File[] existsHprofFiles = leakCanaryDirectory
-                .listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File file) {
-                        return !file.isDirectory()
-                                && (file.getName().endsWith(".hprof"));
-                    }
-                });
-
-        // zip和hprof文件去重
-        List<File> existsFiles = removeDupli(existsZipFiles, existsHprofFiles);*/
-
-        for (final File file : existsFiles) {
-            Logger.i(TAG, "exist file :" + file.getName());
-            Intent intent = new Intent();
-            intent.putExtra("dumpFilePath", file.getAbsolutePath());
-            intent.setClass(this.mContext, UploadLeakDumpService.class);
-            this.mContext.startService(intent);
+        if (existsFiles != null && existsFiles.length > 0) {
+            for (final File file : existsFiles) {
+                Logger.i(TAG, "exist file :" + file.getName());
+                Intent intent = new Intent();
+                intent.putExtra("dumpFilePath", file.getAbsolutePath());
+                intent.setClass(this.mContext, UploadLeakDumpService.class);
+                this.mContext.startService(intent);
+            }
         }
     }
 
 
-    private List<File> removeDupli(File[] existsZipFiles, File[] existsHprofFiles) {
+    /*private List<File> removeDupli(File[] existsZipFiles, File[] existsHprofFiles) {
         // zip和hprof文件去重
         List<File> existsFiles = new ArrayList<>();
         for (int i = 0; i < existsZipFiles.length; i++) {
@@ -118,5 +97,5 @@ public class UploadLeakDumpHistory extends Thread {
         String fileNameNoSuffix = file.getName().substring(0,
                 index);
         return fileNameNoSuffix;
-    }
+    }*/
 }
