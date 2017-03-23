@@ -37,6 +37,9 @@ public class SaveInfo extends Thread {
         JSONObject existObject = null;
 
         File file = new File(filePath);
+        FileInputStream fin = null;
+        FileOutputStream fout = null;
+        BufferedReader reader = null;
         try {
 
             if (file.exists()) {
@@ -52,16 +55,15 @@ public class SaveInfo extends Thread {
                 file.createNewFile();
             }
 
-            FileInputStream fin = new FileInputStream(filePath);
+            fin = new FileInputStream(filePath);
             StringBuffer sb = new StringBuffer();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fin));
-            String line = new String();
+            reader = new BufferedReader(new InputStreamReader(fin));
+            String line = "";
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
             }
 
-            fin.close();
 
             if (sb.length() > 0) {
                 //修改已有文件
@@ -79,10 +81,9 @@ public class SaveInfo extends Thread {
                     }
                 }
 
-                FileOutputStream fileOutputStream = new FileOutputStream(filePath, false);
-                fileOutputStream.write(existObject.toString().getBytes());
-                fileOutputStream.flush();
-                fileOutputStream.close();
+                fout = new FileOutputStream(filePath, false);
+                fout.write(existObject.toString().getBytes());
+                fout.flush();
                 Logger.i(TAG, "save exist info finished, filePath = " + filePath);
             } else {
                 //存新文件
@@ -95,10 +96,9 @@ public class SaveInfo extends Thread {
                 }
                 jsonObject.put("appkey", AppInfo.getAppKey());
 
-                FileOutputStream fileOutputStream = new FileOutputStream(filePath, false);
-                fileOutputStream.write(jsonObject.toString().getBytes());
-                fileOutputStream.flush();
-                fileOutputStream.close();
+                fout = new FileOutputStream(filePath, false);
+                fout.write(jsonObject.toString().getBytes());
+                fout.flush();
                 Logger.i(TAG, "save info finished, filePath = " + filePath);
             }
 
@@ -106,6 +106,22 @@ public class SaveInfo extends Thread {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+
+                if (fin != null) {
+                    fin.close();
+                }
+                if (fout != null) {
+                    fout.close();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

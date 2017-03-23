@@ -185,8 +185,10 @@ public class GetCpu {
 			BufferedReader bufferReader = new BufferedReader(fr);
 			String line = bufferReader.readLine();
 			bufferReader.close();
-			String[] array = line.split(":\\s+", 2);
-			return array[1];
+			if(line!=null) {
+				String[] array = line.split(":\\s+", 2);
+				return array[1];
+			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

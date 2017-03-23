@@ -2,11 +2,11 @@ package com.csmijo.probbugtags.collector;
 
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.internal.util.Predicate;
 import com.csmijo.probbugtags.utils.Constants;
 import com.csmijo.probbugtags.utils.IOUtils;
+import com.csmijo.probbugtags.utils.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class LogCatCollector {
             final Process process = Runtime.getRuntime().exec(commandLine.toArray(new
                     String[commandLine.size()]));
 
-            Log.d(TAG, "collectLogCat: "+ TextUtils.join(" ",commandLine.toArray(new String[commandLine.size()])));
+            Logger.d(TAG, "collectLogCat: "+ TextUtils.join(" ",commandLine.toArray(new String[commandLine.size()])));
             //Dump stderr to null
             new Thread(new Runnable() {
                 @Override

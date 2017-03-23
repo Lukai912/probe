@@ -51,7 +51,7 @@ public class UploadHistoryLog extends Thread {
 
     private void uploadCacheLog(String filePath) {
         String content = readFile(filePath);
-        if(!TextUtils.isEmpty(content)){
+        if (!TextUtils.isEmpty(content)) {
             RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
             Call<ResponseBody> call = apiStores.uploadCacheLog(content);
             call.enqueue(getCallBack(filePath));
@@ -68,8 +68,8 @@ public class UploadHistoryLog extends Thread {
     }
 
     private String readFile(String path) {
-        File file1;
-        FileInputStream in;
+        File file1 = null;
+        FileInputStream in = null;
         try {
             file1 = new File(path);
             if (!file1.exists()) {
@@ -88,10 +88,18 @@ public class UploadHistoryLog extends Thread {
         } catch (Exception e) {
             Logger.e(TAG, e);
             return null;
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private Callback<ResponseBody> getCallBack(final String filePath){
+    private Callback<ResponseBody> getCallBack(final String filePath) {
         return new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -116,7 +124,7 @@ public class UploadHistoryLog extends Thread {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     Logger.e(TAG, "upload filePath info fail");
                 }
             }

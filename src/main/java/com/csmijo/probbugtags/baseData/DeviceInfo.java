@@ -38,7 +38,6 @@ import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.csmijo.probbugtags.utils.CommonUtil;
@@ -466,9 +465,9 @@ public class DeviceInfo {
 
             return memoryInfo.lowMemory;
         } catch (Exception e) {
-            Log.e(TAG, "Could not check lowMemory status");
+            Logger.e(TAG, "Could not check lowMemory status");
         }
-        return null;
+        return false;
     }
 
 
@@ -503,7 +502,7 @@ public class DeviceInfo {
                 }
             }
         } catch (Exception e) {
-            return null;
+            return false;
         }
         return false;
     }
@@ -577,7 +576,7 @@ public class DeviceInfo {
 
             return batteryStatus.getIntExtra("level", -1) / (float) batteryStatus.getIntExtra("scale", -1);
         } catch (Exception e) {
-            Log.w(TAG, "Could not get batteryLevel");
+            Logger.w(TAG, "Could not get batteryLevel");
         }
         return null;
     }
@@ -595,7 +594,7 @@ public class DeviceInfo {
             int status = batteryStatus.getIntExtra("status", -1);
             return (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL);
         } catch (Exception e) {
-            Log.w(TAG, "Could not get charging status");
+            Logger.w(TAG, "Could not get charging status");
         }
         return null;
     }

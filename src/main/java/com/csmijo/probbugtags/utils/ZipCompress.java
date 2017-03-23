@@ -52,22 +52,16 @@ public class ZipCompress {
             e.printStackTrace();
             return false;
         } finally {
-            if (zos != null) {
-                try {
+            try {
+                if (zos != null) {
                     zos.closeEntry();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
-            }
-
-            if (bin != null) {
-                try {
+                if (bin != null) {
                     bin.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
-
     }
 }
