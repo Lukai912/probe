@@ -17,6 +17,7 @@ package com.squareup.leakcanary;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
@@ -88,7 +89,7 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
                                         AnalysisResult result) {
         Logger.i(TAG, "DisplayLeakService:afterDefaulthandling ");
         if (!result.leakFound || result.excludedLeak) {
-            Logger.i(TAG,"DisplayLeakService: result.leakFound = "+result.leakFound+" ;result.excludedLeak = "+result.excludedLeak);
+            Logger.i(TAG, "DisplayLeakService: result.leakFound = " + result.leakFound + " ;result.excludedLeak = " + result.excludedLeak);
             return;
         }
 
@@ -109,7 +110,10 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
             dumpFile.delete();
             filePath = zipFilePath;
         } else {
-            Toast.makeText(ApplicationInit.getCurrentActivity(), "dump file zip fail!", Toast.LENGTH_SHORT).show();
+            Context context = ApplicationInit.getCurrentActivity();
+            if (null != context) {
+                Toast.makeText(context, "dump file zip fail!", Toast.LENGTH_SHORT).show();
+            }
         }
 
 
@@ -121,7 +125,10 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
             intent.setClass(this.getApplicationContext(), UploadLeakDumpService.class);
             this.startService(intent);
         } else {
-            Toast.makeText(ApplicationInit.getCurrentActivity(), "dump file is too large!", Toast.LENGTH_SHORT).show();
+            Context context = ApplicationInit.getCurrentActivity();
+            if (null != context) {
+                Toast.makeText(context, "dump file is too large!", Toast.LENGTH_SHORT).show();
+            }
             file.delete();
         }
 

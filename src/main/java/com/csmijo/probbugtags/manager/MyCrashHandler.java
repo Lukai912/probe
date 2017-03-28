@@ -14,6 +14,7 @@
 
 package com.csmijo.probbugtags.manager;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.csmijo.probbugtags.ApplicationInit;
@@ -66,9 +67,10 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
     public void uncaughtException(Thread thread, Throwable ex) {
 
         if (!handleException(thread, ex) && this.defaultExceptionHandler != null) {
+            //如果自己没处理交给系统处理
             this.defaultExceptionHandler.uncaughtException(thread, ex);
         } else {
-            // exit app
+            // 自己处理，exit app
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(10);
         }
@@ -143,7 +145,12 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
 
         errorObject.put("stacktrace", errorInfo);
 //        errorObject.put("activities", CommonUtil.getActivityName(context));
-        errorObject.put("activities", ApplicationInit.getCurrentActivity().getComponentName().getClassName());
+        Activity activity = ApplicationInit.getCurrentActivity();
+        if(null!=activity) {
+            errorObject.put("activities", activity.getComponentName().getClassName());
+        }else{
+            errorObject.put("activities", "");
+        }
 
         JSONObject clientInfObject = new ClientdataManager(context)
                 .prepareClientdataJSON();
@@ -182,7 +189,7 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
         errorObject.put("cpuAbi", cpuAbiBuilder.toString());
 
         // recent activities
-        errorObject.put("recentActivities", ApplicationInit.recentActivities.toString());
+        errorObject.put("recentActivities", ApplicationInit.getRecentActivities().toString());
 
         return errorObject;
     }

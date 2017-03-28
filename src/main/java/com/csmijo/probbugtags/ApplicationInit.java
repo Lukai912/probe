@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.csmijo.probbugtags.collector.BoundedLinkedList;
+import com.csmijo.probbugtags.manager.ActivityCrumbsManager;
 import com.csmijo.probbugtags.utils.Constants;
 import com.squareup.leakcanary.AndroidExcludedRefs;
 import com.squareup.leakcanary.DisplayLeakService;
@@ -18,8 +19,6 @@ import java.io.IOException;
 public class ApplicationInit {
 
     private static RefWatcher refWatcher;
-    private static Activity currentActivity = null;
-    public static BoundedLinkedList<String> recentActivities;
 
     public static void onCreateInit(Application mApplication) {
         // 不监听特定的对象
@@ -36,7 +35,6 @@ public class ApplicationInit {
             boolean defaultProcess = processName.equalsIgnoreCase(mApplication
                     .getPackageName());
             if (defaultProcess) {
-                recentActivities = new BoundedLinkedList<>(5);
 
                 BugTagAgent.init(mApplication.getApplicationContext());
                 BugTagAgent.setDebugEnabled(true);
@@ -45,13 +43,6 @@ public class ApplicationInit {
                 BugTagAgent.updateOnlineConfig(mApplication.getApplicationContext());
 //                BugTagAgent.startPerformService(mApplication.getApplicationContext());
 //                BugTagAgent.startBugTagFab(mApplication.getApplicationContext());
-
-                // 根据需求添加
-                /*
-                 * UmsAgent.postTags(this, "test tags");
-				 * UmsAgent.postPushID(this, "cid"); UmsAgent.bindUserid(this,
-				 * "user id");
-				 */
             }
         }
 
@@ -98,19 +89,17 @@ public class ApplicationInit {
         return null;
     }
 
+
     public static Activity getCurrentActivity() {
-        return currentActivity;
+        Activity activity = ActivityCrumbsManager.getInstance().getCurrentActivity();
+        return activity;
     }
 
     public static void setCurrentActivity(Activity mCurrentActivity) {
-        currentActivity = mCurrentActivity;
+        ActivityCrumbsManager.getInstance().setCurrentActivity(mCurrentActivity);
     }
 
-    public static void clearReferences(Activity activity) {
-        if (activity.equals(currentActivity)) {
-            recentActivities.add(currentActivity.getComponentName().getClassName());
-            ApplicationInit.setCurrentActivity(null);
-        }
+    public static BoundedLinkedList<String> getRecentActivities() {
+        return ActivityCrumbsManager.getInstance().getRecentActivities();
     }
-
 }

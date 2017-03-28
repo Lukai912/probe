@@ -14,6 +14,7 @@
 
 package com.csmijo.probbugtags.manager;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.csmijo.probbugtags.ApplicationInit;
@@ -93,15 +94,19 @@ public class UsinglogManager {
         }
 
         CommonUtil.saveSessionTime(context);
-        CommonUtil.savePageName(context, ApplicationInit.getCurrentActivity().getComponentName().getClassName());
-
+        Activity activity = ApplicationInit.getCurrentActivity();
+        if (null != activity) {
+            CommonUtil.savePageName(context, activity.getComponentName().getClassName());
+        } else {
+            CommonUtil.savePageName(context, "");
+        }
     }
 
     public void onPause() {
         Logger.i(TAG, "Call onPause()");
-        String pageName = SharedPrefUtil.getValue(context,"CurrentPage", "");
+        String pageName = SharedPrefUtil.getValue(context, "CurrentPage", "");
 
-        long start = SharedPrefUtil.getValue(context,"session_save_time",
+        long start = SharedPrefUtil.getValue(context, "session_save_time",
                 System.currentTimeMillis());
         String start_millis = CommonUtil.getFormatTime(start);
 
@@ -125,12 +130,12 @@ public class UsinglogManager {
     }
 
     public void onWebPage(String pageName) {
-        String lastView = SharedPrefUtil.getValue(context,"CurrentPage", "");
+        String lastView = SharedPrefUtil.getValue(context, "CurrentPage", "");
         if (lastView.equals("")) {
-            SharedPrefUtil.setValue(context,"CurrentPage", pageName);
-            SharedPrefUtil.setValue(context,"session_save_time", System.currentTimeMillis());
+            SharedPrefUtil.setValue(context, "CurrentPage", pageName);
+            SharedPrefUtil.setValue(context, "session_save_time", System.currentTimeMillis());
         } else {
-            long start = SharedPrefUtil.getValue(context,"session_save_time",
+            long start = SharedPrefUtil.getValue(context, "session_save_time",
                     Long.valueOf(System.currentTimeMillis()));
             String start_millis = CommonUtil.getFormatTime(start);
 
@@ -139,8 +144,8 @@ public class UsinglogManager {
 
             String duration = end - start + "";
 
-            SharedPrefUtil.setValue(context,"CurrentPage", pageName);
-            SharedPrefUtil.setValue(context,"session_save_time", end);
+            SharedPrefUtil.setValue(context, "CurrentPage", pageName);
+            SharedPrefUtil.setValue(context, "session_save_time", end);
 
             JSONObject obj;
             try {

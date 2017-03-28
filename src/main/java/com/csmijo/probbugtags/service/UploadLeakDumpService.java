@@ -1,13 +1,10 @@
 package com.csmijo.probbugtags.service;
 
-import android.app.AlertDialog;
 import android.app.IntentService;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.BugTagAgent;
 import com.csmijo.probbugtags.bean.MyMessage;
 import com.csmijo.probbugtags.utils.CommonUtil;
@@ -15,7 +12,6 @@ import com.csmijo.probbugtags.utils.Logger;
 import com.csmijo.probbugtags.utils.RetrofitClient;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.io.IOException;
 
 import okhttp3.MediaType;
@@ -112,7 +108,7 @@ public class UploadLeakDumpService extends IntentService {
         }
     }
 
-    //提示用户发送
+   /* //提示用户发送
     private static void alertToUpload(File parentFile) {
         // 提示上传或者删除
         final File[] existsFiles = parentFile.listFiles(
@@ -152,6 +148,6 @@ public class UploadLeakDumpService extends IntentService {
                 }
             }
         });
-    }
+    }*/
 
 }

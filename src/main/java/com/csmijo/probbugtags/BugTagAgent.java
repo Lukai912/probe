@@ -52,7 +52,7 @@ public class BugTagAgent {
     }
 
     public BugTagAgent() {
-        // TODO Auto-generated constructor stub
+
     }
 
     public static void init(final Context context) {
@@ -98,12 +98,7 @@ public class BugTagAgent {
                 Logger.i(tag, "Call onResume()");
 
                 Activity activity = wActivity.get();
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-                    ApplicationInit.setCurrentActivity(activity);
-                    UsinglogManager usinglogManager = new UsinglogManager(mContext);
-                    usinglogManager.onResume();
-
-                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
                     String[] permissions = new String[]{
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -115,6 +110,10 @@ public class BugTagAgent {
                         ActivityCompat.requestPermissions(activity, permissions, 1);
                     }
                 }
+
+                ApplicationInit.setCurrentActivity(activity);
+                UsinglogManager usinglogManager = new UsinglogManager(mContext);
+                usinglogManager.onResume();
 
             }
         };
@@ -128,8 +127,6 @@ public class BugTagAgent {
             public void run() {
                 Logger.i(tag, "Call onPause()");
 
-                Activity activity = wActivity.get();
-                ApplicationInit.clearReferences(activity);
                 UsinglogManager usinglogManager = new UsinglogManager(mContext);
                 usinglogManager.onPause();
 
@@ -146,9 +143,8 @@ public class BugTagAgent {
                 Logger.i(tag, "Call onDestory()");
 
                 Activity activity = wActivity.get();
-                ApplicationInit.clearReferences(activity);
                 if (SDK_INT < ICE_CREAM_SANDWICH) {
-                    ApplicationInit.watch(activity.getApplicationContext());
+                    ApplicationInit.watch(activity);
                 }
             }
         };
