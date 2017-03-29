@@ -83,7 +83,7 @@ public class UsinglogManager {
     }
 
     public void onResume() {
-        Logger.i(TAG, "Call onResume()");
+        Logger.d(TAG, "Call onResume()");
         try {
             if (CommonUtil.isNewSession(context)) {
                 session_id = CommonUtil.generateSession(context);
@@ -103,7 +103,7 @@ public class UsinglogManager {
     }
 
     public void onPause() {
-        Logger.i(TAG, "Call onPause()");
+        Logger.d(TAG, "Call onPause()");
         String pageName = SharedPrefUtil.getValue(context, "CurrentPage", "");
 
         long start = SharedPrefUtil.getValue(context, "session_save_time",

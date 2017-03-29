@@ -40,7 +40,7 @@ public class ActivityCrumbsManager {
         Activity currentActivity = null;
         if (sCurrentActivityWeakRef != null) {
             currentActivity = sCurrentActivityWeakRef.get();
-            Logger.i(TAG,"sCurrentActivityWeakRef not null , currentActivity = "+ currentActivity.getLocalClassName());
+            Logger.d(TAG,"sCurrentActivityWeakRef not null , currentActivity = "+ currentActivity.getLocalClassName());
         }else {
             //1 获取ActivityThread中所有的ActivityRecord
             //2 从ActivityRecord中获取状态不是pause的Activity并返回
@@ -62,7 +62,7 @@ public class ActivityCrumbsManager {
                         currentActivity = (Activity) activityField.get(activityRecord);
                     }
                 }
-                Logger.i(TAG,"sCurrentActivityWeakRef null , currentActivity = "+ currentActivity.getLocalClassName());
+                Logger.d(TAG,"sCurrentActivityWeakRef null , currentActivity = "+ currentActivity.getLocalClassName());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {

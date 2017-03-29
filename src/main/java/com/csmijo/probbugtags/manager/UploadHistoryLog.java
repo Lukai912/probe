@@ -73,7 +73,7 @@ public class UploadHistoryLog extends Thread {
         try {
             file1 = new File(path);
             if (!file1.exists()) {
-                Logger.d(TAG, "No history log file found!");
+                Logger.i(TAG, "No history log file found!");
                 return null;
             }
             in = new FileInputStream(file1);

@@ -44,13 +44,15 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
     private Thread.UncaughtExceptionHandler defaultExceptionHandler;
     private Context context;
 
-    public static synchronized MyCrashHandler getInstance() {
-        if (myCrashHandler != null) {
-            return myCrashHandler;
-        } else {
-            myCrashHandler = new MyCrashHandler();
-            return myCrashHandler;
+    public static MyCrashHandler getInstance() {
+        if (myCrashHandler == null) {
+            synchronized (MyCrashHandler.class) {
+                if (myCrashHandler == null) {
+                    myCrashHandler = new MyCrashHandler();
+                }
+            }
         }
+        return myCrashHandler;
     }
 
     private MyCrashHandler() {
@@ -146,9 +148,9 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
         errorObject.put("stacktrace", errorInfo);
 //        errorObject.put("activities", CommonUtil.getActivityName(context));
         Activity activity = ApplicationInit.getCurrentActivity();
-        if(null!=activity) {
+        if (null != activity) {
             errorObject.put("activities", activity.getComponentName().getClassName());
-        }else{
+        } else {
             errorObject.put("activities", "");
         }
 

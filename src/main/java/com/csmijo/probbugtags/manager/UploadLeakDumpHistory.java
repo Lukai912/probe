@@ -49,7 +49,7 @@ public class UploadLeakDumpHistory extends Thread {
             if (CommonUtil.isNetworkAvailable(mContext) && CommonUtil.isNetworkTypeWifi(mContext)) {
                 for (int i = 0; i < length; i++) {
                     File file = existsFiles[i];
-                    Logger.i(TAG, "exist file :" + file.getName());
+                    Logger.d(TAG, "exist file :" + file.getName());
                     Intent intent = new Intent();
                     intent.putExtra("dumpFilePath", file.getAbsolutePath());
                     intent.setClass(this.mContext, UploadLeakDumpService.class);

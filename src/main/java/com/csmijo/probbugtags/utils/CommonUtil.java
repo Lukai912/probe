@@ -309,13 +309,13 @@ public class CommonUtil {
         try {
             long currenttime = System.currentTimeMillis();
             long session_save_time = SharedPrefUtil.getValue(context, "session_save_time", 0);
-            Logger.i(TAG, "currenttime=" + currenttime);
-            Logger.i(TAG, "session_save_time=" + session_save_time);
+            Logger.d(TAG, "currenttime=" + currenttime);
+            Logger.d(TAG, "session_save_time=" + session_save_time);
             if (currenttime - session_save_time > Constants.kContinueSessionMillis) {
-                Logger.i(TAG, "return true,create new session.");
+                Logger.d(TAG, "return true,create new session.");
                 return true;
             }
-            Logger.i(TAG, "return false.At the same session.");
+            Logger.d(TAG, "return false.At the same session.");
             return false;
         } catch (Exception e) {
             Logger.e(TAG, e);
@@ -379,13 +379,13 @@ public class CommonUtil {
         try {
             long currenttime = System.currentTimeMillis();
             long login_save_time = SharedPrefUtil.getValue(context, "login_save_time", 0);
-            Logger.i(TAG, "currenttime=" + currenttime);
-            Logger.i(TAG, "login_save_time=" + login_save_time);
+            Logger.d(TAG, "currenttime=" + currenttime);
+            Logger.d(TAG, "login_save_time=" + login_save_time);
             if (currenttime - login_save_time > Constants.liveTimeMillis) {
-                Logger.i(TAG, "return true, please login again.");
+                Logger.d(TAG, "return true, please login again.");
                 return false;
             }
-            Logger.i(TAG, "return false,has login.");
+            Logger.d(TAG, "return false,has login.");
             return true;
         } catch (Exception e) {
             Logger.e(TAG, e);

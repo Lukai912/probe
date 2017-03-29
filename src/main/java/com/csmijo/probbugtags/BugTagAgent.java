@@ -69,7 +69,7 @@ public class BugTagAgent {
      * @param context
      */
     public static void postHistoryLog(final Context context) {
-        Logger.i(tag, "postHistoryLog");
+        Logger.d(tag, "postHistoryLog");
         if (CommonUtil.isNetworkAvailable(context)) {
             Thread thread = new UploadHistoryLog(context);
             handler.post(thread);
@@ -82,7 +82,7 @@ public class BugTagAgent {
      * @param context
      */
     public static void postLeakDumpHistory(Context context) {
-        Logger.i(tag, "postLeakDumpHistory");
+        Logger.d(tag, "postLeakDumpHistory");
 
         Thread thread = new UploadLeakDumpHistory(context);
         handler.post(thread);
@@ -95,7 +95,7 @@ public class BugTagAgent {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Logger.i(tag, "Call onResume()");
+                Logger.d(tag, "Call onResume()");
 
                 Activity activity = wActivity.get();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -125,7 +125,7 @@ public class BugTagAgent {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Logger.i(tag, "Call onPause()");
+                Logger.d(tag, "Call onPause()");
 
                 UsinglogManager usinglogManager = new UsinglogManager(mContext);
                 usinglogManager.onPause();
@@ -140,7 +140,7 @@ public class BugTagAgent {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                Logger.i(tag, "Call onDestory()");
+                Logger.d(tag, "Call onDestory()");
 
                 Activity activity = wActivity.get();
                 if (SDK_INT < ICE_CREAM_SANDWICH) {
@@ -157,19 +157,10 @@ public class BugTagAgent {
      *
      * @param context
      */
-    static void onError(Context context) {
-        final WeakReference<Context> wContext = new WeakReference<Context>(mContext);
-        Thread thread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                Logger.i(tag, "Call onError()");
-                MyCrashHandler crashHandler = MyCrashHandler.getInstance();
-                crashHandler.init(wContext.get().getApplicationContext());
-//                Thread.setDefaultUncaughtExceptionHandler(crashHandler);
-            }
-        });
-        handler.post(thread);
+    public static void onError(Context context) {
+        Logger.d(tag, "Call onError()");
+        MyCrashHandler crashHandler = MyCrashHandler.getInstance();
+        crashHandler.init(context.getApplicationContext());
     }
 
     /**
@@ -194,7 +185,7 @@ public class BugTagAgent {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                Logger.i(tag, "Call updaeOnlineConfig");
+                Logger.d(tag, "Call updaeOnlineConfig");
                 ConfigManager cm = new ConfigManager(wContext.get().getApplicationContext());
                 cm.updateOnlineConfig();
             }
@@ -207,7 +198,7 @@ public class BugTagAgent {
      */
     public static void setUpdateOnlyWifi(boolean isUpdateonlyWifi) {
         Constants.mUpdateOnlyWifi = isUpdateonlyWifi;
-        Logger.i(tag,
+        Logger.d(tag,
                 "setUpdateOnlyWifi = " + String.valueOf(isUpdateonlyWifi));
     }
 
@@ -220,7 +211,7 @@ public class BugTagAgent {
     public static void setDefaultReportPolicy(Context context,
                                               SendPolicy sendPolicy) {
         Constants.mReportPolicy = sendPolicy;
-        Logger.i(tag,
+        Logger.d(tag,
                 "setDefaultReportPolicy = " + String.valueOf(sendPolicy));
     }
 
@@ -231,7 +222,7 @@ public class BugTagAgent {
 
             @Override
             public void run() {
-                Logger.i(tag, "Call postWebPage()");
+                Logger.d(tag, "Call postWebPage()");
 
                 UsinglogManager usinglogManager = new UsinglogManager(wContext.get());
                 usinglogManager.onWebPage(pageName);

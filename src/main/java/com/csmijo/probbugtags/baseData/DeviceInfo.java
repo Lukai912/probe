@@ -91,7 +91,7 @@ public class DeviceInfo {
 
     public static String getLanguage() {
         String language = Locale.getDefault().getLanguage();
-        Logger.i(tag, "getLanguage()=" + language);
+        Logger.d(tag, "getLanguage()=" + language);
         if (language == null)
             return "";
         return language;
@@ -103,14 +103,14 @@ public class DeviceInfo {
         WindowManager wm = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(displaysMetrics);
-        Logger.i(tag, "getResolution()=" + displaysMetrics.widthPixels + "x"
+        Logger.d(tag, "getResolution()=" + displaysMetrics.widthPixels + "x"
                 + displaysMetrics.heightPixels);
         return displaysMetrics.widthPixels + "x" + displaysMetrics.heightPixels;
     }
 
     public static String getDeviceProduct() {
         String result = Build.PRODUCT;
-        Logger.i(tag, "getDeviceProduct()=" + result);
+        Logger.d(tag, "getDeviceProduct()=" + result);
         if (result == null)
             return "";
         return result;
@@ -141,7 +141,7 @@ public class DeviceInfo {
             else
                 sensorManager = (SensorManager) context
                         .getSystemService(Context.SENSOR_SERVICE);
-            Logger.i(tag, "getGravityAvailable()");
+            Logger.d(tag, "getGravityAvailable()");
             return (sensorManager == null) ? false : true;
         } catch (Exception e) {
             return false;
@@ -150,7 +150,7 @@ public class DeviceInfo {
 
     public static String getOsVersion() {
         String result = Build.VERSION.RELEASE;
-        Logger.i(tag, "getOsVersion()=" + result);
+        Logger.d(tag, "getOsVersion()=" + result);
         if (result == null)
             return "";
 
@@ -168,7 +168,7 @@ public class DeviceInfo {
         if (telephonyManager == null)
             return -1;
         int result = telephonyManager.getPhoneType();
-        Logger.i(tag, "getPhoneType()=" + result);
+        Logger.d(tag, "getPhoneType()=" + result);
         return result;
     }
 
@@ -187,7 +187,7 @@ public class DeviceInfo {
                 return "";
             }
             result = telephonyManager.getSubscriberId();
-            Logger.i(tag, "getIMSI()=" + result);
+            Logger.d(tag, "getIMSI()=" + result);
             if (result == null)
                 return "";
             return result;
@@ -207,7 +207,7 @@ public class DeviceInfo {
             String result = wi.getMacAddress();
             if (result == null)
                 result = "";
-            Logger.i(tag, "getWifiMac()=" + result);
+            Logger.d(tag, "getWifiMac()=" + result);
             return result;
         } catch (Exception e) {
             Logger.e(tag, e);
@@ -302,7 +302,7 @@ public class DeviceInfo {
                 return "";
             }
             result = telephonyManager.getDeviceId();
-            Logger.i(tag, "getIMEI()=" + result);
+            Logger.d(tag, "getIMEI()=" + result);
             if (result == null)
                 result = "";
         } catch (Exception e) {
@@ -363,7 +363,7 @@ public class DeviceInfo {
     }
 
     private static void getLocation() {
-        Logger.i(tag, "getLocation");
+        Logger.d(tag, "getLocation");
         try {
             List<String> matchingProviders = locationManager.getAllProviders();
             for (String prociderString : matchingProviders) {

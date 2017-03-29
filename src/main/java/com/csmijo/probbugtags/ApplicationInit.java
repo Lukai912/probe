@@ -38,7 +38,7 @@ public class ApplicationInit {
 
                 BugTagAgent.init(mApplication.getApplicationContext());
                 BugTagAgent.setDebugEnabled(true);
-                BugTagAgent.setDebugLevel(Constants.Verbose);
+                BugTagAgent.setDebugLevel(Constants.Info);
 
                 BugTagAgent.updateOnlineConfig(mApplication.getApplicationContext());
 //                BugTagAgent.startPerformService(mApplication.getApplicationContext());

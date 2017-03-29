@@ -87,7 +87,7 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
     @SuppressLint("NewApi")
     protected void afterDefaultHandling(HeapDump heapDump,
                                         AnalysisResult result) {
-        Logger.i(TAG, "DisplayLeakService:afterDefaulthandling ");
+        Logger.d(TAG, "DisplayLeakService:afterDefaulthandling ");
         if (!result.leakFound || result.excludedLeak) {
             Logger.i(TAG, "DisplayLeakService: result.leakFound = " + result.leakFound + " ;result.excludedLeak = " + result.excludedLeak);
             return;
