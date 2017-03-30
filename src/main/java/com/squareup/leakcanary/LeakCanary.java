@@ -53,12 +53,12 @@ public final class LeakCanary {
         if (isInAnalyzerProcess(application)) {
             return RefWatcher.DISABLED;
         }
+
         // enableDisplayLeakActivity(application);
         HeapDump.Listener heapDumpListener = new ServiceHeapDumpListener(
                 application, listenerServiceClass);
         RefWatcher refWatcher = androidWatcher(application, heapDumpListener,
                 excludedRefs);
-        ActivityRefWatcher.installOnIcsPlus(application, refWatcher);
         return refWatcher;
     }
 

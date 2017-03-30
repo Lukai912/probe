@@ -1,64 +1,179 @@
 package com.csmijo.probbugtags.utils;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 
 /**
- * Created by chengqianqian-xy on 2016/7/4.
+ * Created by chengqianqian-xy on 2017/3/29.
  */
+
 public class SharedPrefUtil {
 
-    //获取SharedPreferences实例
-    private static SharedPreferences getSharedPreferences(Context context) {
-        return context.getSharedPreferences("probbug_SharedPref", Context.MODE_PRIVATE);
+    public static void setValue(Context context, String key, long value) {
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.csmijo.datacontentprovider/info");
+
+        ContentValues values = new ContentValues();
+        values.put(key, value);
+
+
+        Cursor cursor = resolver.query(uri, new String[]{"id"}, null, null, "id desc");
+        int id = -100;
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToNext()) {
+                    id = cursor.getInt(cursor.getColumnIndex("id"));
+                }
+            }
+        }
+        cursor.close();
+
+        if (id != -100) {
+            //update
+            resolver.update(uri, values, "id = ?", new String[]{id + ""});
+        } else {
+            //insert
+            resolver.insert(uri, values);
+        }
+
+
     }
 
-    //获取Editor实例
-    private static SharedPreferences.Editor getEditor(Context context) {
-        return getSharedPreferences(context).edit();
+    public static void setValue(Context context, String key, String value) {
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.csmijo.datacontentprovider/info");
+
+        ContentValues values = new ContentValues();
+        values.put(key, value);
+        // resolver.insert(uri, values);
+
+        Cursor cursor = resolver.query(uri, new String[]{"id"}, null, null, "id desc");
+        int id = -100;
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToNext()) {
+                    id = cursor.getInt(cursor.getColumnIndex("id"));
+                }
+            }
+        }
+        cursor.close();
+
+        if (id != -100) {
+            //update
+            resolver.update(uri, values, "id = ?", new String[]{id + ""});
+        } else {
+            //insert
+            resolver.insert(uri, values);
+        }
     }
 
+    public static void setValue(Context context, String key, Boolean value) {
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.csmijo.datacontentprovider/info");
 
-    public static void setValue(Context context,String key, long value) {
-        SharedPreferences.Editor editor = getEditor(context);
-        editor.putLong(key, value);
-        editor.commit();
+        int insertValue = 0;
+        if (value) {
+            insertValue = 1;
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(key, insertValue);
+        //resolver.insert(uri, values);
+
+        Cursor cursor = resolver.query(uri, new String[]{"id"}, null, null, "id desc");
+        int id = -100;
+        if (cursor != null) {
+            if (cursor.getCount() > 0) {
+                if (cursor.moveToNext()) {
+                    id = cursor.getInt(cursor.getColumnIndex("id"));
+                }
+            }
+        }
+        cursor.close();
+
+        if (id != -100) {
+            //update
+            resolver.update(uri, values, "id = ?", new String[]{id + ""});
+        } else {
+            //insert
+            resolver.insert(uri, values);
+        }
     }
 
-    public static void removeKey(Context context,String key) {
-        SharedPreferences.Editor editor = getEditor(context);
-        editor.remove(key);
-        editor.commit();
+    public static long getValue(Context context, String key, long defaultValue) {
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.csmijo.datacontentprovider/info");
+
+        Cursor cursor = resolver.query(uri, new String[]{key}, key + " IS NOT NULL", null, "id desc");
+        long value = defaultValue;
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                if (cursor.isFirst()) {
+                    value = cursor.getLong(cursor.getColumnIndex(key));
+                    break;
+                }
+            }
+            cursor.close();
+        }
+        return value;
     }
 
-    public static void setValue(Context context,String key, String value) {
-        SharedPreferences.Editor editor = getEditor(context);
-        editor.putString(key, value);
-        editor.commit();
+    public static String getValue(Context context, String key, String defaultValue) {
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.csmijo.datacontentprovider/info");
+
+        Cursor cursor = resolver.query(uri, new String[]{key}, key + " IS NOT NULL", null, "id desc");
+        String value = defaultValue;
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                if (cursor.isFirst()) {
+                    value = cursor.getString(cursor.getColumnIndex(key));
+                    break;
+                }
+            }
+            cursor.close();
+        }
+        return value;
     }
 
-    public static void setValue(Context context,String key, Boolean value) {
-        SharedPreferences.Editor editor = getEditor(context);
-        editor.putBoolean(key, value);
-        editor.commit();
+    public static Boolean getValue(Context context, String key, Boolean defaultValue) {
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.csmijo.datacontentprovider/info");
+
+        Cursor cursor = resolver.query(uri, new String[]{key}, key + " IS NOT NULL", null, "id desc");
+        boolean value = defaultValue;
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                if (cursor.isFirst()) {
+                    int tmpValue = cursor.getInt(cursor.getColumnIndex(key));
+                    if (tmpValue == 0) {
+                        value = false;
+                    } else if (tmpValue == 1) {
+                        value = true;
+                    }
+                    break;
+                }
+            }
+            cursor.close();
+        }
+        return value;
     }
 
-    public static long getValue(Context context,String key, long defaultValue) {
-        return getSharedPreferences(context).getLong(key, defaultValue);
-    }
+    public static void removeKey(Context context, String key) {
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.csmijo.datacontentprovider/info");
 
-    public static String getValue(Context context,String key, String defaultValue) {
-        return getSharedPreferences(context).getString(key, defaultValue);
-    }
-
-    public static Boolean getValue(Context context,String key, Boolean defaultValue) {
-        return getSharedPreferences(context).getBoolean(key, defaultValue);
+        resolver.delete(uri, key, null);
     }
 
     public static void clear(Context context) {
-        SharedPreferences.Editor editor = getEditor(context);
-        editor.clear();
-        editor.commit();
+        ContentResolver resolver = context.getContentResolver();
+        Uri uri = Uri.parse("content://com.csmijo.datacontentprovider/info");
+
+        resolver.delete(uri, null, null);
     }
 
 }

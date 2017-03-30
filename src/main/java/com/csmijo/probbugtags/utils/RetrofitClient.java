@@ -84,7 +84,7 @@ public class RetrofitClient {
         if (response == null) {
             return null;
         }
-
+        Logger.d("RetrofitClient","response = "+response);
         try {
             JSONObject respObject = new JSONObject(response);
             MyMessage message = new MyMessage();

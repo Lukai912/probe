@@ -35,9 +35,6 @@ import com.csmijo.probbugtags.utils.Logger;
 
 import java.lang.ref.WeakReference;
 
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
-
 
 public class BugTagAgent {
 
@@ -59,9 +56,13 @@ public class BugTagAgent {
         mContext = context.getApplicationContext();
         AppInfo.init(mContext);
         DeviceInfo.init(mContext);
+        BugTagAgent.onError(mContext);
+    }
+
+    public static void postOnInit(Context context) {
+        mContext = context.getApplicationContext();
         BugTagAgent.postHistoryLog(mContext);
         BugTagAgent.postLeakDumpHistory(mContext);
-        BugTagAgent.onError(mContext);
     }
 
 
@@ -102,7 +103,6 @@ public class BugTagAgent {
 
                     String[] permissions = new String[]{
                             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.ACCESS_FINE_LOCATION,
                             Manifest.permission.READ_PHONE_STATE
                     };
 
@@ -120,8 +120,8 @@ public class BugTagAgent {
         handler.post(runnable);
     }
 
+
     public static void onPause(Activity activity) {
-        final WeakReference<Activity> wActivity = new WeakReference<Activity>(activity);
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -135,21 +135,6 @@ public class BugTagAgent {
         handler.post(runnable);
     }
 
-    public static void onDestory(Activity activity) {
-        final WeakReference<Activity> wActivity = new WeakReference<Activity>(activity);
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Logger.d(tag, "Call onDestory()");
-
-                Activity activity = wActivity.get();
-                if (SDK_INT < ICE_CREAM_SANDWICH) {
-                    ApplicationInit.watch(activity);
-                }
-            }
-        };
-        handler.post(runnable);
-    }
 
     /**
      * Call this function to send the uncatched crash exception stack
@@ -181,12 +166,12 @@ public class BugTagAgent {
      * @param context
      */
     public static void updateOnlineConfig(final Context context) {
-        final WeakReference<Context> wContext = new WeakReference<Context>(mContext);
+
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Logger.d(tag, "Call updaeOnlineConfig");
-                ConfigManager cm = new ConfigManager(wContext.get().getApplicationContext());
+                ConfigManager cm = new ConfigManager(context);
                 cm.updateOnlineConfig();
             }
         });

@@ -25,6 +25,7 @@ import com.csmijo.probbugtags.performance.GetMemory;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Constants;
 import com.csmijo.probbugtags.utils.Logger;
+import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -136,6 +137,7 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
             // save to file, send next start
             CommonUtil.saveInfoToFile("errorInfo", errorInfo,
                     "/cobub.cache", context);
+            Logger.i(tag, "cobub.cache save successed");
         }
         return true;
     }
@@ -191,7 +193,9 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
         errorObject.put("cpuAbi", cpuAbiBuilder.toString());
 
         // recent activities
-        errorObject.put("recentActivities", ApplicationInit.getRecentActivities().toString());
+        errorObject.put("recentActivities", SharedPrefUtil.getValue(context, "recent_activity_names", ""));
+        // clear sqlite recent activities
+        SharedPrefUtil.setValue(context, "recent_activity_names", "");
 
         return errorObject;
     }

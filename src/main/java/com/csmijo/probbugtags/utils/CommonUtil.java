@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 
 import com.csmijo.probbugtags.BugTagAgent;
@@ -64,7 +65,7 @@ public class CommonUtil {
      */
     public static boolean hasLackPermissions(Context context, String[] permissions) {
         for (String permission : permissions) {
-            if (ActivityCompat.checkSelfPermission(context.getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(context.getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
                 return true;
             }
         }

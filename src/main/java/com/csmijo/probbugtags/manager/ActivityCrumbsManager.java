@@ -2,8 +2,9 @@ package com.csmijo.probbugtags.manager;
 
 import android.app.Activity;
 
-import com.csmijo.probbugtags.collector.BoundedLinkedList;
+import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.utils.Logger;
+import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -17,12 +18,13 @@ import java.util.Map;
 public class ActivityCrumbsManager {
 
     private static ActivityCrumbsManager instance = null;
-    public  BoundedLinkedList<String> recentActivities = null;
     private WeakReference<Activity> sCurrentActivityWeakRef = null;
+    private int callTimes = 0;
+
     private static final String TAG = ActivityCrumbsManager.class.getSimpleName();
 
-    private ActivityCrumbsManager(){
-        recentActivities = new BoundedLinkedList<>(5);
+    private ActivityCrumbsManager() {
+
     }
 
     public static ActivityCrumbsManager getInstance() {
@@ -40,8 +42,8 @@ public class ActivityCrumbsManager {
         Activity currentActivity = null;
         if (sCurrentActivityWeakRef != null) {
             currentActivity = sCurrentActivityWeakRef.get();
-            Logger.d(TAG,"sCurrentActivityWeakRef not null , currentActivity = "+ currentActivity.getLocalClassName());
-        }else {
+            Logger.d(TAG, "sCurrentActivityWeakRef not null , currentActivity = " + currentActivity.getLocalClassName());
+        } else {
             //1 获取ActivityThread中所有的ActivityRecord
             //2 从ActivityRecord中获取状态不是pause的Activity并返回
             try {
@@ -62,7 +64,7 @@ public class ActivityCrumbsManager {
                         currentActivity = (Activity) activityField.get(activityRecord);
                     }
                 }
-                Logger.d(TAG,"sCurrentActivityWeakRef null , currentActivity = "+ currentActivity.getLocalClassName());
+                Logger.d(TAG, "sCurrentActivityWeakRef null , currentActivity = " + currentActivity.getLocalClassName());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
@@ -80,14 +82,38 @@ public class ActivityCrumbsManager {
 
     public void setCurrentActivity(Activity mCurrentActivity) {
         sCurrentActivityWeakRef = new WeakReference<Activity>(mCurrentActivity);
-        if (mCurrentActivity != null) {
-            recentActivities.add(mCurrentActivity.getComponentName().getClassName());
+
+        // 第一次清空sqlite中的recent_activity_names
+        String processName = ApplicationInit.getCurrentProcessName();
+        if (null != processName) {
+            boolean defaultProcess = processName.equalsIgnoreCase(mCurrentActivity.getApplicationContext().getPackageName());
+            if (defaultProcess && callTimes == 0) {
+                SharedPrefUtil.setValue(mCurrentActivity.getApplicationContext(), "recent_activity_names", "");
+                callTimes++;
+            }
         }
+
+        StringBuffer recentActivityNames = new StringBuffer();
+
+        if (mCurrentActivity != null) {
+            String recentNames = SharedPrefUtil.getValue(mCurrentActivity.getApplicationContext(), "recent_activity_names", "");
+            if (recentNames != null && recentNames.trim().length() > 0) {
+                String[] activityNames = recentNames.split(",");
+                if (activityNames.length >= 5) {
+                    for (int i = 1; i < 5; i++) {
+                        recentActivityNames.append(activityNames[i]).append(",");
+                    }
+                    recentActivityNames.append(mCurrentActivity.getComponentName().getClassName());
+                } else {
+                    recentActivityNames.append(recentNames);
+                    recentActivityNames.append(mCurrentActivity.getComponentName().getClassName()).append(",");
+                }
+            } else {
+                recentActivityNames.append(mCurrentActivity.getComponentName().getClassName()).append(",");
+            }
+
+            SharedPrefUtil.setValue(mCurrentActivity.getApplicationContext(), "recent_activity_names", recentActivityNames.toString());
+        }
+
     }
-
-    public BoundedLinkedList<String> getRecentActivities() {
-        return recentActivities;
-    }
-
-
 }

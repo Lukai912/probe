@@ -21,9 +21,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -34,7 +32,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -50,7 +47,6 @@ import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
@@ -63,7 +59,7 @@ public class DeviceInfo {
 
     private static final String tag = "DeviceInfo";
     private static Context context;
-    private static Location location;
+   // private static Location location;
     private static TelephonyManager telephonyManager;
     private static LocationManager locationManager;
     private static BluetoothAdapter bluetoothAdapter;
@@ -82,7 +78,7 @@ public class DeviceInfo {
         } catch (Exception e) {
             Logger.e(tag, e.toString());
         }
-        getLocation();
+       // getLocation();
     }
 
     public DeviceInfo() {
@@ -342,7 +338,7 @@ public class DeviceInfo {
         return result;
     }
 
-    public static String getLatitude() {
+    /*public static String getLatitude() {
         if (location == null)
             return "";
         return String.valueOf(location.getLatitude());
@@ -381,7 +377,7 @@ public class DeviceInfo {
         } catch (Exception e) {
             Logger.e(tag, e.toString());
         }
-    }
+    }*/
 
     public static String getMCCMNC() {
         String result = "";
