@@ -24,7 +24,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.manager.ClientdataManager;
 import com.csmijo.probbugtags.service.UploadLeakDumpService;
@@ -191,7 +191,7 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
 
         // send info to server
         final JSONObject finalLeakObject = leakObject;
-        if (CommonUtil.getReportPolicyMode(getApplicationContext()) == BugTagAgent.SendPolicy.REALTIME
+        if (CommonUtil.getReportPolicyMode(getApplicationContext()) == BugTagAgentReal.SendPolicy.REALTIME
                 && CommonUtil.isNetworkAvailable(getApplicationContext())) {
             RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
             Call<ResponseBody> call = apiStores.uploadLeakcanryLog(uploadObject.toString());

@@ -21,16 +21,16 @@ public class ApplicationInit {
                     .getPackageName());
             if (defaultProcess) {
 
-                BugTagAgent.setDebugEnabled(true);
-                BugTagAgent.setDebugLevel(Constants.Info);
-                BugTagAgent.updateOnlineConfig(mApplication.getApplicationContext());
-                BugTagAgent.postOnInit(mApplication.getApplicationContext());
+                BugTagAgentReal.setDebugEnabled(true);
+                BugTagAgentReal.setDebugLevel(Constants.Info);
+                BugTagAgentReal.updateOnlineConfig(mApplication.getApplicationContext());
+                BugTagAgentReal.postOnInit(mApplication.getApplicationContext());
 
-//                BugTagAgent.startPerformService(mApplication.getApplicationContext());
-//                BugTagAgent.startBugTagFab(mApplication.getApplicationContext());
+//                BugTagAgentReal.startPerformService(mApplication.getApplicationContext());
+//                BugTagAgentReal.startBugTagFab(mApplication.getApplicationContext());
             }
 
-            BugTagAgent.init(mApplication.getApplicationContext());
+            BugTagAgentReal.init(mApplication.getApplicationContext());
             LifecycleAgent.init(mApplication);
 
         }

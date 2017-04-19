@@ -1,6 +1,6 @@
 package com.csmijo.probbugtags.utils;
 
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 
 /**
  * Created by chengqianqian-xy on 2016/5/30.
@@ -45,7 +45,7 @@ public class Constants {
     /* Report policy: 1 means sent the data to server immediately
      0 means the data will be cached and sent to server when next app's start
      up. Default is 1, real-time*/
-    public static BugTagAgent.SendPolicy mReportPolicy = BugTagAgent.SendPolicy.REALTIME;
+    public static BugTagAgentReal.SendPolicy mReportPolicy = BugTagAgentReal.SendPolicy.REALTIME;
 
     public static final int DEFAULT_BUFFER_SIZE_IN_BYTES = 8192;
 

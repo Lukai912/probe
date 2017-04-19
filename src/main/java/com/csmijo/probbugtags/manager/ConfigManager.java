@@ -15,7 +15,7 @@ package com.csmijo.probbugtags.manager;
 
 import android.content.Context;
 
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.bean.MyMessage;
 import com.csmijo.probbugtags.utils.CommonUtil;
@@ -76,9 +76,9 @@ public class ConfigManager {
 
 									int isOnlyWifi = object.getInt("updateonlywifi");
 									if (isOnlyWifi == 0)
-										BugTagAgent.setUpdateOnlyWifi(false);
+										BugTagAgentReal.setUpdateOnlyWifi(false);
 									else
-										BugTagAgent.setUpdateOnlyWifi(true);
+										BugTagAgentReal.setUpdateOnlyWifi(true);
 								}
 							}
 						}

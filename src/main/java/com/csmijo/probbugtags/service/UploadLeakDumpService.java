@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.bean.MyMessage;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
@@ -48,7 +48,7 @@ public class UploadLeakDumpService extends IntentService {
     public void postLeakDumpFile(final File heapDumpFile) {
 
         //由于文件较大，仅在wifi的情况下上传
-        if (CommonUtil.getReportPolicyMode(mContext) == BugTagAgent
+        if (CommonUtil.getReportPolicyMode(mContext) == BugTagAgentReal
                 .SendPolicy
                 .REALTIME
                 && CommonUtil.isNetworkAvailable(mContext) && CommonUtil.isNetworkTypeWifi(mContext)) {
@@ -120,7 +120,7 @@ public class UploadLeakDumpService extends IntentService {
                 }
         );
 
-        BugTagAgent.handler.post(new Runnable() {
+        BugTagAgentReal.handler.post(new Runnable() {
             @Override
             public void run() {
                 if (existsFiles != null && existsFiles.length >= 3) {

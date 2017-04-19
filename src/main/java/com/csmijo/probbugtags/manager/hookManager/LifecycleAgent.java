@@ -6,7 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.utils.Logger;
 import com.squareup.leakcanary.AndroidExcludedRefs;
 import com.squareup.leakcanary.DisplayLeakService;
@@ -64,14 +64,14 @@ public class LifecycleAgent {
             public void onActivityResumed(Activity activity) {
                 Logger.i(TAG, "onActivityResumed: " + activity.getLocalClassName().toString());
 
-                BugTagAgent.onResume(activity);
+                BugTagAgentReal.onResume(activity);
                 Logger.e(TAG, "processname = " + processName);
             }
 
             @Override
             public void onActivityPaused(Activity activity) {
                 Logger.i(TAG, "onActivityPaused: " + activity.getLocalClassName().toString());
-                BugTagAgent.onPause(activity);
+                BugTagAgentReal.onPause(activity);
             }
 
             @Override

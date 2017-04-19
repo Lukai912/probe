@@ -18,7 +18,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.bean.MyMessage;
 import com.csmijo.probbugtags.utils.CommonUtil;
@@ -162,7 +162,7 @@ public class UsinglogManager {
     }
 
     private void uploadActivityInfo(final JSONObject info) {
-        if (CommonUtil.getReportPolicyMode(context) == BugTagAgent.SendPolicy.REALTIME
+        if (CommonUtil.getReportPolicyMode(context) == BugTagAgentReal.SendPolicy.REALTIME
                 && CommonUtil.isNetworkAvailable(context)) {
             RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
             Call<ResponseBody> call = apiStores.uploadActivityLog(info.toString());

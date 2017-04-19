@@ -14,7 +14,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.baseData.DeviceInfo;
 
@@ -174,7 +174,7 @@ public class CommonUtil {
      * @param context
      * @return
      */
-    public static BugTagAgent.SendPolicy getReportPolicyMode(Context context) {
+    public static BugTagAgentReal.SendPolicy getReportPolicyMode(Context context) {
         return Constants.mReportPolicy;
     }
 
