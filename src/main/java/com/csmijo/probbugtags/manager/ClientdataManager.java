@@ -55,7 +55,7 @@ public class ClientdataManager {
 		jsonClientdata.put("modulename", DeviceInfo.getDeviceProduct());
 		jsonClientdata.put("devicename", DeviceInfo.getDeviceName());
 		jsonClientdata.put("wifimac", DeviceInfo.getWifiMac());
-		jsonClientdata.put("havebt", DeviceInfo.getBluetoothAvailable());
+	//	jsonClientdata.put("havebt", DeviceInfo.getBluetoothAvailable());
 		jsonClientdata.put("havewifi", DeviceInfo.getWiFiAvailable());
 	//	jsonClientdata.put("havegps", DeviceInfo.getGPSAvailable());
 		jsonClientdata.put("havegravity", DeviceInfo.getGravityAvailable());

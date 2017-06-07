@@ -17,7 +17,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -62,7 +61,7 @@ public class DeviceInfo {
    // private static Location location;
     private static TelephonyManager telephonyManager;
     private static LocationManager locationManager;
-    private static BluetoothAdapter bluetoothAdapter;
+   // private static BluetoothAdapter bluetoothAdapter;
     private static SensorManager sensorManager;
 
     public static void init(Context context) {
@@ -73,7 +72,7 @@ public class DeviceInfo {
                     .getSystemService(Context.TELEPHONY_SERVICE));
             locationManager = (LocationManager) DeviceInfo.context
                     .getSystemService(Context.LOCATION_SERVICE);
-            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            //bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         } catch (Exception e) {
             Logger.e(tag, e.toString());
@@ -112,12 +111,12 @@ public class DeviceInfo {
         return result;
     }
 
-    public static boolean getBluetoothAvailable() {
-        if (bluetoothAdapter == null)
-            return false;
-        else
-            return true;
-    }
+//    public static boolean getBluetoothAvailable() {
+//        if (bluetoothAdapter == null)
+//            return false;
+//        else
+//            return true;
+//    }
 
     private static boolean isSimulator() {
         if (getDeviceIMEI().equals("000000000000000"))
