@@ -47,37 +47,42 @@ public class RetrofitClient {
 
     public interface ApiStores{
         @FormUrlEncoded
-        @POST("index.php?/ums/getOnlineConfiguration")
+        @POST("/ums/getOnlineConfiguration")
         Call<ResponseBody> getConfiguration(@Field("content")String queryJson);
 
         @FormUrlEncoded
-        @POST("index.php?/ums/postActivityLog")
+        @POST("/ums/postActivityLog")
         Call<ResponseBody> uploadActivityLog(@Field("content") String activityLog);
 
         @FormUrlEncoded
-        @POST("index.php?/ums/uploadLog")
+        @POST("/ums/uploadLog")
         Call<ResponseBody> uploadCacheLog(@Field("content") String cacheLog);
 
         @FormUrlEncoded
-        @POST("index.php?/ums/postLeakcanryLog")
+        @POST("/ums/postLeakcanryLog")
         Call<ResponseBody> uploadLeakcanryLog(@Field("content") String leakLog);
 
        /* @FormUrlEncoded
-        @POST("index.php?/ums/postFpslog")
+        @POST("/ums/postFpslog")
         Call<ResponseBody> uploadFpsLog(@Field("content") String fpsLog);*/
 
         @FormUrlEncoded
-        @POST("index.php?/ums/moblielogin")
+        @POST("/ums/moblielogin")
         Call<ResponseBody> login(@Field("content") String params);
 
         @Multipart
-        @POST("index.php?/upload/upload_file/")
+        @POST("/upload/upload_file/")
         Call<ResponseBody> uploadBugInfoAndPic(@Part MultipartBody.Part picFile, @Part("content") RequestBody content);
 
         @Multipart
-        @POST("index.php?/upload/upload_dumpfile/")
+        @POST("/upload/upload_dumpfile/")
         Call<ResponseBody> uploadDumpFile(@Part MultipartBody.Part dumpFile);
+
+        @FormUrlEncoded
+        @POST("/ums/postAnrLog")
+        Call<ResponseBody> uploadAnrLog(@Field("content") String anrLog);
     }
+
 
     //返回结果解析
     public static MyMessage parseResp(String response) {

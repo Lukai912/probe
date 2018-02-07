@@ -52,6 +52,7 @@ public class Constants {
     //Default number of latest lines kept from the logcat output
     public static final int DEFAULT_LOGCAT_LINES = 100;
 
+    public static final String UTF8 = "UTF-8";
 
     /**
      * 设定的轮询间隔 暂定写死，以后可以运控
@@ -65,7 +66,8 @@ public class Constants {
     //Server URL prefix
     //for debug
    // public static String urlPrefix = "http://10.16.12.45/tanzhen_client/";
-    public static String urlPrefix = "http://211.151.122.244/";
+    public static String urlPrefix = "http://10.18.61.46:8080/";
     //for release
 //    public static String urlPrefix = "http://211.151.122.244:80/";
+
 }

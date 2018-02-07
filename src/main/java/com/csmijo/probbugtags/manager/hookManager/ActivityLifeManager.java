@@ -3,6 +3,8 @@ package com.csmijo.probbugtags.manager.hookManager;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.csmijo.probbugtags.utils.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +54,7 @@ public class ActivityLifeManager implements IActivityLifecycleCallbacks {
 
     @Override
     public void onActivityResumed(Activity activity) {
+        Logger.e("lukai", "lukai LifecycleCallbacks" + mLifeChanges.size());
         for (IActivityLifecycleCallbacks lis : mLifeChanges) {
             lis.onActivityResumed(activity);
         }

@@ -25,6 +25,7 @@ import com.csmijo.probbugtags.performance.GetMemory;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Constants;
 import com.csmijo.probbugtags.utils.Logger;
+import com.csmijo.probbugtags.utils.RetrofitClient;
 import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
@@ -37,6 +38,8 @@ import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import retrofit2.Retrofit;
 
 
 public class MyCrashHandler implements UncaughtExceptionHandler {

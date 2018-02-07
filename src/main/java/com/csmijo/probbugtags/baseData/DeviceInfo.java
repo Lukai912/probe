@@ -34,6 +34,7 @@ import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.csmijo.probbugtags.utils.CommonUtil;
@@ -179,6 +180,9 @@ public class DeviceInfo {
                     Manifest.permission.READ_PHONE_STATE)) {
                 Logger.e(tag,
                         "READ_PHONE_STATE permission should be added into AndroidManifest.xml.");
+                Exception e = new Exception("lukai");
+
+                e.printStackTrace();
                 return "";
             }
             result = telephonyManager.getSubscriberId();
@@ -294,6 +298,9 @@ public class DeviceInfo {
                     Manifest.permission.READ_PHONE_STATE)) {
                 Logger.e(tag,
                         "READ_PHONE_STATE permission should be added into AndroidManifest.xml.");
+                Exception e = new Exception("lukai");
+
+                e.printStackTrace();
                 return "";
             }
             result = telephonyManager.getDeviceId();
@@ -314,6 +321,9 @@ public class DeviceInfo {
                     Manifest.permission.READ_PHONE_STATE)) {
                 Logger.e(tag,
                         "READ_PHONE_STATE permission should be added into AndroidManifest.xml.");
+                Exception e = new Exception("lukai");
+
+                e.printStackTrace();
                 return "";
             }
             result = telephonyManager.getSimSerialNumber();

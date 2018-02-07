@@ -146,6 +146,7 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
      */
     private void postLeakTextInfo(HeapDump heapDump,
                                   AnalysisResult result, String newFileName) {
+        Logger.d(TAG,"postLeakTextInfo");
         // use JSONObject to save info
         JSONObject uploadObject = new JSONObject(); // 最终上传的JSONObject
         JSONArray leakArray = new JSONArray();
@@ -198,7 +199,7 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                    Logger.d(TAG,"postLeakTextInfo sucess");
                 }
 
                 @Override

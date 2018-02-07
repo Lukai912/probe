@@ -42,9 +42,9 @@ public class UploadLeakDumpService extends IntentService {
         this.mContext = this.getApplicationContext();
         String dumpFilePath = intent.getStringExtra("dumpFilePath");
         File dumFile = new File(dumpFilePath);
+        Logger.d(TAG,"dumpFilePath:" + dumpFilePath);
         postLeakDumpFile(dumFile);
     }
-
     public void postLeakDumpFile(final File heapDumpFile) {
 
         //由于文件较大，仅在wifi的情况下上传
@@ -66,35 +66,18 @@ public class UploadLeakDumpService extends IntentService {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        try {
-                            String body = response.body().string();
-                            MyMessage message = RetrofitClient.parseResp(body);
+                        //上传成功，删除本地文件
+                        Logger.i(TAG, "upload leak file success");
+                        heapDumpFile.delete();
 
-                            if (message == null) {
-                                Logger.i(TAG, "response is null");
-                                Toast.makeText(mContext, "dumpFile upload fail!", Toast.LENGTH_SHORT).show();
-                                return;
-                            }
-
-                            if (message.getFlag() == 1) {
-                                //上传成功，删除本地文件
-                                Logger.i(TAG, "upload leak file success");
-                                heapDumpFile.delete();
-
-                                if (heapDumpFile.exists()) {
-                                    Logger.i(TAG, heapDumpFile.getAbsolutePath() + " delete fail");
-                                } else {
-                                    Logger.i(TAG, heapDumpFile.getAbsolutePath() + " delete success");
-                                }
-
-                            } else {
-                                Logger.i(TAG, "response is " + response);
-                                Toast.makeText(mContext, "dumpFile upload fail!", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if (heapDumpFile.exists()) {
+                            Logger.i(TAG, heapDumpFile.getAbsolutePath() + " delete fail");
+                        } else {
+                            Logger.i(TAG, heapDumpFile.getAbsolutePath() + " delete success");
                         }
+                    } else {
+                        Logger.i(TAG, "response is null");
+                        Toast.makeText(mContext, "dumpFile upload fail!", Toast.LENGTH_SHORT).show();
                     }
                 }
 

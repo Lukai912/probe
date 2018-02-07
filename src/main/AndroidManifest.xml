@@ -24,7 +24,7 @@
 
         <provider
             android:name="com.csmijo.probbugtags.utils.DataContentProvider"
-            android:authorities="com.csmijo.datacontentprovider"
+            android:authorities="${applicationId}.com.csmijo.datacontentprovider"
             android:enabled="true"
             android:exported="true"/>
     </application>

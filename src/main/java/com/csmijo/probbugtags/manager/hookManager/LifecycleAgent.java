@@ -52,17 +52,17 @@ public class LifecycleAgent {
         ActivityLifeManager.getInstance().addIActivityLifeChange(new IActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                Logger.i(TAG, "onActivityCreated: " + activity.getLocalClassName().toString());
+                Logger.i(TAG, "onActivityCreated: " + activity.getLocalClassName());
             }
 
             @Override
             public void onActivityStarted(Activity activity) {
-                Logger.i(TAG, "onActivityStarted: " + activity.getLocalClassName().toString());
+                Logger.i(TAG, "onActivityStarted: " + activity.getLocalClassName());
             }
 
             @Override
             public void onActivityResumed(Activity activity) {
-                Logger.i(TAG, "onActivityResumed: " + activity.getLocalClassName().toString());
+                Logger.i(TAG, "onActivityResumed: " + activity.getLocalClassName());
 
                 BugTagAgentReal.onResume(activity);
                 Logger.e(TAG, "processname = " + processName);
@@ -70,23 +70,23 @@ public class LifecycleAgent {
 
             @Override
             public void onActivityPaused(Activity activity) {
-                Logger.i(TAG, "onActivityPaused: " + activity.getLocalClassName().toString());
+                Logger.i(TAG, "onActivityPaused: " + activity.getLocalClassName());
                 BugTagAgentReal.onPause(activity);
             }
 
             @Override
             public void onActivityStopped(Activity activity) {
-                Logger.i(TAG, "onActivityStopped: " + activity.getLocalClassName().toString());
+                Logger.i(TAG, "onActivityStopped: " + activity.getLocalClassName());
             }
 
             @Override
             public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-                Logger.i(TAG, "onActivitySaveInstanceState: " + activity.getLocalClassName().toString());
+                Logger.i(TAG, "onActivitySaveInstanceState: " + activity.getLocalClassName());
             }
 
             @Override
             public void onActivityDestroyed(Activity activity) {
-                Logger.i(TAG, "onActivityDestroyed: " + activity.getLocalClassName().toString());
+                Logger.i(TAG, "onActivityDestroyed: " + activity.getLocalClassName());
                 refWatcher.watch(activity);
             }
         });

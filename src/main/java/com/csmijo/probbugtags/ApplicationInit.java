@@ -2,10 +2,12 @@ package com.csmijo.probbugtags;
 
 import android.app.Activity;
 import android.app.Application;
+import android.util.Log;
 
 import com.csmijo.probbugtags.manager.ActivityCrumbsManager;
 import com.csmijo.probbugtags.manager.hookManager.LifecycleAgent;
 import com.csmijo.probbugtags.utils.Constants;
+import com.csmijo.probbugtags.utils.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,7 +24,7 @@ public class ApplicationInit {
             if (defaultProcess) {
 
                 BugTagAgentReal.setDebugEnabled(true);
-                BugTagAgentReal.setDebugLevel(Constants.Info);
+                BugTagAgentReal.setDebugLevel(Constants.Verbose);
                 BugTagAgentReal.updateOnlineConfig(mApplication.getApplicationContext());
                 BugTagAgentReal.postOnInit(mApplication.getApplicationContext());
 
@@ -32,6 +34,9 @@ public class ApplicationInit {
 
             BugTagAgentReal.init(mApplication.getApplicationContext());
             LifecycleAgent.init(mApplication);
+            AnrInspector collector = new AnrInspector();
+            collector.setANRListener(new BugTagAgentReal());
+            collector.start();
 
         }
 
