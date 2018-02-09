@@ -21,10 +21,6 @@ import android.support.annotation.Nullable;
 
 import com.csmijo.probbugtags.utils.Constants;
 
-import org.acra.ACRAConstants;
-import org.acra.config.CoreConfiguration;
-import org.acra.sender.HttpSender;
-
 import java.io.IOException;
 import java.util.Map;
 
@@ -34,22 +30,20 @@ import java.util.Map;
  */
 
 public class DefaultHttpRequest extends BaseHttpRequest<String> {
-    @NonNull
-    private final String contentType;
 
-    public DefaultHttpRequest(@NonNull CoreConfiguration config, @NonNull Context context, @NonNull HttpSender.Method method, @NonNull String contentType,
-                              @Nullable String login, @Nullable String password, int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers) {
-        super(config, context, method, login, password, connectionTimeOut, socketTimeOut, headers);
-        this.contentType = contentType;
+    public DefaultHttpRequest(@NonNull Context context, @NonNull HttpSender.Method method,
+                              int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers) {
+        super(context, method,connectionTimeOut, socketTimeOut, headers);
     }
 
     @Override
     protected String getContentType(@NonNull Context context, @NonNull String s) {
-        return contentType;
+        return null;
     }
 
     @Override
     protected byte[] asBytes(String content) throws IOException {
+        content = "content=" + content;
         return content.getBytes(Constants.UTF8);
     }
 }

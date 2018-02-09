@@ -54,15 +54,11 @@ public class Constants {
 
     public static final String UTF8 = "UTF-8";
 
-    /**
-     * 设定的轮询间隔 暂定写死，以后可以运控
-     *
-     * @author houjianhua
-     */
     public static int mPerFormDataDelay = 5000;
     // Default is false, not open fps view.
     public static boolean isOpenWindow = false;
-
+    public static int DEFAULT_CONNECTION_TIMEOUT = 15000;
+    public static int DEFAULT_SOCKET_TIMEOUT = 15000;
     //Server URL prefix
     //for debug
    // public static String urlPrefix = "http://10.16.12.45/tanzhen_client/";
