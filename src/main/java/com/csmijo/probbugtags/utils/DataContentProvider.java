@@ -26,13 +26,16 @@ public class DataContentProvider extends ContentProvider {
 
 
     static {
+        Logger.i("DataContentProvider", "uriMathcer");
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(AUTHORITY, "info", INFO_ITEM);
+//        uriMatcher.addURI(AUTHORITY, "info", INFO_ITEM);
     }
 
     @Override
     public boolean onCreate() {
+        Logger.i("DataContentProvider", "onCreate");
         mDBHelper = new DBHelper(getContext(), "Infos.db", null, 1);
+        uriMatcher.addURI(getContext().getPackageName()  + "." + AUTHORITY, "info",INFO_ITEM);
         return true;
     }
 
@@ -40,11 +43,14 @@ public class DataContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         //查询数据库
+        Logger.i("DataContentProvider", "query");
+        Logger.i("DataContentProvider", uri.getAuthority());
         SQLiteDatabase database = mDBHelper.getReadableDatabase();
         Cursor cursor = null;
         switch (uriMatcher.match(uri)) {
 
             case INFO_ITEM:
+                Logger.i("DataContentProvider", "INFO_ITEM");
                 cursor = database.query("Infos", projection, selection, selectionArgs, null, null, sortOrder);
                 break;
             default:
@@ -58,13 +64,14 @@ public class DataContentProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         //添加数据
+        Logger.i("DataContentProvider", "insert");
         SQLiteDatabase database = mDBHelper.getWritableDatabase();
         Uri uriReturn = null;
         switch (uriMatcher.match(uri)) {
 
             case INFO_ITEM:
                 long newItemId = database.insert("Infos", null, values);
-                uriReturn = Uri.parse("content://" + AUTHORITY + "/info/" + newItemId);
+                uriReturn = Uri.parse("content://" + getContext().getPackageName()+AUTHORITY + "/info/" + newItemId);
                 break;
             default:
                 break;
@@ -92,6 +99,7 @@ public class DataContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         //更新数据
+        Logger.i("DataContentProvider", "update");
         SQLiteDatabase database = mDBHelper.getWritableDatabase();
         int updateRows = 0;
         switch (uriMatcher.match(uri)) {

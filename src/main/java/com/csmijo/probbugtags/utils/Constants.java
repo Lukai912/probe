@@ -65,5 +65,10 @@ public class Constants {
     public static String urlPrefix = "http://10.18.61.46:8080/";
     //for release
 //    public static String urlPrefix = "http://211.151.122.244:80/";
+    public static String anrUrlExt = "ums/postAnrLog";
+    public static String dumpFileUrlExt = "upload/upload_dumpfile/";
+    public static String usingUrlExt = "ums/postActivityLog/";
+    public static String cacheUrlExt = "ums/uploadLog/";
+    public static String leackCanaryUrlExt = "ums/postLeakcanryLog";
 
 }

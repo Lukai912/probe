@@ -34,10 +34,6 @@ public class ApplicationInit {
 
             BugTagAgentReal.init(mApplication.getApplicationContext());
             LifecycleAgent.init(mApplication);
-            AnrInspector collector = new AnrInspector();
-            collector.setANRListener(new BugTagAgentReal());
-            collector.start();
-
         }
 
     }

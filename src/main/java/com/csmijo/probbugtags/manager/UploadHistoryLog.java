@@ -15,9 +15,11 @@
 package com.csmijo.probbugtags.manager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.csmijo.probbugtags.bean.MyMessage;
+import com.csmijo.probbugtags.service.UploadReportService;
 import com.csmijo.probbugtags.utils.Logger;
 import com.csmijo.probbugtags.utils.RetrofitClient;
 
@@ -25,7 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,18 +53,28 @@ public class UploadHistoryLog extends Thread {
     private void uploadCacheLog(String filePath) {
         String content = readFile(filePath);
         if (!TextUtils.isEmpty(content)) {
-            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-            Call<ResponseBody> call = apiStores.uploadCacheLog(content);
-            call.enqueue(getCallBack(filePath));
+//            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
+//            Call<ResponseBody> call = apiStores.uploadCacheLog(content);
+//            call.enqueue(getCallBack(filePath));
+            Intent intent = new Intent("cacheLog");
+            intent.putExtra("content", content);
+            intent.putExtra("filePath", filePath);
+            intent.setClass(context.getApplicationContext(), UploadReportService.class);
+            context.startService(intent);
         }
     }
 
     private void uploadLeakLog(String filePath) {
         String content = readFile(filePath);
         if (!TextUtils.isEmpty(content)) {
-            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-            Call<ResponseBody> call = apiStores.uploadLeakcanryLog(content);
-            call.enqueue(getCallBack(filePath));
+//            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
+//            Call<ResponseBody> call = apiStores.uploadLeakcanryLog(content);
+//            call.enqueue(getCallBack(filePath));
+            Intent intent = new Intent("leakcanryLog");
+            intent.putExtra("content", content);
+            intent.putExtra("filePath", filePath);
+            intent.setClass(context.getApplicationContext(), UploadReportService.class);
+            context.startService(intent);
         }
     }
 
@@ -99,40 +110,40 @@ public class UploadHistoryLog extends Thread {
         }
     }
 
-    private Callback<ResponseBody> getCallBack(final String filePath) {
-        return new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        String body = response.body().string();
-                        MyMessage message = RetrofitClient.parseResp(body);
-
-                        if (message == null) {
-                            return;
-                        }
-                        if (message.getFlag() > 0) {
-                            File file = new File(filePath);
-                            file.delete();
-
-                            if (file.exists()) {
-                                Logger.i(TAG, file.getAbsolutePath() + " delete fail!");
-                            } else {
-                                Logger.i(TAG, file.getAbsolutePath() + " delete success!");
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Logger.e(TAG, "upload filePath info fail");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Logger.e(TAG, "upload filePath info fail");
-            }
-        };
-    }
+//    private Callback<ResponseBody> getCallBack(final String filePath) {
+//        return new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                if (response.isSuccessful()) {
+//                    try {
+//                        String body = response.body().string();
+//                        MyMessage message = RetrofitClient.parseResp(body);
+//
+//                        if (message == null) {
+//                            return;
+//                        }
+//                        if (message.getFlag() > 0) {
+//                            File file = new File(filePath);
+//                            file.delete();
+//
+//                            if (file.exists()) {
+//                                Logger.i(TAG, file.getAbsolutePath() + " delete fail!");
+//                            } else {
+//                                Logger.i(TAG, file.getAbsolutePath() + " delete success!");
+//                            }
+//                        }
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    Logger.e(TAG, "upload filePath info fail");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Logger.e(TAG, "upload filePath info fail");
+//            }
+//        };
+//    }
 }

@@ -20,7 +20,7 @@
             android:enabled="false"
             android:process=":leakcanary"/>
         <service android:name="com.squareup.leakcanary.DisplayLeakService"/>
-        <service android:name=".service.UploadLeakDumpService"/>
+        <service android:name=".service.UploadReportService"/>
 
         <provider
             android:name="com.csmijo.probbugtags.utils.DataContentProvider"

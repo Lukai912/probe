@@ -9,10 +9,12 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.csmijo.probbugtags.utils.Logger;
+
 /**
  * A watchdog timer thread that detects when the UI thread has frozen.
  */
-public class AnrInspector extends Thread {
+public class AnrInspector implements Runnable {
 
     public interface ANRListener {
         public void onAppNotResponding(ANRError error);
@@ -160,11 +162,11 @@ public class AnrInspector extends Thread {
 
     @Override
     public void run() {
-        setName("|ANR-WatchDog|");
-
+        Logger.e("ANR-Watchdog thread", "Inspect Application Not Responding!");
+        Thread.currentThread().setName("|ANR-WatchDog|");
         int lastTick;
         int lastIgnored = -1;
-        while (!isInterrupted()) {
+        while (!Thread.currentThread().isInterrupted()) {
             lastTick = _tick;
             _uiHandler.post(_ticker);
             try {

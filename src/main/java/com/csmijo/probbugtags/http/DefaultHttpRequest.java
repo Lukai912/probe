@@ -42,8 +42,8 @@ public class DefaultHttpRequest extends BaseHttpRequest<String> {
     }
 
     @Override
-    protected byte[] asBytes(String content) throws IOException {
-        content = "content=" + content;
+    protected byte[] asBytes(String tag, String content) throws IOException {
+        content = tag +"=" + content;
         return content.getBytes(Constants.UTF8);
     }
 }

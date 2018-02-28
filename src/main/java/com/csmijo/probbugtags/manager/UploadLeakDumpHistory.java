@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.csmijo.probbugtags.service.UploadLeakDumpService;
+import com.csmijo.probbugtags.service.UploadReportService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
 import com.squareup.leakcanary.internal.LeakCanaryInternals;
@@ -50,9 +50,9 @@ public class UploadLeakDumpHistory extends Thread {
                 for (int i = 0; i < length; i++) {
                     File file = existsFiles[i];
                     Logger.d(TAG, "exist file :" + file.getName());
-                    Intent intent = new Intent();
-                    intent.putExtra("dumpFilePath", file.getAbsolutePath());
-                    intent.setClass(this.mContext, UploadLeakDumpService.class);
+                    Intent intent = new Intent("leakdump");
+                    intent.putExtra("filePath", file.getAbsolutePath());
+                    intent.setClass(this.mContext, UploadReportService.class);
                     this.mContext.startService(intent);
                 }
             }else{

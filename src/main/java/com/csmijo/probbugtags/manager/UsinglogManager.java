@@ -16,11 +16,13 @@ package com.csmijo.probbugtags.manager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.bean.MyMessage;
+import com.csmijo.probbugtags.service.UploadReportService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
 import com.csmijo.probbugtags.utils.RetrofitClient;
@@ -33,7 +35,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Iterator;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -83,7 +84,7 @@ public class UsinglogManager {
     }
 
     public void onResume() {
-        Logger.d(TAG, "Call onResume()");
+        Logger.i(TAG, "Call onResume()");
         try {
             if (CommonUtil.isNewSession(context)) {
                 session_id = CommonUtil.generateSession(context);
@@ -103,7 +104,7 @@ public class UsinglogManager {
     }
 
     public void onPause() {
-        Logger.d(TAG, "Call onPause()");
+        Logger.i(TAG, "Call onPause()");
         String pageName = SharedPrefUtil.getValue(context, "CurrentPage", "");
 
         long start = SharedPrefUtil.getValue(context, "session_save_time",
@@ -162,48 +163,53 @@ public class UsinglogManager {
     }
 
     private void uploadActivityInfo(final JSONObject info) {
+        Logger.i(TAG, "uploadActivityInfo");
         if (CommonUtil.getReportPolicyMode(context) == BugTagAgentReal.SendPolicy.REALTIME
                 && CommonUtil.isNetworkAvailable(context)) {
-            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-            Call<ResponseBody> call = apiStores.uploadActivityLog(info.toString());
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                    if (response.isSuccessful()) {
-                        try {
-                            String body = response.body().string();
-                            MyMessage message = RetrofitClient.parseResp(body);
-                            if (message == null) {
-                                CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-                                        context);
-                                return;
-                            }
-
-                            if (message.getFlag() < 0) {
-                                if (message.getFlag() == -4 || message.getFlag() == -5)
-                                    CommonUtil.saveInfoToFile("activityInfo", info,
-                                            "/cobub.cache", context);
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-                                context);
-                        return;
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-                            context);
-                    Logger.e(TAG, "upload activity fail, " + t.getMessage());
-                    return;
-                }
-            });
+            Intent intent = new Intent("usingLog");
+            intent.putExtra("content", info.toString());
+            intent.setClass(context.getApplicationContext(), UploadReportService.class);
+            context.startService(intent);
+//            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
+//            Call<ResponseBody> call = apiStores.uploadActivityLog(info.toString());
+//            call.enqueue(new Callback<ResponseBody>() {
+//                @Override
+//                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//
+//                    if (response.isSuccessful()) {
+//                        try {
+//                            String body = response.body().string();
+//                            MyMessage message = RetrofitClient.parseResp(body);
+//                            if (message == null) {
+//                                CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
+//                                        context);
+//                                return;
+//                            }
+//
+//                            if (message.getFlag() < 0) {
+//                                if (message.getFlag() == -4 || message.getFlag() == -5)
+//                                    CommonUtil.saveInfoToFile("activityInfo", info,
+//                                            "/cobub.cache", context);
+//                            }
+//
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    } else {
+//                        CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
+//                                context);
+//                        return;
+//                    }
+//                }
+//
+//                @Override
+//                public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                    CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
+//                            context);
+//                    Logger.e(TAG, "upload activity fail, " + t.getMessage());
+//                    return;
+//                }
+//            });
 
         } else {
             CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",

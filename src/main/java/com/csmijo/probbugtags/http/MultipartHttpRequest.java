@@ -59,14 +59,14 @@ public class MultipartHttpRequest extends BaseHttpRequest<List<File>> {
         return "multipart/form-data; boundary=" + BOUNDARY;
     }
     @Override
-    protected byte[] asBytes(List<File> files) throws IOException {
+    protected byte[] asBytes(String tag, List<File> files) throws IOException {
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         final Writer writer = new OutputStreamWriter(outputStream, Constants.UTF8);
         //noinspection TryFinallyCanBeTryWithResources we do not target api 19
         try {
             for (File file : files) {
                 writer.append(NEW_LINE).append(BOUNDARY_FIX).append(BOUNDARY).append(NEW_LINE);
-                writer.append("Content-Disposition: form-data; name=\"").append("dumpFile").append('\"').append("; filename=\"").append(file.getName()).append("\"").append(NEW_LINE);
+                writer.append("Content-Disposition: form-data; name=\"").append(tag).append('\"').append("; filename=\"").append(file.getName()).append("\"").append(NEW_LINE);
                 writer.append(CONTENT_TYPE).append("multipart/form-data").append(NEW_LINE);
                 writer.append("Content-Length: ").append(String.valueOf(fileToByteArray(file).length)).append(NEW_LINE).append(NEW_LINE);
                 writer.flush();

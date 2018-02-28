@@ -48,8 +48,13 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
         this.socketTimeOut = socketTimeOut;
         this.headers = headers;
     }
-
-
+    /**
+     * Interface definition for a callback to be invoked when request has finished.
+     */
+    public interface Callback {
+        void onSuccess(String responseMessage);
+        void onFailure(int responseCode, String responseMessage);
+    }
     /**
      * Sends to a URL.
      *
@@ -58,13 +63,13 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
      * @throws IOException if the data cannot be sent.
      */
     @Override
-    public void send(@NonNull URL url, @NonNull T content) throws IOException {
+    public void send(@NonNull URL url,String tag, @NonNull T content) throws IOException {
 
         final HttpURLConnection urlConnection = createConnection(url);
         configureTimeouts(urlConnection, connectionTimeOut, socketTimeOut);
         configureHeaders(urlConnection,headers, content);
         try {
-            writeContent(urlConnection, method, content);
+            writeContent(urlConnection, method, tag, content);
             handleResponse(urlConnection.getResponseCode(), urlConnection.getResponseMessage());
             urlConnection.disconnect();
         } catch (SocketTimeoutException e) {
@@ -101,8 +106,8 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
 
     protected abstract String getContentType(@NonNull Context context, @NonNull T t);
     @SuppressWarnings("WeakerAccess")
-    protected void writeContent(@NonNull HttpURLConnection connection, @NonNull HttpSender.Method method, @NonNull T content) throws IOException {
-        final byte[] contentAsBytes = asBytes(content);
+    protected void writeContent(@NonNull HttpURLConnection connection, @NonNull HttpSender.Method method,String tag, @NonNull T content) throws IOException {
+        final byte[] contentAsBytes = asBytes(tag, content);
         // write output - see http://developer.android.com/reference/java/net/HttpURLConnection.html
         connection.setRequestMethod(method.name());
         connection.setDoOutput(true);
@@ -121,7 +126,7 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
             IOUtils.safeClose(outputStream);
         }
     }
-    protected abstract byte[] asBytes(T content) throws IOException;
+    protected abstract byte[] asBytes(String tag, T content) throws IOException;
 
     protected void handleResponse(int responseCode, String responseMessage) throws IOException {
         if (responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE) {

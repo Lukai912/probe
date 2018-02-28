@@ -27,7 +27,7 @@ import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.manager.ClientdataManager;
-import com.csmijo.probbugtags.service.UploadLeakDumpService;
+import com.csmijo.probbugtags.service.UploadReportService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
 import com.csmijo.probbugtags.utils.RetrofitClient;
@@ -40,7 +40,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.Iterator;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -120,9 +119,9 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
         File file = new File(filePath);
         //上传leak dump file
         if (fileSize < 90) {
-            Intent intent = new Intent();
+            Intent intent = new Intent("leakdump");
             intent.putExtra("dumpFilePath", file.getAbsolutePath());
-            intent.setClass(this.getApplicationContext(), UploadLeakDumpService.class);
+            intent.setClass(this.getApplicationContext(), UploadReportService.class);
             this.startService(intent);
         } else {
             Context context = ApplicationInit.getCurrentActivity();
@@ -189,25 +188,30 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
         } catch (Exception e) {
             // TODO: handle exception
         }
-
+        String path = ApplicationInit.getCurrentActivity().getApplicationContext().getCacheDir() + "/leakInfo.cache";
+        Intent intent = new Intent("leakcanryLog");
+        intent.putExtra("content", uploadObject.toString());
+        intent.putExtra("filePath", path);
+        intent.setClass(this.getApplicationContext(), UploadReportService.class);
+        this.startService(intent);
         // send info to server
         final JSONObject finalLeakObject = leakObject;
         if (CommonUtil.getReportPolicyMode(getApplicationContext()) == BugTagAgentReal.SendPolicy.REALTIME
                 && CommonUtil.isNetworkAvailable(getApplicationContext())) {
-            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-            Call<ResponseBody> call = apiStores.uploadLeakcanryLog(uploadObject.toString());
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    Logger.d(TAG,"postLeakTextInfo sucess");
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    CommonUtil.saveInfoToFile("leakInfo", finalLeakObject,
-                            "/leakInfo.cache", getApplicationContext());
-                }
-            });
+//            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
+//            Call<ResponseBody> call = apiStores.uploadLeakcanryLog(uploadObject.toString());
+//            call.enqueue(new Callback<ResponseBody>() {
+//                @Override
+//                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                    Logger.d(TAG,"postLeakTextInfo sucess");
+//                }
+//
+//                @Override
+//                public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                    CommonUtil.saveInfoToFile("leakInfo", finalLeakObject,
+//                            "/leakInfo.cache", getApplicationContext());
+//                }
+//            });
         } else {
             CommonUtil.saveInfoToFile("leakInfo", leakObject,
                     "/leakInfo.cache", getApplicationContext());

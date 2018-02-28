@@ -13,20 +13,17 @@ public class HttpConfig {
     private int mConnectionTimeout;
     private int mSocketTimeout;
     private Map<String, String> mHttpHeaders;
-    private boolean isMuiltyPart;
 
     public HttpConfig() {
         this.mConnectionTimeout = Constants.DEFAULT_CONNECTION_TIMEOUT;
         this.mSocketTimeout = Constants.DEFAULT_SOCKET_TIMEOUT;
         this.mHttpHeaders = null;
-        this.isMuiltyPart = false;
     }
 
-    public HttpConfig(int connectionTimeout, int socketTimeout, Map<String, String> httpHeaders, boolean isMuiltyPart) {
+    public HttpConfig(int connectionTimeout, int socketTimeout, Map<String, String> httpHeaders) {
         this.mConnectionTimeout = connectionTimeout;
         this.mSocketTimeout = connectionTimeout;
         this.mHttpHeaders = httpHeaders;
-        this.isMuiltyPart = isMuiltyPart;
     }
 
     public int getConnectionTimeout() {
@@ -39,9 +36,5 @@ public class HttpConfig {
 
     public Map<String, String> getHttpHeaders() {
         return mHttpHeaders;
-    }
-
-    public boolean isMuiltyPart() {
-        return isMuiltyPart;
     }
 }

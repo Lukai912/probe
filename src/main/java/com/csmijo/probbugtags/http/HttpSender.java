@@ -55,14 +55,14 @@ public class HttpSender{
         this.httpConfig = httpConfig;
     }
 
-    public void send(@NonNull Context context, @NonNull String report, @NonNull List<File> attchments) throws Exception {
+    public void send(@NonNull Context context, @NonNull String report,String tag, List<File> attchments) throws Exception {
         try {
             final String baseUrl = Constants.urlPrefix;
             // Adjust URL depending on method
             final URL reportUrl = mMethod.createURL(baseUrl, mUrlExt);
             Logger.d(this.getClass().toString(), "Connect to " + reportUrl);
             sendHttpRequests(context, mMethod, httpConfig.getConnectionTimeout(),
-                    httpConfig.getSocketTimeout(), httpConfig.getHttpHeaders(), report, reportUrl, attchments);
+                    httpConfig.getSocketTimeout(), httpConfig.getHttpHeaders(), report, reportUrl, tag, attchments);
 
         } catch (@NonNull Exception e) {
             throw e;
@@ -72,13 +72,13 @@ public class HttpSender{
     @SuppressWarnings("WeakerAccess")
     protected void sendHttpRequests(@NonNull Context context, @NonNull Method method,
                                     int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers,
-                                    @NonNull String content, @NonNull URL url, @NonNull List<File> attachments) throws IOException {
+                                    @NonNull String content, @NonNull URL url,String tag, List<File> attachments) throws IOException {
         switch (method) {
             case POST:
-                if (!httpConfig.isMuiltyPart()) {
-                    sendWithoutAttachments(context, method,connectionTimeOut, socketTimeOut, headers, content, url);
+                if (attachments == null || attachments.isEmpty()) {
+                    sendWithoutAttachments(context, method,connectionTimeOut, socketTimeOut, headers, tag, content, url);
                 } else {
-                    postMultipart(context,connectionTimeOut, socketTimeOut, headers, attachments, url);
+                    postMultipart(context,connectionTimeOut, socketTimeOut, headers, tag, attachments, url);
                 }
                 break;
         }
@@ -86,16 +86,16 @@ public class HttpSender{
 
     @SuppressWarnings("WeakerAccess")
     protected void sendWithoutAttachments(@NonNull Context context, @NonNull Method method,
-                                          int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers,
+                                          int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers,String tag,
                                           @NonNull String content, @NonNull URL url) throws IOException {
-        new DefaultHttpRequest(context, method, connectionTimeOut, socketTimeOut, headers).send(url, content);
+        new DefaultHttpRequest(context, method, connectionTimeOut, socketTimeOut, headers).send(url, tag, content);
     }
 
     @SuppressWarnings("WeakerAccess")
     protected void postMultipart(@NonNull Context context,
-                                 int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers,
+                                 int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers, String tag,
                                  @NonNull List<File> content, @NonNull URL url) throws IOException {
-        new MultipartHttpRequest(context, Method.POST, connectionTimeOut, socketTimeOut, headers).send(url, content);
+        new MultipartHttpRequest(context, Method.POST, connectionTimeOut, socketTimeOut, headers).send(url, tag, content);
     }
 
 

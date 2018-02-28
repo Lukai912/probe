@@ -17,6 +17,7 @@ package com.csmijo.probbugtags;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -31,6 +32,7 @@ import com.csmijo.probbugtags.manager.MyCrashHandler;
 import com.csmijo.probbugtags.manager.UploadHistoryLog;
 import com.csmijo.probbugtags.manager.UploadLeakDumpHistory;
 import com.csmijo.probbugtags.manager.UsinglogManager;
+import com.csmijo.probbugtags.service.UploadReportService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Constants;
 import com.csmijo.probbugtags.utils.Logger;
@@ -42,8 +44,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,7 +57,7 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
     private static final String tag = "BugTagAgentReal";
     public static Handler handler;
     private static Context mContext;
-
+    private static ExecutorService anrCollector = Executors.newSingleThreadExecutor();
     static {
         HandlerThread localHandlerThread = new HandlerThread("BugTagAgentReal");
         localHandlerThread.start();
@@ -70,6 +73,7 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
         AppInfo.init(mContext);
         DeviceInfo.init(mContext);
         BugTagAgentReal.onError(mContext);
+        anrCollector.execute(new AnrInspector().setANRListener(new BugTagAgentReal()));
     }
 
     public static void postOnInit(Context context) {
@@ -169,15 +173,15 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
      */
     public static void updateOnlineConfig(final Context context) {
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Logger.d(tag, "Call updaeOnlineConfig");
-                ConfigManager cm = new ConfigManager(context);
-                cm.updateOnlineConfig();
-            }
-        });
-        handler.post(thread);
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Logger.d(tag, "Call updaeOnlineConfig");
+//                ConfigManager cm = new ConfigManager(context);
+//                cm.updateOnlineConfig();
+//            }
+//        });
+//        handler.post(thread);
     }
 
     /**
@@ -222,54 +226,33 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
     public void onAppNotResponding(ANRError error) {
         Logger.e("ANR-Watchdog", "Detected Application Not Responding!");
         final String trace = error.getStackTrace("anr",error.getCause());
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                Logger.d(tag, "Call onPause()");
-
-                try {
-                    final JSONObject clientInfObject = new ClientdataManager(mContext).prepareClientdataJSON();
-                    clientInfObject.put("ANRThreadTrace",trace);
-                    Activity activity = ApplicationInit.getCurrentActivity();
-                    if (null != activity) {
-                        clientInfObject.put("activities", activity.getComponentName().getClassName());
-                    } else {
-                        clientInfObject.put("activities", "");
-                    }
-                    clientInfObject.put("time",CommonUtil.getFormatTime(System.currentTimeMillis()));
-                    clientInfObject.put("recentActivities", SharedPrefUtil.getValue(mContext, "recent_activity_names", ""));
-                    if (CommonUtil.getReportPolicyMode(mContext) == BugTagAgentReal.SendPolicy.REALTIME
-                            && CommonUtil.isNetworkAvailable(mContext)) {
-                        RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-                        Call<ResponseBody> call = apiStores.uploadAnrLog(clientInfObject.toString());
-                        call.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if(response.isSuccessful()) {
-                                    Logger.i("ANRTrace", "upload anr isSuccessful");
-                                } else {
-                                    CommonUtil.saveInfoToFile("activityInfo", clientInfObject, "/cobub.cache",
-                                            mContext);
-                                    return;
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                CommonUtil.saveInfoToFile("activityInfo", clientInfObject, "/cobub.cache",
-                                        mContext);
-                                Logger.e("ANRTrace", "upload activity fail, " + t.getMessage());
-                                return;
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+        try {
+            final JSONObject clientInfObject = new ClientdataManager(mContext).prepareClientdataJSON();
+            clientInfObject.put("ANRThreadTrace",trace);
+            Activity activity = ApplicationInit.getCurrentActivity();
+            if (null != activity) {
+                clientInfObject.put("activities", activity.getComponentName().getClassName());
+            } else {
+                clientInfObject.put("activities", "");
             }
-        };
-        handler.post(runnable);
+            clientInfObject.put("time",CommonUtil.getFormatTime(System.currentTimeMillis()));
+            clientInfObject.put("recentActivities", SharedPrefUtil.getValue(mContext, "recent_activity_names", ""));
+            if (CommonUtil.getReportPolicyMode(mContext) == BugTagAgentReal.SendPolicy.REALTIME
+                    && CommonUtil.isNetworkAvailable(mContext)) {
+                Intent intent = new Intent("anr");
+                intent.putExtra("content", clientInfObject.toString());
+                intent.setClass(mContext.getApplicationContext(), UploadReportService.class);
+                mContext.startService(intent);
+            } else {
+                CommonUtil.saveInfoToFile("anrInfo", clientInfObject,
+                        "/cobub.cache", mContext);
+            }
+
+            anrCollector.execute(new AnrInspector().setANRListener(new BugTagAgentReal()));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
