@@ -15,21 +15,22 @@
  */
 package com.squareup.leakcanary;
 
-import java.io.File;
+import com.squareup.haha.perflib.Instance;
 
-/** Dumps the heap into a file. */
-public interface HeapDumper {
-  HeapDumper NONE = new HeapDumper() {
-    @Override public File dumpHeap() {
-      return RETRY_LATER;
-    }
-  };
+final class LeakNode {
+  /** May be null. */
+  final Exclusion exclusion;
+  final Instance instance;
+  final LeakNode parent;
+  final String referenceName;
+  final LeakTraceElement.Type referenceType;
 
-  File RETRY_LATER = null;
-
-  /**
-   * @return a {@link File} referencing the dumped heap, or {@link #RETRY_LATER} if the heap could
-   * not be dumped.
-   */
-  File dumpHeap();
+  LeakNode(Exclusion exclusion, Instance instance, LeakNode parent,
+      String referenceName, LeakTraceElement.Type referenceType) {
+    this.exclusion = exclusion;
+    this.instance = instance;
+    this.parent = parent;
+    this.referenceName = referenceName;
+    this.referenceType = referenceType;
+  }
 }

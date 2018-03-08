@@ -54,7 +54,6 @@ public class ActivityLifeManager implements IActivityLifecycleCallbacks {
 
     @Override
     public void onActivityResumed(Activity activity) {
-        Logger.e("lukai", "lukai LifecycleCallbacks" + mLifeChanges.size());
         for (IActivityLifecycleCallbacks lis : mLifeChanges) {
             lis.onActivityResumed(activity);
         }

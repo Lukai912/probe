@@ -64,7 +64,6 @@ public class ActivityCrumbsManager {
                         currentActivity = (Activity) activityField.get(activityRecord);
                     }
                 }
-                Logger.d(TAG, "sCurrentActivityWeakRef null , currentActivity = " + currentActivity.getLocalClassName());
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (NoSuchMethodException e) {
@@ -74,6 +73,8 @@ public class ActivityCrumbsManager {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

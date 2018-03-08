@@ -8,13 +8,7 @@ import org.json.JSONObject;
 import java.util.concurrent.TimeUnit;
 
 
-import retrofit2.Call;
-import retrofit2.Retrofit;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Multipart;
-import retrofit2.http.POST;
-import retrofit2.http.Part;
+
 
 /**
  * 负责网络请求部分
@@ -24,23 +18,23 @@ import retrofit2.http.Part;
 
 public class RetrofitClient {
 
-    private static Retrofit mRetrofit;
-
-    public static Retrofit retrofit() {
-//        if (mRetrofit == null) {
-//            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-//                    .readTimeout(15, TimeUnit.SECONDS)
-//                    .connectTimeout(15,TimeUnit.SECONDS)
-//                    .retryOnConnectionFailure(false)
-//                    .build();
+//    private static Retrofit mRetrofit;
 //
-//            mRetrofit = new Retrofit.Builder()
-//                    .baseUrl(Constants.urlPrefix)
-//                    .client(okHttpClient)
-//                    .build();
-//        }
-        return mRetrofit;
-    }
+//    public static Retrofit retrofit() {
+////        if (mRetrofit == null) {
+////            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+////                    .readTimeout(15, TimeUnit.SECONDS)
+////                    .connectTimeout(15,TimeUnit.SECONDS)
+////                    .retryOnConnectionFailure(false)
+////                    .build();
+////
+////            mRetrofit = new Retrofit.Builder()
+////                    .baseUrl(Constants.urlPrefix)
+////                    .client(okHttpClient)
+////                    .build();
+////        }
+//        return mRetrofit;
+//    }
 
     public interface ApiStores{
 //        @FormUrlEncoded

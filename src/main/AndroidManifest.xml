@@ -14,14 +14,18 @@
 
 
     <application>
-
+        <service android:name=".service.LeakService"/>
+        <service android:name=".service.UploadReportService"/>
         <service
             android:name="com.squareup.leakcanary.internal.HeapAnalyzerService"
+            android:process=":leakcanary"
             android:enabled="false"
-            android:process=":leakcanary"/>
-        <service android:name="com.squareup.leakcanary.DisplayLeakService"/>
-        <service android:name=".service.UploadReportService"/>
-
+            />
+        <service
+            android:name="com.squareup.leakcanary.DisplayLeakService"
+            android:process=":leakcanary"
+            android:enabled="false"
+            />
         <provider
             android:name="com.csmijo.probbugtags.utils.DataContentProvider"
             android:authorities="${applicationId}.com.csmijo.datacontentprovider"

@@ -13,23 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.squareup.leakcanary;
+package com.squareup.leakcanary.internal;
 
-import java.io.File;
+import java.util.concurrent.ThreadFactory;
 
-/** Dumps the heap into a file. */
-public interface HeapDumper {
-  HeapDumper NONE = new HeapDumper() {
-    @Override public File dumpHeap() {
-      return RETRY_LATER;
-    }
-  };
+/**
+ * This is intended to only be used with a single thread executor.
+ */
+final class LeakCanarySingleThreadFactory implements ThreadFactory {
 
-  File RETRY_LATER = null;
+  private final String threadName;
 
-  /**
-   * @return a {@link File} referencing the dumped heap, or {@link #RETRY_LATER} if the heap could
-   * not be dumped.
-   */
-  File dumpHeap();
+  LeakCanarySingleThreadFactory(String threadName) {
+    this.threadName = "LeakCanary-" + threadName;
+  }
+
+  @Override public Thread newThread(Runnable runnable) {
+    return new Thread(runnable, threadName);
+  }
 }

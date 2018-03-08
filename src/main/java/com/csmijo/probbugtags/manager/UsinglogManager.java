@@ -35,9 +35,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Iterator;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class UsinglogManager {
 
@@ -170,46 +168,6 @@ public class UsinglogManager {
             intent.putExtra("content", info.toString());
             intent.setClass(context.getApplicationContext(), UploadReportService.class);
             context.startService(intent);
-//            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-//            Call<ResponseBody> call = apiStores.uploadActivityLog(info.toString());
-//            call.enqueue(new Callback<ResponseBody>() {
-//                @Override
-//                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//
-//                    if (response.isSuccessful()) {
-//                        try {
-//                            String body = response.body().string();
-//                            MyMessage message = RetrofitClient.parseResp(body);
-//                            if (message == null) {
-//                                CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-//                                        context);
-//                                return;
-//                            }
-//
-//                            if (message.getFlag() < 0) {
-//                                if (message.getFlag() == -4 || message.getFlag() == -5)
-//                                    CommonUtil.saveInfoToFile("activityInfo", info,
-//                                            "/cobub.cache", context);
-//                            }
-//
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    } else {
-//                        CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-//                                context);
-//                        return;
-//                    }
-//                }
-//
-//                @Override
-//                public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                    CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-//                            context);
-//                    Logger.e(TAG, "upload activity fail, " + t.getMessage());
-//                    return;
-//                }
-//            });
 
         } else {
             CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",

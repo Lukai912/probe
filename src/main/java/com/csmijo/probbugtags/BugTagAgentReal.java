@@ -47,9 +47,6 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 public class BugTagAgentReal implements AnrInspector.ANRListener {
@@ -88,10 +85,8 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
      */
     public static void postHistoryLog(final Context context) {
         Logger.d(tag, "postHistoryLog");
-        if (CommonUtil.isNetworkAvailable(context)) {
-            Thread thread = new UploadHistoryLog(context);
-            handler.post(thread);
-        }
+        Thread thread = new UploadHistoryLog(context);
+        handler.postDelayed(thread,10000);
     }
 
     /**
@@ -101,10 +96,8 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
      */
     public static void postLeakDumpHistory(Context context) {
         Logger.d(tag, "postLeakDumpHistory");
-
         Thread thread = new UploadLeakDumpHistory(context);
-        handler.post(thread);
-
+        handler.postDelayed(thread,15000);
     }
 
 

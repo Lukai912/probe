@@ -20,12 +20,11 @@ package com.squareup.leakcanary;
  * An attached debugger might retain references and create false positives.
  */
 public interface DebuggerControl {
-    DebuggerControl NONE = new DebuggerControl() {
-        @Override
-        public boolean isDebuggerAttached() {
-            return false;
-        }
-    };
+  DebuggerControl NONE = new DebuggerControl() {
+    @Override public boolean isDebuggerAttached() {
+      return false;
+    }
+  };
 
-    boolean isDebuggerAttached();
+  boolean isDebuggerAttached();
 }

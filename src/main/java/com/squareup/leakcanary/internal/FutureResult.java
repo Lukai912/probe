@@ -25,7 +25,7 @@ public final class FutureResult<T> {
   private final CountDownLatch latch;
 
   public FutureResult() {
-    resultHolder = new AtomicReference<T>();
+    resultHolder = new AtomicReference<>();
     latch = new CountDownLatch(1);
   }
 

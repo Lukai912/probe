@@ -22,9 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 
 /**
@@ -44,9 +42,10 @@ public class UploadReportService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         this.mContext = this.getApplicationContext();
-        Logger.d(TAG, "onHandleIntent");
+
         String report = intent.getStringExtra("content");
         String filePath = intent.getStringExtra("filePath");
+        Logger.d(TAG, "onHandleIntent: " + intent.getAction());
         switch (intent.getAction()) {
             case "leakdump":
                 uploadFileLog(filePath, report, Constants.dumpFileUrlExt, "dumpFile");
@@ -57,7 +56,7 @@ public class UploadReportService extends IntentService {
             case "config":
                 break;
             case "usingLog":
-                uploadCommonLog("activityInfo", report, Constants.usingUrlExt, "content");
+//                uploadCommonLog("activityInfo", report, Constants.usingUrlExt, "content");
                 break;
             case "leakcanryLog":
                 uploadCommonLog("leakInfo", report, Constants.leackCanaryUrlExt, "content");
@@ -85,6 +84,10 @@ public class UploadReportService extends IntentService {
     }
 
     protected void uploadFileLog(String filePath, String report, String urlExt, String tag) {
+        if (filePath == null) {
+            Logger.d(TAG, "uploadFileLog path is null");
+            return;
+        }
         HttpSender sender = new HttpSender(HttpSender.Method.POST, urlExt, new HttpConfig());
         File logFile = new File(filePath);
         List<File> fileList = new ArrayList<File>();

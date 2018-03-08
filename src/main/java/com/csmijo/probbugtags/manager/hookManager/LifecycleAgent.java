@@ -7,9 +7,9 @@ import android.os.Bundle;
 
 import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.BugTagAgentReal;
+import com.csmijo.probbugtags.service.LeakService;
 import com.csmijo.probbugtags.utils.Logger;
 import com.squareup.leakcanary.AndroidExcludedRefs;
-import com.squareup.leakcanary.DisplayLeakService;
 import com.squareup.leakcanary.ExcludedRefs;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
@@ -43,8 +43,9 @@ public class LifecycleAgent {
                 .createAndroidDefaults()
                 .build();
         // install LeakCanary
-        final RefWatcher refWatcher = LeakCanary.install(app, DisplayLeakService.class,
-                excludedRefs);
+        final RefWatcher refWatcher = LeakCanary.refWatcher(app)
+                .listenerServiceClass(LeakService.class).buildAndInstall();
+//        final RefWatcher refWatcher = LeakCanary.install(app);
 
         final String processName = ApplicationInit.getCurrentProcessName();
 
@@ -87,7 +88,7 @@ public class LifecycleAgent {
             @Override
             public void onActivityDestroyed(Activity activity) {
                 Logger.i(TAG, "onActivityDestroyed: " + activity.getLocalClassName());
-                refWatcher.watch(activity);
+//                refWatcher.watch(activity);
             }
         });
 

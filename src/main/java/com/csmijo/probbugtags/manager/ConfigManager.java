@@ -27,9 +27,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ConfigManager {
 	private Context context;

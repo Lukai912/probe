@@ -39,7 +39,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import retrofit2.Retrofit;
 
 
 public class MyCrashHandler implements UncaughtExceptionHandler {

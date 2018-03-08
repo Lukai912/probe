@@ -15,140 +15,82 @@
  */
 package com.squareup.leakcanary;
 
-
 import android.content.Context;
 import android.os.Debug;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.MessageQueue;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.squareup.leakcanary.internal.FutureResult;
-import com.squareup.leakcanary.internal.LeakCanaryInternals;
 
 import java.io.File;
-import java.util.Random;
-
-import static com.squareup.leakcanary.internal.LeakCanaryInternals.isExternalStorageWritable;
-import static com.squareup.leakcanary.internal.LeakCanaryInternals.storageDirectory;
 
 public final class AndroidHeapDumper implements HeapDumper {
 
-    private static final String TAG = "AndroidHeapDumper";
+  final Context context;
+  private final LeakDirectoryProvider leakDirectoryProvider;
+  private final Handler mainHandler;
 
-    private final Context context;
-    private final Handler mainHandler;
+  public AndroidHeapDumper(Context context, LeakDirectoryProvider leakDirectoryProvider) {
+    this.leakDirectoryProvider = leakDirectoryProvider;
+    this.context = context.getApplicationContext();
+    mainHandler = new Handler(Looper.getMainLooper());
+  }
 
-    public AndroidHeapDumper(Context context) {
-        this.context = context.getApplicationContext();
-        mainHandler = new Handler(Looper.getMainLooper());
+
+  @SuppressWarnings("ReferenceEquality") // Explicitly checking for named null.
+  @Override public File dumpHeap() {
+    File heapDumpFile = leakDirectoryProvider.newHeapDumpFile();
+
+    if (heapDumpFile == RETRY_LATER) {
+      return RETRY_LATER;
     }
 
+//    FutureResult<Toast> waitingForToast = new FutureResult<>();
+//    showToast(waitingForToast);
 
-    @Override
-    public File dumpHeap() {
-        if (!isExternalStorageWritable()) {
-            Log.d(TAG, "Could not dump heap, external storage not mounted.");
-        }
-        File heapDumpFile = getHeapDumpFile();
-        if (heapDumpFile.exists()) {
-            Log.d(TAG,
-                    "Could not dump heap, previous analysis still is in progress.");
-            // Heap analysis in progress, let's not put too much pressure on the
-            // device.
-            return NO_DUMP;
+//    if (!waitingForToast.wait(5, SECONDS)) {
+//      CanaryLog.d("Did not dump heap, too much time waiting for Toast.");
+//      return RETRY_LATER;
+//    }
 
-        }
-
-		/*
-         * FutureResult<Toast> waitingForToast = new FutureResult<Toast>();
-		 * showToast(waitingForToast);
-		 * 
-		 * if (!waitingForToast.wait(5, SECONDS)) { Log.d(TAG,
-		 * "Did not dump heap, too much time waiting for Toast."); return
-		 * NO_DUMP; }
-		 * 
-		 * Toast toast = waitingForToast.get(); try {
-		 * Debug.dumpHprofData(heapDumpFile.getAbsolutePath());
-		 * cancelToast(toast); return heapDumpFile; } catch (IOException e) {
-		 * cleanup(); Log.e(TAG, "Could not perform heap dump", e); // Abort
-		 * heap dump return NO_DUMP; }
-		 */
-
-        try {
-            Debug.dumpHprofData(heapDumpFile.getAbsolutePath());
-            return heapDumpFile;
-        } catch (Exception e) {
-            cleanup();
-            Log.e(TAG, "Could not perform heap dump", e);
-            return NO_DUMP;
-        }
+//    Toast toast = waitingForToast.get();
+    try {
+      Debug.dumpHprofData(heapDumpFile.getAbsolutePath());
+//      cancelToast(toast);
+      return heapDumpFile;
+    } catch (Exception e) {
+      CanaryLog.d(e, "Could not dump heap");
+      // Abort heap dump
+      return RETRY_LATER;
     }
+  }
 
-    /**
-     * Call this on app startup to clean up all heap dump files that had not
-     * been handled yet when the app process was killed.
-     */
-    public void cleanup() {
-        LeakCanaryInternals.executeOnFileIoThread(new Runnable() {
-            @Override
-            public void run() {
-                if (isExternalStorageWritable()) {
-                    Log.d(TAG,
-                            "Could not attempt cleanup, external storage not mounted.");
-                }
-                File heapDumpFile = getHeapDumpFile();
-                if (heapDumpFile.exists()) {
-                    Log.d(TAG,
-                            "Previous analysis did not complete correctly, cleaning: "
-                                    + heapDumpFile);
-                    heapDumpFile.delete();
-                }
-            }
-        });
-    }
+  private void showToast(final FutureResult<Toast> waitingForToast) {
+//    mainHandler.post(new Runnable() {
+//      @Override public void run() {
+//        final Toast toast = new Toast(context);
+//        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+//        toast.setDuration(Toast.LENGTH_LONG);
+//        LayoutInflater inflater = LayoutInflater.from(context);
+//        toast.setView(inflater.inflate(R.layout.leak_canary_heap_dump_toast, null));
+//        toast.show();
+//        // Waiting for Idle to make sure Toast gets rendered.
+//        Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+//          @Override public boolean queueIdle() {
+//            waitingForToast.set(toast);
+//            return false;
+//          }
+//        });
+//      }
+//    });
+  }
 
-    private File getHeapDumpFile() {
-        long currentTime = System.currentTimeMillis();
-        Random random = new Random();
-        int randomInt = random.nextInt(100);
-        String newFileName = currentTime + String.valueOf(randomInt) + ".hprof";
-        return new File(storageDirectory(), newFileName);
-        //return new File(storageDirectory(), "suspected_leak_heapdump.hprof");
-    }
-
-    private void showToast(final FutureResult<Toast> waitingForToast) {
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                /*
-                 * final Toast toast = new Toast(context);
-				 * toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-				 * toast.setDuration(Toast.LENGTH_LONG);
-				 * toast.setText("find a potential problem"); toast.show();
-				 */
-                final Toast toast = Toast.makeText(context,
-                        "find a potential problem", Toast.LENGTH_LONG);
-                toast.show();
-                // Waiting for Idle to make sure Toast gets rendered.
-                Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
-                    @Override
-                    public boolean queueIdle() {
-                        waitingForToast.set(toast);
-                        return false;
-                    }
-                });
-            }
-        });
-    }
-
-    private void cancelToast(final Toast toast) {
-        mainHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                toast.cancel();
-            }
-        });
-    }
+  private void cancelToast(final Toast toast) {
+    mainHandler.post(new Runnable() {
+      @Override public void run() {
+        toast.cancel();
+      }
+    });
+  }
 }

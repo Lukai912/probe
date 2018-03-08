@@ -2,15 +2,22 @@ package com.csmijo.probbugtags.manager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.csmijo.probbugtags.service.UploadReportService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
+import com.squareup.leakcanary.DefaultLeakDirectoryProvider;
+import com.squareup.leakcanary.LeakDirectoryProvider;
 import com.squareup.leakcanary.internal.LeakCanaryInternals;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.util.List;
+
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 /**
  * Created by chengqianqian-xy on 2016/8/29.
@@ -27,13 +34,14 @@ public class UploadLeakDumpHistory extends Thread {
     @Override
     public void run() {
         super.run();
-        File leakCanaryDirectory = LeakCanaryInternals.storageDirectory();
+        File downloadsDirectory = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
+        File leakCanaryDirectory = new File(downloadsDirectory, "leakcanary-" + mContext.getPackageName());
         final File[] existsFiles = leakCanaryDirectory
                 .listFiles(new FileFilter() {
                     @Override
                     public boolean accept(File file) {
                         return !file.isDirectory()
-                                && (file.getName().endsWith(".zip") || file.getName().endsWith(".hprof"));
+                                && (file.getName().endsWith(".zip"));
                     }
                 });
 

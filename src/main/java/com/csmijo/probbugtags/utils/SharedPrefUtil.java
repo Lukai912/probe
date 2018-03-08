@@ -15,7 +15,6 @@ public class SharedPrefUtil {
     public static void setValue(Context context, String key, long value) {
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
-        Logger.i("sharedPrefUtil", "setValue");
         ContentValues values = new ContentValues();
         values.put(key, value);
 
@@ -50,7 +49,6 @@ public class SharedPrefUtil {
         ContentValues values = new ContentValues();
         values.put(key, value);
         // resolver.insert(uri, values);
-        Logger.i("sharedPrefUtil", "setValue");
         Cursor cursor = resolver.query(uri, new String[]{"id"}, null, null, "id desc");
         int id = -100;
         if (cursor != null) {
@@ -75,7 +73,6 @@ public class SharedPrefUtil {
     public static void setValue(Context context, String key, Boolean value) {
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
-        Logger.i("sharedPrefUtil", "setValue");
         int insertValue = 0;
         if (value) {
             insertValue = 1;
@@ -145,7 +142,6 @@ public class SharedPrefUtil {
     public static Boolean getValue(Context context, String key, Boolean defaultValue) {
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
-        Logger.i("sharedPrefUtil", "getValue");
         Cursor cursor = resolver.query(uri, new String[]{key}, key + " IS NOT NULL", null, "id desc");
         boolean value = defaultValue;
         if (cursor != null) {
