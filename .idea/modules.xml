@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/leakcanary-analyzer/leakcanary-analyzer.iml" filepath="$PROJECT_DIR$/leakcanary-analyzer/leakcanary-analyzer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leakcanary-android/leakcanary-android.iml" filepath="$PROJECT_DIR$/leakcanary-android/leakcanary-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leakcanary-watcher/leakcanary-watcher.iml" filepath="$PROJECT_DIR$/leakcanary-watcher/leakcanary-watcher.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mylibrary/mylibrary.iml" filepath="$PROJECT_DIR$/mylibrary/mylibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mylibrarydfasdf/mylibrarydfasdf.iml" filepath="$PROJECT_DIR$/mylibrarydfasdf/mylibrarydfasdf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pkg_project/pkg_project.iml" filepath="$PROJECT_DIR$/pkg_project/pkg_project.iml" />
       <module fileurl="file://$PROJECT_DIR$/probe.iml" filepath="$PROJECT_DIR$/probe.iml" />
     </modules>
   </component>

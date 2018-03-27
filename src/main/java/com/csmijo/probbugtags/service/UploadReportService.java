@@ -54,15 +54,16 @@ public class UploadReportService extends IntentService {
                 uploadCommonLog("anrInfo", report, Constants.anrUrlExt, "content");
                 break;
             case "config":
+                uploadCommonLog("config", report, Constants.configUrlExt, "content");
                 break;
             case "usingLog":
-//                uploadCommonLog("activityInfo", report, Constants.usingUrlExt, "content");
+                uploadCommonLog("activityInfo", report, Constants.usingUrlExt, "content");
                 break;
             case "leakcanryLog":
                 uploadCommonLog("leakInfo", report, Constants.leackCanaryUrlExt, "content");
                 break;
             case "cacheLog":
-                uploadCommonLog("errorInfo", report, Constants.cacheUrlExt, "content");
+                uploadFileLog(filePath, report, Constants.cacheUrlExt, "cacheFile");
                 break;
         }
 

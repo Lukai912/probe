@@ -1,0 +1,3 @@
+include ':leakcanary-android', ':leakcanary-analyzer', ':leakcanary-watcher', ':mylibrarydfasdf', ':mylibrary', ':pkg_project'
+
+

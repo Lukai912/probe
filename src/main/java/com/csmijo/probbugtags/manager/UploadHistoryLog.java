@@ -48,16 +48,13 @@ public class UploadHistoryLog extends Thread {
     }
 
     private void uploadCacheLog(String filePath) {
-        if (CommonUtil.isNetworkAvailable(context) && CommonUtil.isNetworkTypeWifi(context)) {
-            String content = readFile(filePath);
-            if (!TextUtils.isEmpty(content)) {
-                Logger.i(TAG,"uploadCacheLog");
-                Intent intent = new Intent("cacheLog");
-                intent.putExtra("content", content);
-                intent.putExtra("filePath", filePath);
-                intent.setClass(context.getApplicationContext(), UploadReportService.class);
-                context.startService(intent);
-            }
+        File file = new File(filePath);
+        if (file.exists() && CommonUtil.isNetworkAvailable(context) && CommonUtil.isNetworkTypeWifi(context)) {
+            Logger.i(TAG,"uploadCacheLog");
+            Intent intent = new Intent("cacheLog");
+            intent.putExtra("filePath", filePath);
+            intent.setClass(context.getApplicationContext(), UploadReportService.class);
+            context.startService(intent);
         }else{
             Logger.i(TAG,"exist cache log, but wifi is not available");
         }

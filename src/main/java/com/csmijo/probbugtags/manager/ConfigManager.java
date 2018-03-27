@@ -14,10 +14,12 @@
 package com.csmijo.probbugtags.manager;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.bean.MyMessage;
+import com.csmijo.probbugtags.service.UploadReportService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
 import com.csmijo.probbugtags.utils.RetrofitClient;
@@ -43,53 +45,19 @@ public class ConfigManager {
 		return jsonConfig;
 	}
 
-//	public void updateOnlineConfig() {
-//		JSONObject jsonConfig;
-//		try {
-//			jsonConfig = prepareConfigJSON();
-//		} catch (Exception e) {
-//			return;
-//		}
-//
-//		if (CommonUtil.isNetworkAvailable(context)) {
-//
-//			RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-//			Call<ResponseBody> call = apiStores.getConfiguration(jsonConfig.toString());
-//			call.enqueue(new Callback<ResponseBody>() {
-//				@Override
-//				public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//					try {
-//						if(response.isSuccessful()) {
-//							String body = response.body().string();
-//							MyMessage message = RetrofitClient.parseResp(body);
-//
-//							if (message == null) {
-//								Logger.e(TAG, "getConfiguration response message is null");
-//								return;
-//							} else {
-//								if (message.getFlag() > 0) {
-//									JSONObject object = new JSONObject(body);
-//
-//									int isOnlyWifi = object.getInt("updateonlywifi");
-//									if (isOnlyWifi == 0)
-//										BugTagAgentReal.setUpdateOnlyWifi(false);
-//									else
-//										BugTagAgentReal.setUpdateOnlyWifi(true);
-//								}
-//							}
-//						}
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					} catch (JSONException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//
-//				@Override
-//				public void onFailure(Call<ResponseBody> call, Throwable t) {
-//					Logger.e(TAG,t.getMessage());
-//				}
-//			});
-//		}
-//	}
+	public void updateOnlineConfig() {
+		JSONObject jsonConfig;
+		try {
+			jsonConfig = prepareConfigJSON();
+		} catch (Exception e) {
+			return;
+		}
+
+		if (CommonUtil.isNetworkAvailable(context)) {
+			Intent intent = new Intent("config");
+			intent.putExtra("content", jsonConfig.toString());
+			intent.setClass(context.getApplicationContext(), UploadReportService.class);
+			context.startService(intent);
+		}
+	}
 }

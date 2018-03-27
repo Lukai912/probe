@@ -166,15 +166,15 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
      */
     public static void updateOnlineConfig(final Context context) {
 
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                Logger.d(tag, "Call updaeOnlineConfig");
-//                ConfigManager cm = new ConfigManager(context);
-//                cm.updateOnlineConfig();
-//            }
-//        });
-//        handler.post(thread);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Logger.d(tag, "Call updaeOnlineConfig");
+                ConfigManager cm = new ConfigManager(context);
+                cm.updateOnlineConfig();
+            }
+        });
+        handler.post(thread);
     }
 
     /**

@@ -62,6 +62,7 @@ public class Constants {
     //Server URL prefix
     //for debug
    // public static String urlPrefix = "http://10.16.12.45/tanzhen_client/";
+    //public static String urlPrefix = "http://10.18.60.140:8889/";
     public static String urlPrefix = "http://10.18.61.46:8080/";
     //for release
 //    public static String urlPrefix = "http://211.151.122.244:80/";
@@ -70,5 +71,6 @@ public class Constants {
     public static String usingUrlExt = "ums/postActivityLog/";
     public static String cacheUrlExt = "ums/uploadLog/";
     public static String leackCanaryUrlExt = "ums/postLeakcanryLog";
+    public static String configUrlExt = "ums/getOnlineConfiguration";
 
 }

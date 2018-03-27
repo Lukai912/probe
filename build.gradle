@@ -6,7 +6,7 @@ android {
     buildToolsVersion '27.0.3'
 
     defaultConfig {
-        minSdkVersion 15
+        minSdkVersion 14
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -24,6 +24,11 @@ android {
     lintOptions{
         abortOnError false
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
 }
 
 //task makeJar(type:Copy,dependsOn:['build']){
@@ -38,22 +43,23 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:+'
-
-//    //Retrofit2
-//    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-//    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-//    //okHttp3
-//    compile 'com.squareup.okhttp3:okhttp:+'
+    //    //Retrofit2
+    //    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    //    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    //    //okHttp3
+    //    compile 'com.squareup.okhttp3:okhttp:+'
+    compile files('libs/haha.jar')
+//    compile(name: 'leakcanary-android-debug', ext: 'aar')
+//    compile(name: 'leakcanary-analyzer-debug', ext: 'aar')
 }
 
 buildscript {
     repositories {
-        // Gradle 4.1 and higher include support for Google's Maven repo using
-        // the google() method. And you need to include this repo to download
-        // Android plugin 3.0.0 or higher.
-        google()
+        flatDir {
+            dirs 'libs'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.+'
+        classpath 'com.android.tools.build:gradle:3.0.1'
     }
 }
