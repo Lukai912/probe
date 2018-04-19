@@ -14,34 +14,31 @@
 
 package com.csmijo.probbugtags;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.support.v4.app.ActivityCompat;
 
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.baseData.DeviceInfo;
-import com.csmijo.probbugtags.bean.MyMessage;
 import com.csmijo.probbugtags.manager.ClientdataManager;
 import com.csmijo.probbugtags.manager.ConfigManager;
 import com.csmijo.probbugtags.manager.MyCrashHandler;
 import com.csmijo.probbugtags.manager.UploadHistoryLog;
 import com.csmijo.probbugtags.manager.UploadLeakDumpHistory;
 import com.csmijo.probbugtags.manager.UsinglogManager;
-import com.csmijo.probbugtags.service.UploadReportService;
+import com.csmijo.probbugtags.service.UploadCommonReortService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Constants;
+import com.csmijo.probbugtags.utils.IOUtils;
 import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.RetrofitClient;
 import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.ExecutorService;
@@ -216,35 +213,47 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
     }
 
     @Override
-    public void onAppNotResponding(ANRError error) {
+    public void onAppNotResponding(final ANRError error) {
         Logger.e("ANR-Watchdog", "Detected Application Not Responding!");
-        final String trace = error.getStackTrace("anr",error.getCause());
-        try {
-            final JSONObject clientInfObject = new ClientdataManager(mContext).prepareClientdataJSON();
-            clientInfObject.put("ANRThreadTrace",trace);
-            Activity activity = ApplicationInit.getCurrentActivity();
-            if (null != activity) {
-                clientInfObject.put("activities", activity.getComponentName().getClassName());
-            } else {
-                clientInfObject.put("activities", "");
-            }
-            clientInfObject.put("time",CommonUtil.getFormatTime(System.currentTimeMillis()));
-            clientInfObject.put("recentActivities", SharedPrefUtil.getValue(mContext, "recent_activity_names", ""));
-            if (CommonUtil.getReportPolicyMode(mContext) == BugTagAgentReal.SendPolicy.REALTIME
-                    && CommonUtil.isNetworkAvailable(mContext)) {
-                Intent intent = new Intent("anr");
-                intent.putExtra("content", clientInfObject.toString());
-                intent.setClass(mContext.getApplicationContext(), UploadReportService.class);
-                mContext.startService(intent);
-            } else {
-                CommonUtil.saveInfoToFile("anrInfo", clientInfObject,
-                        "/cobub.cache", mContext);
-            }
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final String trace = error.getStackTrace("anr",error.getCause());
+                try {
 
-            anrCollector.execute(new AnrInspector().setANRListener(new BugTagAgentReal()));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+                    final JSONObject clientInfObject = new ClientdataManager(mContext).prepareClientdataJSON();
+                    clientInfObject.put("ANRThreadTrace",trace);
+                    Activity activity = ApplicationInit.getCurrentActivity();
+                    if (null != activity) {
+                        clientInfObject.put("activities", activity.getComponentName().getClassName());
+                    } else {
+                        clientInfObject.put("activities", "");
+                    }
+                    clientInfObject.put("recentActivities", SharedPrefUtil.getValue(mContext, "recent_activity_names", ""));
+
+                    if (CommonUtil.getReportPolicyMode(mContext) == BugTagAgentReal.SendPolicy.REALTIME
+                            && CommonUtil.isNetworkAvailable(mContext)) {
+                        File file = new File(CommonUtil.getUnapprovedFolder(mContext), "anr_"+clientInfObject.getString("time"));
+                        IOUtils.writeStringToFile(file,clientInfObject.toString());
+
+                        Intent intent = new Intent("anr");
+                        intent.putExtra("content", file.getAbsolutePath());
+                        intent.setClass(mContext.getApplicationContext(), UploadCommonReortService.class);
+                        mContext.startService(intent);
+                    } else {
+                        CommonUtil.saveInfoToFile("anrInfo", clientInfObject,
+                                "/cobub.cache", mContext);
+                    }
+
+                    anrCollector.execute(new AnrInspector().setANRListener(new BugTagAgentReal()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        handler.post(thread);
 
     }
 

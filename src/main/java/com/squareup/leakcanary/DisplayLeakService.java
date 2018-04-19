@@ -43,38 +43,6 @@ public class DisplayLeakService extends AbstractAnalysisResultService {
       heapDump = renameHeapdump(heapDump);
       saveResult(heapDump, result);
     }
-
-//    PendingIntent pendingIntent;
-//    String contentTitle;
-//    String contentText;
-//
-//    if (!shouldSaveResult) {
-//      contentTitle = getString(R.string.leak_canary_no_leak_title);
-//      contentText = getString(R.string.leak_canary_no_leak_text);
-//      pendingIntent = null;
-//    } else if (resultSaved) {
-//      pendingIntent = DisplayLeakActivity.createPendingIntent(this, heapDump.referenceKey);
-//
-//      if (result.failure == null) {
-//        String size = formatShortFileSize(this, result.retainedHeapSize);
-//        String className = classSimpleName(result.className);
-//        if (result.excludedLeak) {
-//          contentTitle = getString(R.string.leak_canary_leak_excluded, className, size);
-//        } else {
-//          contentTitle = getString(R.string.leak_canary_class_has_leaked, className, size);
-//        }
-//      } else {
-//        contentTitle = getString(R.string.leak_canary_analysis_failed);
-//      }
-//      contentText = getString(R.string.leak_canary_notification_message);
-//    } else {
-//      contentTitle = getString(R.string.leak_canary_could_not_save_title);
-//      contentText = getString(R.string.leak_canary_could_not_save_text);
-//      pendingIntent = null;
-//    }
-//    // New notification id every second.
-//    int notificationId = (int) (SystemClock.uptimeMillis() / 1000);
-//    showNotification(this, contentTitle, contentText, pendingIntent, notificationId);
     afterDefaultHandling(heapDump, result, leakInfo);
   }
 

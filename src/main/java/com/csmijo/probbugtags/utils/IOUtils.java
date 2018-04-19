@@ -130,5 +130,10 @@ public class IOUtils {
             safeClose(writer);
         }
     }
+    public static void deleteFile(@NonNull File file) {
+        final boolean deleted = file.delete();
+        if (!deleted) {
+        }
+    }
 }
 

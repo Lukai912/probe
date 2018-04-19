@@ -55,6 +55,10 @@ public class HttpSender{
         this.httpConfig = httpConfig;
     }
 
+    private CallbackListner mlistner;
+    public void setOnResponseListener(CallbackListner listener) {
+        mlistner = listener;
+    }
     public void send(@NonNull Context context, @NonNull String report,String tag, List<File> attchments) throws Exception {
         try {
             final String baseUrl = Constants.urlPrefix;
@@ -88,14 +92,14 @@ public class HttpSender{
     protected void sendWithoutAttachments(@NonNull Context context, @NonNull Method method,
                                           int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers,String tag,
                                           @NonNull String content, @NonNull URL url) throws IOException {
-        new DefaultHttpRequest(context, method, connectionTimeOut, socketTimeOut, headers).send(url, tag, content);
+        new DefaultHttpRequest(context, method, connectionTimeOut, socketTimeOut, headers).send(url, tag, content, mlistner);
     }
 
     @SuppressWarnings("WeakerAccess")
     protected void postMultipart(@NonNull Context context,
                                  int connectionTimeOut, int socketTimeOut, @Nullable Map<String, String> headers, String tag,
                                  @NonNull List<File> content, @NonNull URL url) throws IOException {
-        new MultipartHttpRequest(context, Method.POST, connectionTimeOut, socketTimeOut, headers).send(url, tag, content);
+        new MultipartHttpRequest(context, Method.POST, connectionTimeOut, socketTimeOut, headers).send(url, tag, content, mlistner);
     }
 
 

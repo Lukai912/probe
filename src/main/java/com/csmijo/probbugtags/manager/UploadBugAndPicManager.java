@@ -1,14 +1,8 @@
 package com.csmijo.probbugtags.manager;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
-import android.widget.Toast;
 
 import com.csmijo.probbugtags.bean.BugTag;
-import com.csmijo.probbugtags.bean.MyMessage;
-import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.RetrofitClient;
 import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONArray;
@@ -16,7 +10,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 

@@ -5,17 +5,12 @@ import android.content.Intent;
 import android.os.Environment;
 import android.widget.Toast;
 
-import com.csmijo.probbugtags.service.UploadReportService;
+import com.csmijo.probbugtags.service.UploadFileReportService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
-import com.squareup.leakcanary.DefaultLeakDirectoryProvider;
-import com.squareup.leakcanary.LeakDirectoryProvider;
-import com.squareup.leakcanary.internal.LeakCanaryInternals;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FilenameFilter;
-import java.util.List;
 
 import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
@@ -60,7 +55,7 @@ public class UploadLeakDumpHistory extends Thread {
                     Logger.d(TAG, "exist file :" + file.getName());
                     Intent intent = new Intent("leakdump");
                     intent.putExtra("filePath", file.getAbsolutePath());
-                    intent.setClass(this.mContext, UploadReportService.class);
+                    intent.setClass(this.mContext, UploadFileReportService.class);
                     this.mContext.startService(intent);
                 }
             }else{

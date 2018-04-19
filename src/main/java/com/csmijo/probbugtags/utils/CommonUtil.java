@@ -549,4 +549,8 @@ public class CommonUtil {
 
 
     }
+
+    public static File getUnapprovedFolder(Context context) {
+        return context.getDir("probe-unapproved", Context.MODE_PRIVATE);
+    }
 }

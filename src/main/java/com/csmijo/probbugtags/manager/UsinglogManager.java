@@ -21,17 +21,14 @@ import android.content.Intent;
 import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
-import com.csmijo.probbugtags.bean.MyMessage;
-import com.csmijo.probbugtags.service.UploadReportService;
+import com.csmijo.probbugtags.service.UploadCommonReortService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.RetrofitClient;
 import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Iterator;
 
@@ -124,7 +121,7 @@ public class UsinglogManager {
             return;
         }
 
-        uploadActivityInfo(info);
+        //uploadActivityInfo(info);
 
     }
 
@@ -156,7 +153,7 @@ public class UsinglogManager {
                 return;
             }
 
-            uploadActivityInfo(obj);
+            //uploadActivityInfo(obj);
         }
     }
 
@@ -166,7 +163,7 @@ public class UsinglogManager {
                 && CommonUtil.isNetworkAvailable(context)) {
             Intent intent = new Intent("usingLog");
             intent.putExtra("content", info.toString());
-            intent.setClass(context.getApplicationContext(), UploadReportService.class);
+            intent.setClass(context.getApplicationContext(), UploadCommonReortService.class);
             context.startService(intent);
 
         } else {

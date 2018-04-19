@@ -13,6 +13,9 @@ import android.net.Uri;
 public class SharedPrefUtil {
 
     public static void setValue(Context context, String key, long value) {
+        if (context == null) {
+            return;
+        }
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
         ContentValues values = new ContentValues();
@@ -43,6 +46,9 @@ public class SharedPrefUtil {
     }
 
     public static void setValue(Context context, String key, String value) {
+        if (context == null) {
+            return;
+        }
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
 
@@ -71,6 +77,9 @@ public class SharedPrefUtil {
     }
 
     public static void setValue(Context context, String key, Boolean value) {
+        if (context == null) {
+            return;
+        }
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
         int insertValue = 0;
@@ -104,6 +113,9 @@ public class SharedPrefUtil {
     }
 
     public static long getValue(Context context, String key, long defaultValue) {
+        if (context == null) {
+            return 0;
+        }
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
         Logger.i("sharedPrefUtil", "getValue");
@@ -122,6 +134,9 @@ public class SharedPrefUtil {
     }
 
     public static String getValue(Context context, String key, String defaultValue) {
+        if (context == null) {
+            return "";
+        }
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
         Logger.i("sharedPrefUtil", "getValue");
@@ -140,6 +155,9 @@ public class SharedPrefUtil {
     }
 
     public static Boolean getValue(Context context, String key, Boolean defaultValue) {
+        if (context == null) {
+            return false;
+        }
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
         Cursor cursor = resolver.query(uri, new String[]{key}, key + " IS NOT NULL", null, "id desc");
@@ -162,6 +180,9 @@ public class SharedPrefUtil {
     }
 
     public static void removeKey(Context context, String key) {
+        if (context == null) {
+            return;
+        }
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
 
@@ -169,6 +190,9 @@ public class SharedPrefUtil {
     }
 
     public static void clear(Context context) {
+        if (context == null) {
+            return;
+        }
         ContentResolver resolver = context.getContentResolver();
         Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
 

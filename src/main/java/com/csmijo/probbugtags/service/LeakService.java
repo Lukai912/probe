@@ -11,6 +11,7 @@ import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.manager.ClientdataManager;
 import com.csmijo.probbugtags.utils.CommonUtil;
+import com.csmijo.probbugtags.utils.IOUtils;
 import com.csmijo.probbugtags.utils.Logger;
 import com.csmijo.probbugtags.utils.ZipCompress;
 import com.squareup.leakcanary.AnalysisResult;
@@ -22,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
 /**
@@ -74,7 +76,7 @@ public class LeakService extends DisplayLeakService {
         if (fileSize < 90) {
             Intent intent = new Intent("leakdump");
             intent.putExtra("filePath", file.getAbsolutePath());
-            intent.setClass(this.getApplicationContext(), UploadReportService.class);
+            intent.setClass(this.getApplicationContext(), UploadFileReportService.class);
             this.startService(intent);
         } else {
             Context context = ApplicationInit.getCurrentActivity();
@@ -139,14 +141,23 @@ public class LeakService extends DisplayLeakService {
         } catch (Exception e) {
             // TODO: handle exception
         }
-        // send info to server
-        final JSONObject finalLeakObject = leakObject;
         if (CommonUtil.getReportPolicyMode(getApplicationContext()) == BugTagAgentReal.SendPolicy.REALTIME
                 && CommonUtil.isNetworkAvailable(getApplicationContext())) {
             Logger.d(TAG,"wifi send leak info");
+
+            File file = new File(CommonUtil.getUnapprovedFolder(getApplicationContext()), "leak_"+CommonUtil.getFormatTime(System.currentTimeMillis()));
+            String reporter = file.getAbsolutePath();
+            try {
+                IOUtils.writeStringToFile(file,uploadObject.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+                CommonUtil.saveInfoToFile("leakInfo", leakObject,
+                        "/cobub.cache", getApplicationContext());
+                return;
+            }
             Intent intent = new Intent("leakcanryLog");
-            intent.putExtra("content", uploadObject.toString());
-            intent.setClass(this.getApplicationContext(), UploadReportService.class);
+            intent.putExtra("content", reporter);
+            intent.setClass(this.getApplicationContext(), UploadCommonReortService.class);
             this.startService(intent);
         } else {
             CommonUtil.saveInfoToFile("leakInfo", leakObject,

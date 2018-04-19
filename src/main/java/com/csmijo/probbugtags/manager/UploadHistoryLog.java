@@ -16,14 +16,10 @@ package com.csmijo.probbugtags.manager;
 
 import android.content.Context;
 import android.content.Intent;
-import android.text.TextUtils;
-import android.widget.Toast;
 
-import com.csmijo.probbugtags.bean.MyMessage;
-import com.csmijo.probbugtags.service.UploadReportService;
+import com.csmijo.probbugtags.service.UploadFileReportService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.RetrofitClient;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -53,24 +49,10 @@ public class UploadHistoryLog extends Thread {
             Logger.i(TAG,"uploadCacheLog");
             Intent intent = new Intent("cacheLog");
             intent.putExtra("filePath", filePath);
-            intent.setClass(context.getApplicationContext(), UploadReportService.class);
+            intent.setClass(context.getApplicationContext(), UploadFileReportService.class);
             context.startService(intent);
         }else{
             Logger.i(TAG,"exist cache log, but wifi is not available");
-        }
-    }
-
-    private void uploadLeakLog(String filePath) {
-        String content = readFile(filePath);
-        if (!TextUtils.isEmpty(content)) {
-//            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-//            Call<ResponseBody> call = apiStores.uploadLeakcanryLog(content);
-//            call.enqueue(getCallBack(filePath));
-            Intent intent = new Intent("leakcanryLog");
-            intent.putExtra("content", content);
-            intent.putExtra("filePath", filePath);
-            intent.setClass(context.getApplicationContext(), UploadReportService.class);
-            context.startService(intent);
         }
     }
 

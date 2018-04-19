@@ -15,7 +15,7 @@
 
     <application>
         <service android:name=".service.LeakService"/>
-        <service android:name=".service.UploadReportService"/>
+        <service android:name=".service.UploadFileReportService"/>
         <service
             android:name="com.squareup.leakcanary.internal.HeapAnalyzerService"
             android:process=":leakcanary"
@@ -26,6 +26,8 @@
             android:process=":leakcanary"
             android:enabled="false"
             />
+        <service android:name=".service.UploadCommonReortService" />
+
         <provider
             android:name="com.csmijo.probbugtags.utils.DataContentProvider"
             android:authorities="${applicationId}.com.csmijo.datacontentprovider"

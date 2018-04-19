@@ -57,17 +57,17 @@ public class Constants {
     public static int mPerFormDataDelay = 5000;
     // Default is false, not open fps view.
     public static boolean isOpenWindow = false;
-    public static int DEFAULT_CONNECTION_TIMEOUT = 15000;
-    public static int DEFAULT_SOCKET_TIMEOUT = 15000;
+    public static int DEFAULT_CONNECTION_TIMEOUT = 60000;
+    public static int DEFAULT_SOCKET_TIMEOUT = 60000;
     //Server URL prefix
     //for debug
    // public static String urlPrefix = "http://10.16.12.45/tanzhen_client/";
-    //public static String urlPrefix = "http://10.18.60.140:8889/";
-    public static String urlPrefix = "http://10.18.61.46:8080/";
+    public static String urlPrefix = "http://42.236.102.84/";
+    //public static String urlPrefix = "http://10.18.61.46:8080/";
     //for release
 //    public static String urlPrefix = "http://211.151.122.244:80/";
     public static String anrUrlExt = "ums/postAnrLog";
-    public static String dumpFileUrlExt = "upload/upload_dumpfile/";
+    public static String dumpFileUrlExt = "upload/uploadDumpFile/";
     public static String usingUrlExt = "ums/postActivityLog/";
     public static String cacheUrlExt = "ums/uploadLog/";
     public static String leackCanaryUrlExt = "ums/postLeakcanryLog";

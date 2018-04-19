@@ -24,11 +24,14 @@ import com.csmijo.probbugtags.utils.IOUtils;
 import com.csmijo.probbugtags.utils.Logger;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.Map;
 
 
@@ -49,13 +52,6 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
         this.headers = headers;
     }
     /**
-     * Interface definition for a callback to be invoked when request has finished.
-     */
-    public interface Callback {
-        void onSuccess(String responseMessage);
-        void onFailure(int responseCode, String responseMessage);
-    }
-    /**
      * Sends to a URL.
      *
      * @param url     URL to which to send.
@@ -63,17 +59,19 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
      * @throws IOException if the data cannot be sent.
      */
     @Override
-    public void send(@NonNull URL url,String tag, @NonNull T content) throws IOException {
+    public void send(@NonNull URL url,String tag, @NonNull T content, CallbackListner listner) throws IOException {
 
         final HttpURLConnection urlConnection = createConnection(url);
         configureTimeouts(urlConnection, connectionTimeOut, socketTimeOut);
         configureHeaders(urlConnection,headers, content);
         try {
             writeContent(urlConnection, method, tag, content);
-            handleResponse(urlConnection.getResponseCode(), urlConnection.getResponseMessage());
+            handleResponse(urlConnection.getResponseCode(), urlConnection.getResponseMessage(), urlConnection, listner);
             urlConnection.disconnect();
         } catch (SocketTimeoutException e) {
             throw e;
+        } finally {
+            urlConnection.disconnect();
         }
     }
 
@@ -128,10 +126,22 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
     }
     protected abstract byte[] asBytes(String tag, T content) throws IOException;
 
-    protected void handleResponse(int responseCode, String responseMessage) throws IOException {
+    protected void handleResponse(int responseCode, String responseMessage, URLConnection connection, CallbackListner listner) throws IOException {
         if (responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE) {
             // All is good
             Logger.i("Request received by server", responseMessage);
+            if(listner != null && connection != null) {
+                InputStream is = connection.getInputStream();
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                byte[] buffer = new byte[4096];
+                int ss = 0;
+                while((ss = is.read(buffer))!=-1){
+                    baos.write(buffer,0,ss);
+                }
+                String responseBody = new String(baos.toByteArray(),"UTF-8");
+                listner.onResponse(responseBody);
+                is.close();
+            }
         } else if (responseCode == HttpURLConnection.HTTP_CLIENT_TIMEOUT || responseCode >= HttpURLConnection.HTTP_INTERNAL_ERROR) {
             //timeout or server error. Repeat the request later.
             Logger.w( "Could not send ACRA Post responseCode=" + responseCode," message=" + responseMessage);

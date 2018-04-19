@@ -16,6 +16,7 @@ package com.csmijo.probbugtags.manager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Base64;
 
 import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.baseData.DeviceInfo;
@@ -25,7 +26,6 @@ import com.csmijo.probbugtags.performance.GetMemory;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Constants;
 import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.RetrofitClient;
 import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
@@ -82,6 +82,7 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
     }
 
 
+
     private boolean handleException(Thread thread, Throwable ex) {
         if (ex == null) {
             return false;
@@ -116,23 +117,17 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
         String threadInfo = ThreadCollector.collect(thread);
 
         StringBuilder infoBuilder = new StringBuilder();
-        infoBuilder.append("logcatInfo:");
-        infoBuilder.append(logcatInfo);
-        infoBuilder.append("\r\n");
-        infoBuilder.append("stackTrace:");
         infoBuilder.append(stackTrace);
-        infoBuilder.append("\r\n");
-        infoBuilder.append("threadInfo:");
-        infoBuilder.append(threadInfo);
-        infoBuilder.append("\r\n");
 
         JSONObject errorInfo = null;
         try {
-            errorInfo = prepareErrorInfoJsonObject(infoBuilder.toString());
+            errorInfo = prepareErrorInfoJsonObject(Base64.encodeToString(infoBuilder.toString().getBytes(),Base64.DEFAULT), threadInfo, logcatInfo);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             Logger.e(tag, e);
 
+        } catch (Exception e) {
+            Logger.e(tag, "lukai " + e.getMessage());
         }
 
         if (errorInfo != null) {
@@ -145,12 +140,14 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
     }
 
 
-    private JSONObject prepareErrorInfoJsonObject(String errorInfo)
+    private JSONObject prepareErrorInfoJsonObject(String stackTrace, String threadInfo, String logcatInfo)
             throws JSONException {
         JSONObject errorObject = new JSONObject();
 
-        errorObject.put("stacktrace", errorInfo);
-//        errorObject.put("activities", CommonUtil.getActivityName(context));
+        errorObject.put("stacktrace", stackTrace);
+        errorObject.put("threadInfo", threadInfo);
+        errorObject.put("logcatInfo", logcatInfo);
+        errorObject.put("activities", CommonUtil.getActivityName(context));
         Activity activity = ApplicationInit.getCurrentActivity();
         if (null != activity) {
             errorObject.put("activities", activity.getComponentName().getClassName());
@@ -185,7 +182,7 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
 
         errorObject.put("RomAvailMem", availInternalMem);
         errorObject.put("RomTotalMem", totalInternalMem);
-        errorObject.put("isLowMemory", isLowMemory);
+        errorObject.put("isLowMemory ", isLowMemory);
         errorObject.put("RamAvailMem", availMem);
         errorObject.put("orientation", orientation);
         errorObject.put("isRooted", isRooted);

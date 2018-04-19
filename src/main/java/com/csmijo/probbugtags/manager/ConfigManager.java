@@ -16,18 +16,12 @@ package com.csmijo.probbugtags.manager;
 import android.content.Context;
 import android.content.Intent;
 
-import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
-import com.csmijo.probbugtags.bean.MyMessage;
-import com.csmijo.probbugtags.service.UploadReportService;
+import com.csmijo.probbugtags.service.UploadCommonReortService;
 import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.RetrofitClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
 
 
 public class ConfigManager {
@@ -56,7 +50,7 @@ public class ConfigManager {
 		if (CommonUtil.isNetworkAvailable(context)) {
 			Intent intent = new Intent("config");
 			intent.putExtra("content", jsonConfig.toString());
-			intent.setClass(context.getApplicationContext(), UploadReportService.class);
+			intent.setClass(context.getApplicationContext(), UploadCommonReortService.class);
 			context.startService(intent);
 		}
 	}
