@@ -30,27 +30,10 @@ android {
         }
     }
 }
-
-//task makeJar(type:Copy,dependsOn:['build']){
-//    delete 'build/libs/probe.jar'
-//    from('build/intermediates/bundles/release/')
-//    into('build/libs/')
-//    include('classes.jar')
-//    rename('classes.jar','probe.jar')
-//}
-
-
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:+'
-    //    //Retrofit2
-    //    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    //    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-    //    //okHttp3
-    //    compile 'com.squareup.okhttp3:okhttp:+'
     compile files('libs/haha.jar')
-//    compile(name: 'leakcanary-android-debug', ext: 'aar')
-//    compile(name: 'leakcanary-analyzer-debug', ext: 'aar')
 }
 
 buildscript {

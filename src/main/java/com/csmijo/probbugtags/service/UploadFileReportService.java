@@ -21,8 +21,6 @@ public class UploadFileReportService extends AbstractUploadReportService{
 
     public UploadFileReportService() {
         super("uploadLeakDumpFileService");
-
-
     }
 
     @Override

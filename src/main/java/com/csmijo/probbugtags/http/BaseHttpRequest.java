@@ -71,6 +71,7 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
         } catch (SocketTimeoutException e) {
             throw e;
         } finally {
+            urlConnection.getInputStream().close();
             urlConnection.disconnect();
         }
     }

@@ -102,13 +102,6 @@ public abstract class AbstractUploadReportService extends IntentService {
         sender.setOnResponseListener(listner);
         try {
             sender.send(context, report, tag, fileList);
-            logFile.delete();
-
-            if (logFile.exists()) {
-                Logger.i(this.getClass().getName(), logFile.getAbsolutePath() + " delete fail!");
-            } else {
-                Logger.i(this.getClass().getName(), logFile.getAbsolutePath() + " delete success!");
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

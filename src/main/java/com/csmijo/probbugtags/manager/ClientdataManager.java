@@ -62,6 +62,9 @@ public class ClientdataManager {
 		jsonClientdata.put("imei", DeviceInfo.getDeviceIMEI());
 		jsonClientdata.put("salt", CommonUtil.getSALT(context));
 		jsonClientdata.put("RAM", new GetMemory(context).getTotalMem());
+		// package info
+		jsonClientdata.put("versionCode", AppInfo.getAppVersionCode());
+
 		
 	/*	if (Constants.mProvideGPSData) {
 			jsonClientdata.put("latitude", DeviceInfo.getLatitude());

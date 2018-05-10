@@ -21,6 +21,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.csmijo.probbugtags.utils.Constants;
+import com.csmijo.probbugtags.utils.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -63,14 +64,17 @@ public class MultipartHttpRequest extends BaseHttpRequest<List<File>> {
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         final Writer writer = new OutputStreamWriter(outputStream, Constants.UTF8);
         //noinspection TryFinallyCanBeTryWithResources we do not target api 19
+        byte[] byteArray = null;
         try {
             for (File file : files) {
+                byteArray = fileToByteArray(file);
+                Logger.i(Logger.TAG_PREFIX,"byteArray:" + byteArray.length);
                 writer.append(NEW_LINE).append(BOUNDARY_FIX).append(BOUNDARY).append(NEW_LINE);
                 writer.append("Content-Disposition: form-data; name=\"").append(tag).append('\"').append("; filename=\"").append(file.getName()).append("\"").append(NEW_LINE);
                 writer.append(CONTENT_TYPE).append("multipart/form-data").append(NEW_LINE);
-                writer.append("Content-Length: ").append(String.valueOf(fileToByteArray(file).length)).append(NEW_LINE).append(NEW_LINE);
+                writer.append("Content-Length: ").append(String.valueOf(byteArray.length)).append(NEW_LINE).append(NEW_LINE);
                 writer.flush();
-                outputStream.write(fileToByteArray(file));
+                outputStream.write(byteArray);
             }
             writer.append(NEW_LINE).append(BOUNDARY_FIX).append(BOUNDARY).append(BOUNDARY_FIX).append(NEW_LINE);
             writer.flush();

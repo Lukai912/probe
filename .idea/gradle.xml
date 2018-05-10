@@ -8,9 +8,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/leakcanary-analyzer" />
-            <option value="$PROJECT_DIR$/leakcanary-android" />
-            <option value="$PROJECT_DIR$/leakcanary-watcher" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

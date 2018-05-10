@@ -172,8 +172,6 @@ public class LeakService extends DisplayLeakService {
             throws JSONException {
 
         JSONObject leakObject = new JSONObject();
-        // package info
-        leakObject.put("versionCode", AppInfo.getAppVersionCode());
 
         // device info
         leakObject.put("brand", Build.BRAND);

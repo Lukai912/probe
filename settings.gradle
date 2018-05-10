@@ -1,3 +1,2 @@
-include ':leakcanary-android', ':leakcanary-analyzer', ':leakcanary-watcher'
 
 
