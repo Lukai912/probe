@@ -64,6 +64,7 @@ public class ClientdataManager {
 		jsonClientdata.put("RAM", new GetMemory(context).getTotalMem());
 		// package info
 		jsonClientdata.put("versionCode", AppInfo.getAppVersionCode());
+		jsonClientdata.put("sdk_version", AppInfo.getSdkVersion());
 
 		
 	/*	if (Constants.mProvideGPSData) {
