@@ -15,92 +15,72 @@
  */
 package com.squareup.leakcanary;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Application;
-import android.os.Build;
 import android.os.Bundle;
 
-import com.csmijo.probbugtags.BugTagAgent;
-
-import static android.os.Build.VERSION.SDK_INT;
-import static android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH;
 import static com.squareup.leakcanary.Preconditions.checkNotNull;
 
-@TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public final class ActivityRefWatcher {
 
-    private final Application application;
-    private final RefWatcher refWatcher;
-    private final Application.ActivityLifecycleCallbacks lifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
-        @Override
-        public void onActivityCreated(Activity activity,
-                                      Bundle savedInstanceState) {
+  /** @deprecated Use {@link #install(Application, RefWatcher)}. */
+  @Deprecated
+  public static void installOnIcsPlus(Application application, RefWatcher refWatcher) {
+    install(application, refWatcher);
+  }
+
+  public static void install(Application application, RefWatcher refWatcher) {
+    new ActivityRefWatcher(application, refWatcher).watchActivities();
+  }
+
+  private final Application.ActivityLifecycleCallbacks lifecycleCallbacks =
+      new Application.ActivityLifecycleCallbacks() {
+        @Override public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
         }
 
-        @Override
-        public void onActivityStarted(Activity activity) {
-
+        @Override public void onActivityStarted(Activity activity) {
         }
 
-        @Override
-        public void onActivityResumed(Activity activity) {
-            BugTagAgent.onResume(activity);
+        @Override public void onActivityResumed(Activity activity) {
         }
 
-        @Override
-        public void onActivityPaused(Activity activity) {
-            BugTagAgent.onPause(activity);
+        @Override public void onActivityPaused(Activity activity) {
         }
 
-        @Override
-        public void onActivityStopped(Activity activity) {
+        @Override public void onActivityStopped(Activity activity) {
         }
 
-        @Override
-        public void onActivitySaveInstanceState(Activity activity,
-                                                Bundle outState) {
+        @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
         }
 
-        @Override
-        public void onActivityDestroyed(Activity activity) {
-            ActivityRefWatcher.this.onActivityDestroyed(activity);
+        @Override public void onActivityDestroyed(Activity activity) {
+          ActivityRefWatcher.this.onActivityDestroyed(activity);
         }
-    };
-    /**
-     * Constructs an {@link ActivityRefWatcher} that will make sure the
-     * activities are not leaking after they have been destroyed.
-     */
-    public ActivityRefWatcher(Application application,
-                              final RefWatcher refWatcher) {
-        this.application = checkNotNull(application, "application");
-        this.refWatcher = checkNotNull(refWatcher, "refWatcher");
-    }
+      };
 
-    public static void installOnIcsPlus(Application application,
-                                        RefWatcher refWatcher) {
-        if (SDK_INT < ICE_CREAM_SANDWICH) {
-            // If you need to support Android < ICS, override onDestroy() in
-            // your base activity.
-            return;
-        }
-        ActivityRefWatcher activityRefWatcher = new ActivityRefWatcher(
-                application, refWatcher);
-        activityRefWatcher.watchActivities();
-    }
+  private final Application application;
+  private final RefWatcher refWatcher;
 
-    void onActivityDestroyed(Activity activity) {
-        refWatcher.watch(activity);
-    }
+  /**
+   * Constructs an {@link ActivityRefWatcher} that will make sure the activities are not leaking
+   * after they have been destroyed.
+   */
+  public ActivityRefWatcher(Application application, RefWatcher refWatcher) {
+    this.application = checkNotNull(application, "application");
+    this.refWatcher = checkNotNull(refWatcher, "refWatcher");
+  }
 
+  void onActivityDestroyed(Activity activity) {
+    refWatcher.watch(activity);
+  }
 
-    public void watchActivities() {
-        // Make sure you don't get installed twice.
-        stopWatchingActivities();
-        application.registerActivityLifecycleCallbacks(lifecycleCallbacks);
-    }
+  public void watchActivities() {
+    // Make sure you don't get installed twice.
+    stopWatchingActivities();
+    application.registerActivityLifecycleCallbacks(lifecycleCallbacks);
+  }
 
-    public void stopWatchingActivities() {
-        application.unregisterActivityLifecycleCallbacks(lifecycleCallbacks);
-    }
+  public void stopWatchingActivities() {
+    application.unregisterActivityLifecycleCallbacks(lifecycleCallbacks);
+  }
 }

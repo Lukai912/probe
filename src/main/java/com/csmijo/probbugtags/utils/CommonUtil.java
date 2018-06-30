@@ -11,9 +11,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.baseData.DeviceInfo;
 
@@ -22,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -63,7 +65,7 @@ public class CommonUtil {
      */
     public static boolean hasLackPermissions(Context context, String[] permissions) {
         for (String permission : permissions) {
-            if (ActivityCompat.checkSelfPermission(context.getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(context.getApplicationContext(), permission) != PackageManager.PERMISSION_GRANTED) {
                 return true;
             }
         }
@@ -159,7 +161,7 @@ public class CommonUtil {
      */
     public static String getUserIdentifier(Context context) {
         try {
-            return SharedPrefUtil.getValue(context,"identifier", "");
+            return SharedPrefUtil.getValue(context, "identifier", "");
         } catch (Exception e) {
             Logger.e(TAG, e);
             return "";
@@ -172,7 +174,7 @@ public class CommonUtil {
      * @param context
      * @return
      */
-    public static BugTagAgent.SendPolicy getReportPolicyMode(Context context) {
+    public static BugTagAgentReal.SendPolicy getReportPolicyMode(Context context) {
         return Constants.mReportPolicy;
     }
 
@@ -307,14 +309,14 @@ public class CommonUtil {
     public static boolean isNewSession(Context context) {
         try {
             long currenttime = System.currentTimeMillis();
-            long session_save_time = SharedPrefUtil.getValue(context,"session_save_time", 0);
-            Logger.i(TAG, "currenttime=" + currenttime);
-            Logger.i(TAG, "session_save_time=" + session_save_time);
+            long session_save_time = SharedPrefUtil.getValue(context, "session_save_time", 0);
+            Logger.d(TAG, "currenttime=" + currenttime);
+            Logger.d(TAG, "session_save_time=" + session_save_time);
             if (currenttime - session_save_time > Constants.kContinueSessionMillis) {
-                Logger.i(TAG, "return true,create new session.");
+                Logger.d(TAG, "return true,create new session.");
                 return true;
             }
-            Logger.i(TAG, "return false.At the same session.");
+            Logger.d(TAG, "return false.At the same session.");
             return false;
         } catch (Exception e) {
             Logger.e(TAG, e);
@@ -356,7 +358,7 @@ public class CommonUtil {
         if (str != null) {
             str = str + DeviceInfo.getDeviceTime();
             sessionId = CommonUtil.md5Appkey(str);
-            SharedPrefUtil.setValue(context,"session_id", sessionId);
+            SharedPrefUtil.setValue(context, "session_id", sessionId);
 
             saveSessionTime(context);
             return sessionId;
@@ -365,7 +367,7 @@ public class CommonUtil {
     }
 
     public static void saveSessionTime(Context context) {
-        SharedPrefUtil.setValue(context,"session_save_time", System.currentTimeMillis());
+        SharedPrefUtil.setValue(context, "session_save_time", System.currentTimeMillis());
     }
 
 
@@ -377,14 +379,14 @@ public class CommonUtil {
     public static boolean isOnLine(Context context) {
         try {
             long currenttime = System.currentTimeMillis();
-            long login_save_time = SharedPrefUtil.getValue(context,"login_save_time", 0);
-            Logger.i(TAG, "currenttime=" + currenttime);
-            Logger.i(TAG, "login_save_time=" + login_save_time);
+            long login_save_time = SharedPrefUtil.getValue(context, "login_save_time", 0);
+            Logger.d(TAG, "currenttime=" + currenttime);
+            Logger.d(TAG, "login_save_time=" + login_save_time);
             if (currenttime - login_save_time > Constants.liveTimeMillis) {
-                Logger.i(TAG, "return true, please login again.");
+                Logger.d(TAG, "return true, please login again.");
                 return false;
             }
-            Logger.i(TAG, "return false,has login.");
+            Logger.d(TAG, "return false,has login.");
             return true;
         } catch (Exception e) {
             Logger.e(TAG, e);
@@ -393,7 +395,7 @@ public class CommonUtil {
     }
 
     public static void savePageName(Context context, String pageName) {
-        SharedPrefUtil.setValue(context,"CurrentPage", pageName);
+        SharedPrefUtil.setValue(context, "CurrentPage", pageName);
     }
 
     public static String getFormatTime(long timestamp) {
@@ -446,12 +448,7 @@ public class CommonUtil {
             } else {
                 // SD卡上存在salt
                 saltString = getSaltOnSDCard(fileFromSDCard);
-                try {
-                    writeToFile(fileFromDData, saltString);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+                writeToFile(fileFromDData, saltString);
                 return saltString;
             }
 
@@ -464,28 +461,21 @@ public class CommonUtil {
 
     private static String getSaltOnSDCard(File fileFromSDCard) {
         // TODO Auto-generated method stub
-        try {
-            String saltString = readSaltFromFile(fileFromSDCard);
-            return saltString;
-        } catch (IOException e) {
-            Logger.e(TAG, e);
-        }
-        return null;
+
+        String saltString = readSaltFromFile(fileFromSDCard);
+        return saltString;
     }
 
     private static String getSaltOnDataData(File fileFromDData, String file_name) {
-        try {
-            if (!fileFromDData.exists()) {
-                String uuid = getUUID();
-                writeToFile(fileFromDData, uuid);
-                return uuid;
-            }
-            return readSaltFromFile(fileFromDData);
 
-        } catch (IOException e) {
-            Logger.e(TAG, e);
+        if (!fileFromDData.exists()) {
+            String uuid = getUUID();
+            writeToFile(fileFromDData, uuid);
+            return uuid;
         }
-        return "";
+        return readSaltFromFile(fileFromDData);
+
+
     }
 
     private static String getUUID() {
@@ -500,12 +490,34 @@ public class CommonUtil {
      * @return 唯一标识符。
      * @throws IOException IO异常。
      */
-    private static String readSaltFromFile(File file) throws IOException {
-        RandomAccessFile accessFile = new RandomAccessFile(file, "r");
-        byte[] bs = new byte[(int) accessFile.length()];
-        accessFile.readFully(bs);
-        accessFile.close();
-        return new String(bs);
+    private static String readSaltFromFile(File file) {
+        RandomAccessFile accessFile = null;
+        byte[] bs = null;
+        try {
+            accessFile = new RandomAccessFile(file, "r");
+            bs = new byte[(int) accessFile.length()];
+            accessFile.readFully(bs);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (accessFile != null) {
+                try {
+                    accessFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if (bs != null) {
+            return new String(bs);
+        } else {
+            return "";
+        }
+
+
     }
 
     /**
@@ -514,12 +526,31 @@ public class CommonUtil {
      * @param file 保存唯一标识符的File对象。
      * @throws IOException IO异常。
      */
-    private static void writeToFile(File file, String uuid) throws IOException {
-        file.createNewFile();
-        FileOutputStream out = new FileOutputStream(file);
+    private static void writeToFile(File file, String uuid) {
+        FileOutputStream out = null;
+        try {
+            file.createNewFile();
 
-        out.write(uuid.getBytes());
-        out.close();
+            out = new FileOutputStream(file);
 
+            out.write(uuid.getBytes());
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (out != null) {
+                try {
+                    out.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+    }
+
+    public static File getUnapprovedFolder(Context context) {
+        return context.getDir("probe-unapproved", Context.MODE_PRIVATE);
     }
 }

@@ -14,7 +14,9 @@
 
 package com.csmijo.probbugtags.manager;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Base64;
 
 import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.baseData.DeviceInfo;
@@ -24,6 +26,7 @@ import com.csmijo.probbugtags.performance.GetMemory;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Constants;
 import com.csmijo.probbugtags.utils.Logger;
+import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,19 +40,22 @@ import java.util.Iterator;
 import java.util.List;
 
 
+
 public class MyCrashHandler implements UncaughtExceptionHandler {
     private final String tag = "MyCrashHandler";
     private static MyCrashHandler myCrashHandler;
     private Thread.UncaughtExceptionHandler defaultExceptionHandler;
     private Context context;
 
-    public static synchronized MyCrashHandler getInstance() {
-        if (myCrashHandler != null) {
-            return myCrashHandler;
-        } else {
-            myCrashHandler = new MyCrashHandler();
-            return myCrashHandler;
+    public static MyCrashHandler getInstance() {
+        if (myCrashHandler == null) {
+            synchronized (MyCrashHandler.class) {
+                if (myCrashHandler == null) {
+                    myCrashHandler = new MyCrashHandler();
+                }
+            }
         }
+        return myCrashHandler;
     }
 
     private MyCrashHandler() {
@@ -66,13 +72,15 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
     public void uncaughtException(Thread thread, Throwable ex) {
 
         if (!handleException(thread, ex) && this.defaultExceptionHandler != null) {
+            //如果自己没处理交给系统处理
             this.defaultExceptionHandler.uncaughtException(thread, ex);
         } else {
-            // exit app
+            // 自己处理，exit app
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(10);
         }
     }
+
 
 
     private boolean handleException(Thread thread, Throwable ex) {
@@ -109,41 +117,43 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
         String threadInfo = ThreadCollector.collect(thread);
 
         StringBuilder infoBuilder = new StringBuilder();
-        infoBuilder.append("logcatInfo:");
-        infoBuilder.append(logcatInfo);
-        infoBuilder.append("\r\n");
-        infoBuilder.append("stackTrace:");
         infoBuilder.append(stackTrace);
-        infoBuilder.append("\r\n");
-        infoBuilder.append("threadInfo:");
-        infoBuilder.append(threadInfo);
-        infoBuilder.append("\r\n");
 
         JSONObject errorInfo = null;
         try {
-            errorInfo = prepareErrorInfoJsonObject(infoBuilder.toString());
+            errorInfo = prepareErrorInfoJsonObject(Base64.encodeToString(infoBuilder.toString().getBytes(),Base64.DEFAULT), threadInfo, logcatInfo);
         } catch (JSONException e) {
             // TODO Auto-generated catch block
             Logger.e(tag, e);
 
+        } catch (Exception e) {
+            Logger.e(tag, "lukai " + e.getMessage());
         }
 
         if (errorInfo != null) {
             // save to file, send next start
             CommonUtil.saveInfoToFile("errorInfo", errorInfo,
                     "/cobub.cache", context);
+            Logger.i(tag, "cobub.cache save successed");
         }
         return true;
     }
 
 
-    private JSONObject prepareErrorInfoJsonObject(String errorInfo)
+    private JSONObject prepareErrorInfoJsonObject(String stackTrace, String threadInfo, String logcatInfo)
             throws JSONException {
         JSONObject errorObject = new JSONObject();
 
-        errorObject.put("stacktrace", errorInfo);
-//        errorObject.put("activities", CommonUtil.getActivityName(context));
-        errorObject.put("activities", ApplicationInit.getCurrentActivity().getComponentName().getClassName());
+        errorObject.put("stacktrace", stackTrace);
+        errorObject.put("threadInfo", threadInfo);
+        errorObject.put("logcatInfo", logcatInfo);
+        errorObject.put("activities", CommonUtil.getActivityName(context));
+        Activity activity = ApplicationInit.getCurrentActivity();
+        if (null != activity) {
+            errorObject.put("activities", activity.getComponentName().getClassName());
+        } else {
+            errorObject.put("activities", "");
+        }
 
         JSONObject clientInfObject = new ClientdataManager(context)
                 .prepareClientdataJSON();
@@ -172,7 +182,7 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
 
         errorObject.put("RomAvailMem", availInternalMem);
         errorObject.put("RomTotalMem", totalInternalMem);
-        errorObject.put("isLowMemory", isLowMemory);
+        errorObject.put("isLowMemory ", isLowMemory);
         errorObject.put("RamAvailMem", availMem);
         errorObject.put("orientation", orientation);
         errorObject.put("isRooted", isRooted);
@@ -182,7 +192,9 @@ public class MyCrashHandler implements UncaughtExceptionHandler {
         errorObject.put("cpuAbi", cpuAbiBuilder.toString());
 
         // recent activities
-        errorObject.put("recentActivities", ApplicationInit.recentActivities.toString());
+        errorObject.put("recentActivities", SharedPrefUtil.getValue(context, "recent_activity_names", ""));
+        // clear sqlite recent activities
+        SharedPrefUtil.setValue(context, "recent_activity_names", "");
 
         return errorObject;
     }

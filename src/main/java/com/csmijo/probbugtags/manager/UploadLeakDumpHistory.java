@@ -2,13 +2,16 @@ package com.csmijo.probbugtags.manager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.widget.Toast;
 
-import com.csmijo.probbugtags.service.UploadLeakDumpService;
+import com.csmijo.probbugtags.service.UploadFileReportService;
+import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
-import com.squareup.leakcanary.internal.LeakCanaryInternals;
+import com.squareup.leakcanary.DefaultLeakDirectoryProvider;
 
 import java.io.File;
-import java.io.FileFilter;
+import java.io.FilenameFilter;
+import java.util.List;
 
 /**
  * Created by chengqianqian-xy on 2016/8/29.
@@ -25,77 +28,40 @@ public class UploadLeakDumpHistory extends Thread {
     @Override
     public void run() {
         super.run();
-        File leakCanaryDirectory = LeakCanaryInternals.storageDirectory();
-        final File[] existsFiles = leakCanaryDirectory
-                .listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File file) {
-                        return !file.isDirectory()
-                                && (file.getName().endsWith(".zip") || file.getName().endsWith(".hprof"));
+        DefaultLeakDirectoryProvider leakDirectoryProvider = new DefaultLeakDirectoryProvider(mContext);
+        final List<File> existsFiles = leakDirectoryProvider.listFiles(new FilenameFilter() {
+            @Override public boolean accept(File dir, String filename) {
+                return filename.endsWith(".zip");
+            }
+        });
+
+        if (existsFiles != null && existsFiles.size() > 0) {
+       /* int length = 0;
+        if (existsFiles.length <= 3) {
+            length = existsFiles.length;
+        } else {
+            length = 3;
+        }*/
+            int length = existsFiles.size();
+
+            if (CommonUtil.isNetworkAvailable(mContext) && CommonUtil.isNetworkTypeWifi(mContext)) {
+                for (int i = 0; i < length; i++) {
+                    File file = existsFiles.get(i);
+                    if(file.length()> 50000000) {
+                        Logger.i(TAG, "exist file too large :" + file.getName() + ",size:"+file.length());
+                        break;
                     }
-                });
-
-
-        if (existsFiles != null && existsFiles.length > 0) {
-            for (final File file : existsFiles) {
-                Logger.i(TAG, "exist file :" + file.getName());
-                Intent intent = new Intent();
-                intent.putExtra("dumpFilePath", file.getAbsolutePath());
-                intent.setClass(this.mContext, UploadLeakDumpService.class);
-                this.mContext.startService(intent);
+                    Logger.d(TAG, "exist file :" + file.getName());
+                    Intent intent = new Intent("leakdump");
+                    intent.putExtra("filePath", file.getAbsolutePath());
+                    intent.setClass(this.mContext, UploadFileReportService.class);
+                    this.mContext.startService(intent);
+                }
+            }else{
+                Logger.i(TAG,"存在 " + existsFiles.size()+ " 个dump文件");
+                Toast.makeText(mContext,"存在 "+existsFiles.size() + " 个dump文件，请尽快打开wifi并重启APP进行dump文件上传！",Toast.LENGTH_LONG).show();
             }
         }
+
     }
-
-
-    /*private List<File> removeDupli(File[] existsZipFiles, File[] existsHprofFiles) {
-        // zip和hprof文件去重
-        List<File> existsFiles = new ArrayList<>();
-        for (int i = 0; i < existsZipFiles.length; i++) {
-            String zipFileNameNoSuffix = getFileNameNoSuffix(existsZipFiles[i], ".zip");
-
-            for (int j = 0; j < existsHprofFiles.length; j++) {
-                String hprofFileNameNoSuffix = getFileNameNoSuffix(existsHprofFiles[j], ".hprof");
-
-                if (zipFileNameNoSuffix.equals(hprofFileNameNoSuffix)) {
-                    existsZipFiles[i].delete(); // 删除重复的zip文件，上传可能压缩未完成
-                } else {
-                    existsFiles.add(existsZipFiles[i]);
-                }
-            }
-        }
-
-        // 重新压缩未压缩的hprof文件
-        for (File file : existsHprofFiles) {
-            String fileNameNoSuffix = getFileNameNoSuffix(file, ".hprof");
-            String zipFilePath = file.getParent() + File.separator
-                    + fileNameNoSuffix + ".zip"; // 压缩文件文件绝对路径
-
-            boolean zipResult = ZipCompress.writeByZipOutputStream(
-                    file.getAbsolutePath(), zipFilePath);
-
-            File zipFile = new File(zipFilePath);
-            if (zipResult) {
-                file.delete();
-                if (zipFile.exists()) {
-                    existsFiles.add(zipFile);
-                }
-            } else {
-                // 压缩失败，保存hprof文件
-                existsFiles.add(file);
-                if (zipFile.exists()) {
-                    zipFile.delete();
-                }
-            }
-        }
-
-        return existsFiles;
-    }
-
-    private String getFileNameNoSuffix(File file, String suffix) {
-        int index = file.getName().indexOf(".zip");
-        String fileNameNoSuffix = file.getName().substring(0,
-                index);
-        return fileNameNoSuffix;
-    }*/
 }

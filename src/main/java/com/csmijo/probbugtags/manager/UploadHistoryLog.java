@@ -15,20 +15,16 @@
 package com.csmijo.probbugtags.manager;
 
 import android.content.Context;
-import android.text.TextUtils;
+import android.content.Intent;
 
-import com.csmijo.probbugtags.bean.MyMessage;
+import com.csmijo.probbugtags.service.UploadFileReportService;
+import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.RetrofitClient;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class UploadHistoryLog extends Thread {
     public Context context;
@@ -45,35 +41,28 @@ public class UploadHistoryLog extends Thread {
         String path = context.getCacheDir() + "/cobub.cache";
         uploadCacheLog(path);
 
-        path = context.getCacheDir() + "/leakInfo.cache";
-        uploadLeakLog(path);
     }
 
     private void uploadCacheLog(String filePath) {
-        String content = readFile(filePath);
-        if(!TextUtils.isEmpty(content)){
-            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-            Call<ResponseBody> call = apiStores.uploadCacheLog(content);
-            call.enqueue(getCallBack(filePath));
-        }
-    }
-
-    private void uploadLeakLog(String filePath) {
-        String content = readFile(filePath);
-        if (!TextUtils.isEmpty(content)) {
-            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-            Call<ResponseBody> call = apiStores.uploadLeakcanryLog(content);
-            call.enqueue(getCallBack(filePath));
+        File file = new File(filePath);
+        if (file.exists() && CommonUtil.isNetworkAvailable(context) && CommonUtil.isNetworkTypeWifi(context)) {
+            Logger.i(TAG,"uploadCacheLog");
+            Intent intent = new Intent("cacheLog");
+            intent.putExtra("filePath", filePath);
+            intent.setClass(context.getApplicationContext(), UploadFileReportService.class);
+            context.startService(intent);
+        }else{
+            Logger.i(TAG,"exist cache log, but wifi is not available");
         }
     }
 
     private String readFile(String path) {
-        File file1;
-        FileInputStream in;
+        File file1 = null;
+        FileInputStream in = null;
         try {
             file1 = new File(path);
             if (!file1.exists()) {
-                Logger.d(TAG, "No history log file found!");
+                Logger.i(TAG, "No history log file found!");
                 return null;
             }
             in = new FileInputStream(file1);
@@ -88,43 +77,51 @@ public class UploadHistoryLog extends Thread {
         } catch (Exception e) {
             Logger.e(TAG, e);
             return null;
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    private Callback<ResponseBody> getCallBack(final String filePath){
-        return new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
-                    try {
-                        String body = response.body().string();
-                        MyMessage message = RetrofitClient.parseResp(body);
-
-                        if (message == null) {
-                            return;
-                        }
-                        if (message.getFlag() > 0) {
-                            File file = new File(filePath);
-                            file.delete();
-
-                            if (file.exists()) {
-                                Logger.i(TAG, file.getAbsolutePath() + " delete fail!");
-                            } else {
-                                Logger.i(TAG, file.getAbsolutePath() + " delete success!");
-                            }
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }else{
-                    Logger.e(TAG, "upload filePath info fail");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Logger.e(TAG, "upload filePath info fail");
-            }
-        };
-    }
+//    private Callback<ResponseBody> getCallBack(final String filePath) {
+//        return new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                if (response.isSuccessful()) {
+//                    try {
+//                        String body = response.body().string();
+//                        MyMessage message = RetrofitClient.parseResp(body);
+//
+//                        if (message == null) {
+//                            return;
+//                        }
+//                        if (message.getFlag() > 0) {
+//                            File file = new File(filePath);
+//                            file.delete();
+//
+//                            if (file.exists()) {
+//                                Logger.i(TAG, file.getAbsolutePath() + " delete fail!");
+//                            } else {
+//                                Logger.i(TAG, file.getAbsolutePath() + " delete success!");
+//                            }
+//                        }
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                } else {
+//                    Logger.e(TAG, "upload filePath info fail");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                Logger.e(TAG, "upload filePath info fail");
+//            }
+//        };
+//    }
 }

@@ -1,6 +1,6 @@
 package com.csmijo.probbugtags.utils;
 
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 
 /**
  * Created by chengqianqian-xy on 2016/5/30.
@@ -45,23 +45,31 @@ public class Constants {
     /* Report policy: 1 means sent the data to server immediately
      0 means the data will be cached and sent to server when next app's start
      up. Default is 1, real-time*/
-    public static BugTagAgent.SendPolicy mReportPolicy = BugTagAgent.SendPolicy.REALTIME;
+    public static BugTagAgentReal.SendPolicy mReportPolicy = BugTagAgentReal.SendPolicy.REALTIME;
 
     public static final int DEFAULT_BUFFER_SIZE_IN_BYTES = 8192;
 
     //Default number of latest lines kept from the logcat output
     public static final int DEFAULT_LOGCAT_LINES = 100;
 
+    public static final String UTF8 = "UTF-8";
 
-    /**
-     * 设定的轮询间隔 暂定写死，以后可以运控
-     *
-     * @author houjianhua
-     */
     public static int mPerFormDataDelay = 5000;
     // Default is false, not open fps view.
     public static boolean isOpenWindow = false;
-
+    public static int DEFAULT_CONNECTION_TIMEOUT = 60000;
+    public static int DEFAULT_SOCKET_TIMEOUT = 60000;
     //Server URL prefix
-    public static String urlPrefix = "http://211.151.122.244/";
+    //for debug
+   // public static String urlPrefix = "http://10.16.12.45/tanzhen_client/";
+    public static String urlPrefix = "http://42.236.102.84/";
+    //public static String urlPrefix = "http://10.18.61.46:8080/";
+    //for release
+//    public static String urlPrefix = "http://211.151.122.244:80/";
+    public static String anrUrlExt = "ums/postAnrLog";
+    public static String dumpFileUrlExt = "upload/uploadDumpFile/";
+    public static String usingUrlExt = "ums/postActivityLog/";
+    public static String cacheUrlExt = "ums/uploadLog/";
+    public static String leackCanaryUrlExt = "ums/postLeakcanryLog";
+    public static String configUrlExt = "ums/getOnlineConfiguration";
 }

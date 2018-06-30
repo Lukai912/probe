@@ -14,28 +14,25 @@
 
 package com.csmijo.probbugtags.manager;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 
 import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.BugTagAgent;
+import com.csmijo.probbugtags.BugTagAgentReal;
 import com.csmijo.probbugtags.baseData.AppInfo;
-import com.csmijo.probbugtags.bean.MyMessage;
+import com.csmijo.probbugtags.service.UploadCommonReortService;
 import com.csmijo.probbugtags.utils.CommonUtil;
 import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.RetrofitClient;
 import com.csmijo.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Iterator;
 
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 public class UsinglogManager {
 
@@ -93,15 +90,19 @@ public class UsinglogManager {
         }
 
         CommonUtil.saveSessionTime(context);
-        CommonUtil.savePageName(context, ApplicationInit.getCurrentActivity().getComponentName().getClassName());
-
+        Activity activity = ApplicationInit.getCurrentActivity();
+        if (null != activity) {
+            CommonUtil.savePageName(context, activity.getComponentName().getClassName());
+        } else {
+            CommonUtil.savePageName(context, "");
+        }
     }
 
     public void onPause() {
         Logger.i(TAG, "Call onPause()");
-        String pageName = SharedPrefUtil.getValue(context,"CurrentPage", "");
+        String pageName = SharedPrefUtil.getValue(context, "CurrentPage", "");
 
-        long start = SharedPrefUtil.getValue(context,"session_save_time",
+        long start = SharedPrefUtil.getValue(context, "session_save_time",
                 System.currentTimeMillis());
         String start_millis = CommonUtil.getFormatTime(start);
 
@@ -120,17 +121,17 @@ public class UsinglogManager {
             return;
         }
 
-        uploadActivityInfo(info);
+        //uploadActivityInfo(info);
 
     }
 
     public void onWebPage(String pageName) {
-        String lastView = SharedPrefUtil.getValue(context,"CurrentPage", "");
+        String lastView = SharedPrefUtil.getValue(context, "CurrentPage", "");
         if (lastView.equals("")) {
-            SharedPrefUtil.setValue(context,"CurrentPage", pageName);
-            SharedPrefUtil.setValue(context,"session_save_time", System.currentTimeMillis());
+            SharedPrefUtil.setValue(context, "CurrentPage", pageName);
+            SharedPrefUtil.setValue(context, "session_save_time", System.currentTimeMillis());
         } else {
-            long start = SharedPrefUtil.getValue(context,"session_save_time",
+            long start = SharedPrefUtil.getValue(context, "session_save_time",
                     Long.valueOf(System.currentTimeMillis()));
             String start_millis = CommonUtil.getFormatTime(start);
 
@@ -139,8 +140,8 @@ public class UsinglogManager {
 
             String duration = end - start + "";
 
-            SharedPrefUtil.setValue(context,"CurrentPage", pageName);
-            SharedPrefUtil.setValue(context,"session_save_time", end);
+            SharedPrefUtil.setValue(context, "CurrentPage", pageName);
+            SharedPrefUtil.setValue(context, "session_save_time", end);
 
             JSONObject obj;
             try {
@@ -152,52 +153,18 @@ public class UsinglogManager {
                 return;
             }
 
-            uploadActivityInfo(obj);
+            //uploadActivityInfo(obj);
         }
     }
 
     private void uploadActivityInfo(final JSONObject info) {
-        if (CommonUtil.getReportPolicyMode(context) == BugTagAgent.SendPolicy.REALTIME
+        Logger.i(TAG, "uploadActivityInfo");
+        if (CommonUtil.getReportPolicyMode(context) == BugTagAgentReal.SendPolicy.REALTIME
                 && CommonUtil.isNetworkAvailable(context)) {
-            RetrofitClient.ApiStores apiStores = RetrofitClient.retrofit().create(RetrofitClient.ApiStores.class);
-            Call<ResponseBody> call = apiStores.uploadActivityLog(info.toString());
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()) {
-                        try {
-                            String body = response.body().string();
-                            MyMessage message = RetrofitClient.parseResp(body);
-                            if (message == null) {
-                                CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-                                        context);
-                                return;
-                            }
-
-                            if (message.getFlag() < 0) {
-                                if (message.getFlag() == -4 || message.getFlag() == -5)
-                                    CommonUtil.saveInfoToFile("activityInfo", info,
-                                            "/cobub.cache", context);
-                            }
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-                                context);
-                        return;
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",
-                            context);
-                    Logger.e(TAG, "upload activity fail, " + t.getMessage());
-                    return;
-                }
-            });
+            Intent intent = new Intent("usingLog");
+            intent.putExtra("content", info.toString());
+            intent.setClass(context.getApplicationContext(), UploadCommonReortService.class);
+            context.startService(intent);
 
         } else {
             CommonUtil.saveInfoToFile("activityInfo", info, "/cobub.cache",

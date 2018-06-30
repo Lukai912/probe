@@ -17,13 +17,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
-import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.hardware.SensorManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -34,7 +31,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -51,7 +47,6 @@ import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Locale;
 
 import static android.content.ContentValues.TAG;
@@ -64,10 +59,10 @@ public class DeviceInfo {
 
     private static final String tag = "DeviceInfo";
     private static Context context;
-    private static Location location;
+   // private static Location location;
     private static TelephonyManager telephonyManager;
     private static LocationManager locationManager;
-    private static BluetoothAdapter bluetoothAdapter;
+   // private static BluetoothAdapter bluetoothAdapter;
     private static SensorManager sensorManager;
 
     public static void init(Context context) {
@@ -78,12 +73,12 @@ public class DeviceInfo {
                     .getSystemService(Context.TELEPHONY_SERVICE));
             locationManager = (LocationManager) DeviceInfo.context
                     .getSystemService(Context.LOCATION_SERVICE);
-            bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+            //bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
         } catch (Exception e) {
             Logger.e(tag, e.toString());
         }
-        getLocation();
+       // getLocation();
     }
 
     public DeviceInfo() {
@@ -92,7 +87,7 @@ public class DeviceInfo {
 
     public static String getLanguage() {
         String language = Locale.getDefault().getLanguage();
-        Logger.i(tag, "getLanguage()=" + language);
+        Logger.d(tag, "getLanguage()=" + language);
         if (language == null)
             return "";
         return language;
@@ -104,25 +99,25 @@ public class DeviceInfo {
         WindowManager wm = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
         wm.getDefaultDisplay().getMetrics(displaysMetrics);
-        Logger.i(tag, "getResolution()=" + displaysMetrics.widthPixels + "x"
+        Logger.d(tag, "getResolution()=" + displaysMetrics.widthPixels + "x"
                 + displaysMetrics.heightPixels);
         return displaysMetrics.widthPixels + "x" + displaysMetrics.heightPixels;
     }
 
     public static String getDeviceProduct() {
         String result = Build.PRODUCT;
-        Logger.i(tag, "getDeviceProduct()=" + result);
+        Logger.d(tag, "getDeviceProduct()=" + result);
         if (result == null)
             return "";
         return result;
     }
 
-    public static boolean getBluetoothAvailable() {
-        if (bluetoothAdapter == null)
-            return false;
-        else
-            return true;
-    }
+//    public static boolean getBluetoothAvailable() {
+//        if (bluetoothAdapter == null)
+//            return false;
+//        else
+//            return true;
+//    }
 
     private static boolean isSimulator() {
         if (getDeviceIMEI().equals("000000000000000"))
@@ -142,7 +137,7 @@ public class DeviceInfo {
             else
                 sensorManager = (SensorManager) context
                         .getSystemService(Context.SENSOR_SERVICE);
-            Logger.i(tag, "getGravityAvailable()");
+            Logger.d(tag, "getGravityAvailable()");
             return (sensorManager == null) ? false : true;
         } catch (Exception e) {
             return false;
@@ -151,7 +146,7 @@ public class DeviceInfo {
 
     public static String getOsVersion() {
         String result = Build.VERSION.RELEASE;
-        Logger.i(tag, "getOsVersion()=" + result);
+        Logger.d(tag, "getOsVersion()=" + result);
         if (result == null)
             return "";
 
@@ -169,7 +164,7 @@ public class DeviceInfo {
         if (telephonyManager == null)
             return -1;
         int result = telephonyManager.getPhoneType();
-        Logger.i(tag, "getPhoneType()=" + result);
+        Logger.d(tag, "getPhoneType()=" + result);
         return result;
     }
 
@@ -185,10 +180,13 @@ public class DeviceInfo {
                     Manifest.permission.READ_PHONE_STATE)) {
                 Logger.e(tag,
                         "READ_PHONE_STATE permission should be added into AndroidManifest.xml.");
+                Exception e = new Exception("lukai");
+
+                e.printStackTrace();
                 return "";
             }
             result = telephonyManager.getSubscriberId();
-            Logger.i(tag, "getIMSI()=" + result);
+            Logger.d(tag, "getIMSI()=" + result);
             if (result == null)
                 return "";
             return result;
@@ -208,7 +206,7 @@ public class DeviceInfo {
             String result = wi.getMacAddress();
             if (result == null)
                 result = "";
-            Logger.i(tag, "getWifiMac()=" + result);
+            Logger.d(tag, "getWifiMac()=" + result);
             return result;
         } catch (Exception e) {
             Logger.e(tag, e);
@@ -300,10 +298,13 @@ public class DeviceInfo {
                     Manifest.permission.READ_PHONE_STATE)) {
                 Logger.e(tag,
                         "READ_PHONE_STATE permission should be added into AndroidManifest.xml.");
+                Exception e = new Exception("lukai");
+
+                e.printStackTrace();
                 return "";
             }
             result = telephonyManager.getDeviceId();
-            Logger.i(tag, "getIMEI()=" + result);
+            Logger.d(tag, "getIMEI()=" + result);
             if (result == null)
                 result = "";
         } catch (Exception e) {
@@ -320,6 +321,9 @@ public class DeviceInfo {
                     Manifest.permission.READ_PHONE_STATE)) {
                 Logger.e(tag,
                         "READ_PHONE_STATE permission should be added into AndroidManifest.xml.");
+                Exception e = new Exception("lukai");
+
+                e.printStackTrace();
                 return "";
             }
             result = telephonyManager.getSimSerialNumber();
@@ -343,7 +347,7 @@ public class DeviceInfo {
         return result;
     }
 
-    public static String getLatitude() {
+    /*public static String getLatitude() {
         if (location == null)
             return "";
         return String.valueOf(location.getLatitude());
@@ -364,7 +368,7 @@ public class DeviceInfo {
     }
 
     private static void getLocation() {
-        Logger.i(tag, "getLocation");
+        Logger.d(tag, "getLocation");
         try {
             List<String> matchingProviders = locationManager.getAllProviders();
             for (String prociderString : matchingProviders) {
@@ -382,7 +386,7 @@ public class DeviceInfo {
         } catch (Exception e) {
             Logger.e(tag, e.toString());
         }
-    }
+    }*/
 
     public static String getMCCMNC() {
         String result = "";
@@ -422,7 +426,7 @@ public class DeviceInfo {
             availableBlocks = statFs.getAvailableBlocks();
         }
 
-        return availableBlocks * blockSize / 1024 / 1024;
+        return availableBlocks * blockSize/ 1024 / 1024;
     }
 
 
@@ -448,7 +452,7 @@ public class DeviceInfo {
             totalBlocks = statFs.getBlockCount();
         }
 
-        return totalBlocks * blockSize / 1024 / 1024;
+        return totalBlocks * blockSize/ 1024 / 1024;
     }
 
 
@@ -466,9 +470,9 @@ public class DeviceInfo {
 
             return memoryInfo.lowMemory;
         } catch (Exception e) {
-            Log.e(TAG, "Could not check lowMemory status");
+            Logger.e(TAG, "Could not check lowMemory status");
         }
-        return null;
+        return false;
     }
 
 
@@ -503,7 +507,7 @@ public class DeviceInfo {
                 }
             }
         } catch (Exception e) {
-            return null;
+            return false;
         }
         return false;
     }
@@ -577,7 +581,7 @@ public class DeviceInfo {
 
             return batteryStatus.getIntExtra("level", -1) / (float) batteryStatus.getIntExtra("scale", -1);
         } catch (Exception e) {
-            Log.w(TAG, "Could not get batteryLevel");
+            Logger.w(TAG, "Could not get batteryLevel");
         }
         return null;
     }
@@ -588,13 +592,16 @@ public class DeviceInfo {
      */
     @Nullable
     public static Boolean isCharging(Context appContext) {
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = appContext.registerReceiver(null, ifilter);
+        try {
+            IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            Intent batteryStatus = appContext.registerReceiver(null, ifilter);
 
-        int status = batteryStatus.getIntExtra("status", -1);
-        return (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL);
-
-
+            int status = batteryStatus.getIntExtra("status", -1);
+            return (status == BatteryManager.BATTERY_STATUS_CHARGING || status == BatteryManager.BATTERY_STATUS_FULL);
+        } catch (Exception e) {
+            Logger.w(TAG, "Could not get charging status");
+        }
+        return null;
     }
 
     /**

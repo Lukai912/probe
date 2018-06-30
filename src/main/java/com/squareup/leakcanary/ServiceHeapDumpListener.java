@@ -24,22 +24,19 @@ import static com.squareup.leakcanary.internal.LeakCanaryInternals.setEnabled;
 
 public final class ServiceHeapDumpListener implements HeapDump.Listener {
 
-    private final Context context;
-    private final Class<? extends AbstractAnalysisResultService> listenerServiceClass;
+  private final Context context;
+  private final Class<? extends AbstractAnalysisResultService> listenerServiceClass;
 
-    public ServiceHeapDumpListener(Context context,
-                                   Class<? extends AbstractAnalysisResultService> listenerServiceClass) {
-        setEnabled(context, listenerServiceClass, true);
-        setEnabled(context, HeapAnalyzerService.class, true);
-        this.listenerServiceClass = checkNotNull(listenerServiceClass,
-                "listenerServiceClass");
-        this.context = checkNotNull(context, "context").getApplicationContext();
-    }
+  public ServiceHeapDumpListener(Context context,
+      Class<? extends AbstractAnalysisResultService> listenerServiceClass) {
+    setEnabled(context, listenerServiceClass, true);
+    setEnabled(context, HeapAnalyzerService.class, true);
+    this.listenerServiceClass = checkNotNull(listenerServiceClass, "listenerServiceClass");
+    this.context = checkNotNull(context, "context").getApplicationContext();
+  }
 
-    @Override
-    public void analyze(HeapDump heapDump) {
-        checkNotNull(heapDump, "heapDump");
-        HeapAnalyzerService
-                .runAnalysis(context, heapDump, listenerServiceClass);
-    }
+  @Override public void analyze(HeapDump heapDump) {
+    checkNotNull(heapDump, "heapDump");
+    HeapAnalyzerService.runAnalysis(context, heapDump, listenerServiceClass);
+  }
 }

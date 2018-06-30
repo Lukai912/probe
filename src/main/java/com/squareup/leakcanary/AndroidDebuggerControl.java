@@ -18,8 +18,7 @@ package com.squareup.leakcanary;
 import android.os.Debug;
 
 public final class AndroidDebuggerControl implements DebuggerControl {
-    @Override
-    public boolean isDebuggerAttached() {
-        return Debug.isDebuggerConnected();
-    }
+  @Override public boolean isDebuggerAttached() {
+    return Debug.isDebuggerConnected();
+  }
 }

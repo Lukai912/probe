@@ -19,7 +19,6 @@ import com.csmijo.probbugtags.baseData.AppInfo;
 import com.csmijo.probbugtags.baseData.DeviceInfo;
 import com.csmijo.probbugtags.performance.GetMemory;
 import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -56,19 +55,23 @@ public class ClientdataManager {
 		jsonClientdata.put("modulename", DeviceInfo.getDeviceProduct());
 		jsonClientdata.put("devicename", DeviceInfo.getDeviceName());
 		jsonClientdata.put("wifimac", DeviceInfo.getWifiMac());
-		jsonClientdata.put("havebt", DeviceInfo.getBluetoothAvailable());
+	//	jsonClientdata.put("havebt", DeviceInfo.getBluetoothAvailable());
 		jsonClientdata.put("havewifi", DeviceInfo.getWiFiAvailable());
-		jsonClientdata.put("havegps", DeviceInfo.getGPSAvailable());
+	//	jsonClientdata.put("havegps", DeviceInfo.getGPSAvailable());
 		jsonClientdata.put("havegravity", DeviceInfo.getGravityAvailable());
 		jsonClientdata.put("imei", DeviceInfo.getDeviceIMEI());
 		jsonClientdata.put("salt", CommonUtil.getSALT(context));
 		jsonClientdata.put("RAM", new GetMemory(context).getTotalMem());
+		// package info
+		jsonClientdata.put("versionCode", AppInfo.getAppVersionCode());
+		jsonClientdata.put("sdk_version", AppInfo.getSdkVersion());
+
 		
-		if (Constants.mProvideGPSData) {
+	/*	if (Constants.mProvideGPSData) {
 			jsonClientdata.put("latitude", DeviceInfo.getLatitude());
 			jsonClientdata.put("longitude", DeviceInfo.getLongitude());
 		}
-
+*/
 		return jsonClientdata;
 	}
 }

@@ -27,12 +27,15 @@ public class AppInfo {
 	private static Context context;
 	private static final String TAG = "AppInfo";
 	private static final String UMS_APPKEY = "UMS_APPKEY";
+	private static final String SDK_VERSION = "1.0";
 
 	public static void init(Context context) {
 		AppInfo.context = context;
 	}
 
-
+	public static String getSdkVersion() {
+		return SDK_VERSION;
+	}
 	public static String getAppKey() {
 		String umsAppkey = "";
 		try {
