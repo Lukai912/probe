@@ -2,13 +2,12 @@ package com.csmijo.probbugtags;
 
 /**
  * Created by lukai1 on 2018/1/16.
+ * ANRErro结构类
  */
 
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
-
-import com.csmijo.probbugtags.utils.Logger;
 
 import java.io.PrintWriter;
 import java.io.Serializable;
@@ -54,7 +53,7 @@ public class ANRError extends Error {
         setStackTrace(new StackTraceElement[] {});
         return this;
     }
-
+    //创建一个ANR的错误对象，填充ANR告警内容
     static ANRError New(String prefix, boolean logThreadsWithoutStackTrace) {
         final Thread mainThread = Looper.getMainLooper().getThread();
 
@@ -96,7 +95,7 @@ public class ANRError extends Error {
 
         return new ANRError(tst);
     }
-
+    //只捕获主线程ANR
     static ANRError NewMainOnly() {
         final Thread mainThread = Looper.getMainLooper().getThread();
         final StackTraceElement[] mainStackTrace = mainThread.getStackTrace();
@@ -108,7 +107,7 @@ public class ANRError extends Error {
         return thread.getName() + " (state = " + thread.getState() + ")";
     }
 
-
+    //获取当前线程调用堆栈
     public String getStackTrace(@Nullable String msg, @Nullable Throwable th) {
         final Writer result = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(result);

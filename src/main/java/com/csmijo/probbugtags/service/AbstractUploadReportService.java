@@ -20,6 +20,7 @@ import java.util.List;
 
 /**
  * Created by lukai1 on 2018/4/18.
+ * 优化网络上报线程操作，之前每次上报单开线程，消耗系统资源过大，使用IntentService代替
  */
 
 public abstract class AbstractUploadReportService extends IntentService {
@@ -39,6 +40,7 @@ public abstract class AbstractUploadReportService extends IntentService {
 
     protected abstract void onHandleUploadReport(Intent intent);
     protected void uploadCommonLog(final Context context, final String type, final String report, String urlExt, String tag) {
+        //增加服务端返回值判断，服务端处理异常要保留本地cache
         CallbackListner listner = new CallbackListner() {
             @Override
             public void onResponse(String responseBody) {
@@ -84,6 +86,7 @@ public abstract class AbstractUploadReportService extends IntentService {
                 try {
                     JSONObject resObject = new JSONObject(responseBody);
                     int errno = resObject.getInt("errno");
+                    //增加服务端返回值判断，服务端处理异常要保留本地cache
                     if (errno == 0) {
                         logFile.delete();
 

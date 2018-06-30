@@ -34,7 +34,9 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Map;
 
-
+/**抛弃Retrofit，使用原生接口实现http上报
+*参考ACRA网络传输架构
+*/
 public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
     @NonNull
     private final Context context;
@@ -91,7 +93,7 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
     @SuppressWarnings("WeakerAccess")
     protected void configureHeaders(@NonNull HttpURLConnection connection, @Nullable Map<String, String> customHeaders, @NonNull T t) throws IOException {
         // Set Headers
-        connection.setRequestProperty("User-Agent", String.format("Android probe %1$s", BuildConfig.VERSION_NAME)); //sent ACRA version to server
+        connection.setRequestProperty("User-Agent", String.format("Android probe %1$s", BuildConfig.VERSION_NAME)); //sent   version to server
         connection.setRequestProperty("Accept",
                 "text/html,application/xml,application/json,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
         connection.setRequestProperty("Content-Type", getContentType(context, t));
@@ -130,6 +132,7 @@ public abstract class BaseHttpRequest<T> implements HttpRequest<T> {
     protected void handleResponse(int responseCode, String responseMessage, URLConnection connection, CallbackListner listner) throws IOException {
         if (responseCode >= HttpURLConnection.HTTP_OK && responseCode < HttpURLConnection.HTTP_MULT_CHOICE) {
             // All is good
+            //回调处理服务端返回内容
             Logger.i("Request received by server", responseMessage);
             if(listner != null && connection != null) {
                 InputStream is = connection.getInputStream();

@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * Created by lukai1 on 2018/2/8.
+ * http 参数配置
  */
 
 public class HttpConfig {

@@ -661,9 +661,19 @@ dependencies {
 </code></pre></li>
 <li><p>在<code>module</code>的<code>AndroidManifest.xml</code>文件中，加入 <code>UMS_APPKEY</code>，例如：</p>
 
-<pre><code>&lt;meta-data
+<pre><code>
+   &lt;application
+        android:name=&quot;.MyApplication&quot;
+        android:allowBackup=&quot;true&quot;
+        android:icon=&quot;@mipmap/ic_launcher&quot;
+        android:label=&quot;@string/app_name&quot;
+        android:roundIcon=&quot;@mipmap/ic_launcher_round&quot;
+        android:supportsRtl=&quot;true&quot;
+        android:theme=&quot;@style/AppTheme&quot;&gt;
+         &lt;meta-data
         android:name=&quot;UMS_APPKEY&quot;
         android:value=&quot;58fde063a263***d64faa7ced0cbcce9&quot;/&gt;
+   &lt;/application&gt;
 </code></pre></li>
 </ol>
 

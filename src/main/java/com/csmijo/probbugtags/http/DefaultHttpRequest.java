@@ -25,8 +25,9 @@ import java.io.IOException;
 import java.util.Map;
 
 /**
- * @author F43nd1r
- * @since 10.03.2017
+ * lukai
+ * 2018
+ * 默认上传操作类
  */
 
 public class DefaultHttpRequest extends BaseHttpRequest<String> {

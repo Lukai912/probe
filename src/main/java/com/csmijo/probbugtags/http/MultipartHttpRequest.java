@@ -34,10 +34,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Produces <a href="https://www.w3.org/Protocols/rfc1341/7_2_Multipart.html">RFC 1341</a> compliant requests
- *
- * @author F43nd1r
- * @since 11.03.2017
+ * lukai
+ * 2018
+ * 文件上传操作类
  */
 
 public class MultipartHttpRequest extends BaseHttpRequest<List<File>> {
@@ -59,6 +58,7 @@ public class MultipartHttpRequest extends BaseHttpRequest<List<File>> {
     protected String getContentType(@NonNull Context context, List<File> content) {
         return "multipart/form-data; boundary=" + BOUNDARY;
     }
+    //构造http消息头，将file二进制化
     @Override
     protected byte[] asBytes(String tag, List<File> files) throws IOException {
         final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();

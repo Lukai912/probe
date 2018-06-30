@@ -99,6 +99,7 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
 
 
     public static void onResume(Activity activity) {
+
         final WeakReference<Activity> wActivity = new WeakReference<Activity>(activity);
         Runnable runnable = new Runnable() {
             @Override
@@ -211,7 +212,7 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
         });
         handler.post(thread);
     }
-
+    //anr收集到的信息上报处理
     @Override
     public void onAppNotResponding(final ANRError error) {
         Logger.e("ANR-Watchdog", "Detected Application Not Responding!");
@@ -233,6 +234,7 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
 
                     if (CommonUtil.getReportPolicyMode(mContext) == BugTagAgentReal.SendPolicy.REALTIME
                             && CommonUtil.isNetworkAvailable(mContext)) {
+                        //优先缓存到cache中，规避app消息队列超时、app crash等场景导致的anr信息丢失，到上报时再将cache信息读取出来上报
                         File file = new File(CommonUtil.getUnapprovedFolder(mContext), "anr_"+clientInfObject.getString("time"));
                         IOUtils.writeStringToFile(file,clientInfObject.toString());
 

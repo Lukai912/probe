@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.csmijo.probbugtags.ApplicationInit;
 import com.csmijo.probbugtags.BugTagAgentReal;
@@ -28,6 +27,7 @@ import java.util.Iterator;
 
 /**
  * Created by lukai1 on 2018/2/28.
+ * 重写DisplayLeakService方法，压缩dumpFile、leak告警，减少对原leakcanary的代码改动
  */
 
 public class LeakService extends DisplayLeakService {
@@ -45,6 +45,7 @@ public class LeakService extends DisplayLeakService {
         String dumpFileName = dumpFile.getName().substring(0,dumpFile.getName().indexOf("."));
         dumpFileName = dumpFileName + ".zip";
         Logger.i(TAG,"dumpFileName:" + dumpFileName);
+        //由于dumpfile的压缩大概耗时10s左右，耗时过久，调整上报顺序，优先上报泄露告警，提高上报成功率
         postLeakTextInfo(heapDump, result, dumpFileName);
 
 
@@ -63,17 +64,12 @@ public class LeakService extends DisplayLeakService {
         if (zipResult) {
             dumpFile.delete();
             filePath = zipFilePath;
-        } else {
-            Context context = ApplicationInit.getCurrentActivity();
-            if (null != context) {
-                Toast.makeText(context, "dump file zip fail!", Toast.LENGTH_SHORT).show();
-            }
         }
 
 
         File file = new File(filePath);
         //上传leak dump file
-        if (fileSize < 90) {
+        if (fileSize < 60) {
             Intent intent = new Intent("leakdump");
             intent.putExtra("filePath", file.getAbsolutePath());
             intent.setClass(this.getApplicationContext(), UploadFileReportService.class);
@@ -81,7 +77,7 @@ public class LeakService extends DisplayLeakService {
         } else {
             Context context = ApplicationInit.getCurrentActivity();
             if (null != context) {
-                Toast.makeText(context, "dump file is too large!", Toast.LENGTH_SHORT).show();
+                Logger.i(TAG, "exist file too large :" + file.getName() + ",size:"+file.length());
             }
             file.delete();
         }

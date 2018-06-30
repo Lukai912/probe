@@ -34,16 +34,7 @@ public class UploadLeakDumpHistory extends Thread {
                 return filename.endsWith(".zip");
             }
         });
-//        File downloadsDirectory = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS);
-//        File leakCanaryDirectory = new File(downloadsDirectory, "leakcanary-" + mContext.getPackageName());
-//        final File[] existsFiles = leakCanaryDirectory
-//                .listFiles(new FileFilter() {
-//                    @Override
-//                    public boolean accept(File file) {
-//                        return !file.isDirectory()
-//                                && (file.getName().endsWith(".zip"));
-//                    }
-//                });
+
         if (existsFiles != null && existsFiles.size() > 0) {
        /* int length = 0;
         if (existsFiles.length <= 3) {
@@ -56,6 +47,10 @@ public class UploadLeakDumpHistory extends Thread {
             if (CommonUtil.isNetworkAvailable(mContext) && CommonUtil.isNetworkTypeWifi(mContext)) {
                 for (int i = 0; i < length; i++) {
                     File file = existsFiles.get(i);
+                    if(file.length()> 50000000) {
+                        Logger.i(TAG, "exist file too large :" + file.getName() + ",size:"+file.length());
+                        break;
+                    }
                     Logger.d(TAG, "exist file :" + file.getName());
                     Intent intent = new Intent("leakdump");
                     intent.putExtra("filePath", file.getAbsolutePath());

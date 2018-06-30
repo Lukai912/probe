@@ -2,6 +2,7 @@ package com.csmijo.probbugtags;
 
 /**
  * Created by lukai1 on 2018/1/16.
+ * ANR watchdog实现
  */
 
 import android.os.Debug;
@@ -12,7 +13,7 @@ import android.util.Log;
 import com.csmijo.probbugtags.utils.Logger;
 
 /**
- * A watchdog timer thread that detects when the UI thread has frozen.
+ *  watchdog 线程监控主线程冻结导致的ANR
  */
 public class AnrInspector implements Runnable {
 
@@ -57,7 +58,7 @@ public class AnrInspector implements Runnable {
     };
 
     /**
-     * Constructs a watchdog that checks the ui thread every {@value #DEFAULT_ANR_TIMEOUT} milliseconds
+     * ANR判定阈值 5s
      */
     public AnrInspector() {
         this(DEFAULT_ANR_TIMEOUT);
@@ -159,13 +160,14 @@ public class AnrInspector implements Runnable {
         _ignoreDebugger = ignoreDebugger;
         return this;
     }
-
+    //ANR watchdog循环判定，5s冻循环冻结此线程，判断是否在主线程自增tick成功，如果失败则认为发生ANR
     @Override
     public void run() {
         Logger.e("ANR-Watchdog thread", "Inspect Application Not Responding!");
         Thread.currentThread().setName("|ANR-WatchDog|");
         int lastTick;
         int lastIgnored = -1;
+        //判定watchdog线程是否在活动状态，如果在活动状态则死循环保持ANR跟踪
         while (!Thread.currentThread().isInterrupted()) {
             lastTick = _tick;
             _uiHandler.post(_ticker);
@@ -179,6 +181,7 @@ public class AnrInspector implements Runnable {
 
             // If the main thread has not handled _ticker, it is blocked. ANR.
             if (_tick == lastTick) {
+                //app链接Androidstudio的debug操作，会造成应用的必现ANR，判处此种场景
                 if (!_ignoreDebugger && Debug.isDebuggerConnected()) {
                     if (_tick != lastIgnored)
                         Log.w("AnrInspector", "An ANR was detected but ignored because the debugger is connected (you can prevent this with setIgnoreDebugger(true))");
@@ -191,6 +194,7 @@ public class AnrInspector implements Runnable {
                     error = ANRError.New(_namePrefix, _logThreadsWithoutStackTrace);
                 else
                     error = ANRError.NewMainOnly();
+                //发生anr回调处理
                 _anrListener.onAppNotResponding(error);
                 return;
             }

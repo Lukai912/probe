@@ -15,6 +15,7 @@ import java.io.InputStream;
 
 /**
  * Created by lukai1 on 2018/4/18.
+ * 处理不同类型的消息上报
  */
 
 public class UploadCommonReortService extends AbstractUploadReportService {
