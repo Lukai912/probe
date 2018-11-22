@@ -1,12 +1,12 @@
-package com.csmijo.probbugtags.collector;
+package com.probe.probbugtags.collector;
 
 import android.os.Build;
 import android.text.TextUtils;
 
 import com.android.internal.util.Predicate;
-import com.csmijo.probbugtags.utils.Constants;
-import com.csmijo.probbugtags.utils.IOUtils;
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.Constants;
+import com.probe.probbugtags.utils.IOUtils;
+import com.probe.probbugtags.utils.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -12,21 +12,21 @@
  * @since Version 0.1
  */
 
-package com.csmijo.probbugtags.manager;
+package com.probe.probbugtags.manager;
 
 import android.app.Activity;
 import android.content.Context;
 import android.util.Base64;
 
-import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.baseData.DeviceInfo;
-import com.csmijo.probbugtags.collector.LogCatCollector;
-import com.csmijo.probbugtags.collector.ThreadCollector;
-import com.csmijo.probbugtags.performance.GetMemory;
-import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.Constants;
-import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.SharedPrefUtil;
+import com.probe.probbugtags.ApplicationInit;
+import com.probe.probbugtags.baseData.DeviceInfo;
+import com.probe.probbugtags.collector.LogCatCollector;
+import com.probe.probbugtags.collector.ThreadCollector;
+import com.probe.probbugtags.performance.GetMemory;
+import com.probe.probbugtags.utils.CommonUtil;
+import com.probe.probbugtags.utils.Constants;
+import com.probe.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.performance;
+package com.probe.probbugtags.performance;
 
 public class MemoryDetailInfo {
 

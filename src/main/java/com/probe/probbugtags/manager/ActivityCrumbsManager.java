@@ -1,10 +1,10 @@
-package com.csmijo.probbugtags.manager;
+package com.probe.probbugtags.manager;
 
 import android.app.Activity;
 
-import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.SharedPrefUtil;
+import com.probe.probbugtags.ApplicationInit;
+import com.probe.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.SharedPrefUtil;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;

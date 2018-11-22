@@ -1,6 +1,6 @@
-package com.csmijo.probbugtags.utils;
+package com.probe.probbugtags.utils;
 
-import com.csmijo.probbugtags.BugTagAgentReal;
+import com.probe.probbugtags.BugTagAgentReal;
 
 /**
  * Created by chengqianqian-xy on 2016/5/30.
@@ -14,19 +14,19 @@ public class Constants {
     public final static int Error = 4; // equals Log.ERROR, for the exceptions errors
     public final static int Nothing = 5;    // no log
     //用于管理悬浮窗
-    public static final String loginActivityName = "com.csmijo.probbugtags.activity.LoginActivity";
-    public static final String bugEditActivityName = "com.csmijo.probbugtags.activity.BugEditActivity";
-    public static final String reportActivityName = "com.csmijo.probbugtags.activity.ReportActivity";
+    public static final String loginActivityName = "com.probe.probbugtags.activity.LoginActivity";
+    public static final String bugEditActivityName = "com.probe.probbugtags.activity.BugEditActivity";
+    public static final String reportActivityName = "com.probe.probbugtags.activity.ReportActivity";
     //BugEditActivity 编辑完成后点击Finish按钮
-    public static final String bugEditFinishAction = "com.csmijo.probbugtags.bugedit.finish";
+    public static final String bugEditFinishAction = "com.probe.probbugtags.bugedit.finish";
     //BugEditActivity 编辑内容为空
-    public static final String bugEditCancelAction = "com.csmijo.probbugtags.bugedit.empty";
+    public static final String bugEditCancelAction = "com.probe.probbugtags.bugedit.empty";
     //publish悬浮窗点击tick按钮
-    public static final String publishTickAction = "com.csmijo.probbugtags.publishFab.tick";
+    public static final String publishTickAction = "com.probe.probbugtags.publishFab.tick";
     //publish悬浮窗点击cross按钮
-    public static final String publishCrossAction = "com.csmijo.probbugtags.publishFab.cross";
+    public static final String publishCrossAction = "com.probe.probbugtags.publishFab.cross";
     //提交成功
-    public static final String finishSelf = "com.csmijo.probbugtags.picTag.finishSelf";
+    public static final String finishSelf = "com.probe.probbugtags.picTag.finishSelf";
     /* Set the SDK Logs output. If DebugEnabled == true, the log will be
      output depends on DebugLevel. If DebugEnabled == false, there is
      no any outputs.*/

@@ -1,9 +1,9 @@
-package com.csmijo.probbugtags.manager;
+package com.probe.probbugtags.manager;
 
 import android.content.Context;
 
-import com.csmijo.probbugtags.bean.BugTag;
-import com.csmijo.probbugtags.utils.SharedPrefUtil;
+import com.probe.probbugtags.bean.BugTag;
+import com.probe.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;

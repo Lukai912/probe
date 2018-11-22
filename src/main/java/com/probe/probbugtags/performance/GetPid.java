@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.performance;
+package com.probe.probbugtags.performance;
 
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningAppProcessInfo;

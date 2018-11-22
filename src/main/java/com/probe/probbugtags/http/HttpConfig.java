@@ -1,7 +1,7 @@
-package com.csmijo.probbugtags.http;
+package com.probe.probbugtags.http;
 
 
-import com.csmijo.probbugtags.utils.Constants;
+import com.probe.probbugtags.utils.Constants;
 
 import java.util.Map;
 

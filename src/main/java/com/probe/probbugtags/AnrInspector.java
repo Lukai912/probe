@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags;
+package com.probe.probbugtags;
 
 /**
  * Created by lukai1 on 2018/1/16.
@@ -10,7 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.Logger;
 
 /**
  *  watchdog 线程监控主线程冻结导致的ANR

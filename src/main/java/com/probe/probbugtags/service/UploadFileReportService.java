@@ -1,10 +1,10 @@
-package com.csmijo.probbugtags.service;
+package com.probe.probbugtags.service;
 
 import android.content.Context;
 import android.content.Intent;
 
-import com.csmijo.probbugtags.utils.Constants;
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.Constants;
+import com.probe.probbugtags.utils.Logger;
 
 
 

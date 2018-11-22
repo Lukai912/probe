@@ -11,7 +11,7 @@
  * @filesource
  * @since Version 0.1
  */
-package com.csmijo.probbugtags.baseData;
+package com.probe.probbugtags.baseData;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -37,8 +37,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
-import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.CommonUtil;
+import com.probe.probbugtags.utils.Logger;
 
 import java.io.File;
 import java.net.InetAddress;

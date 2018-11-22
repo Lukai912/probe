@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.bean;
+package com.probe.probbugtags.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;

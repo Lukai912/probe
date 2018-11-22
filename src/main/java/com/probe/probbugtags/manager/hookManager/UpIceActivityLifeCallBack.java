@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.manager.hookManager;
+package com.probe.probbugtags.manager.hookManager;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.utils;
+package com.probe.probbugtags.utils;
 
 import java.io.BufferedInputStream;
 import java.io.File;

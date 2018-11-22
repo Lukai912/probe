@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.csmijo.probbugtags.http;
+package com.probe.probbugtags.http;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.csmijo.probbugtags.BuildConfig;
-import com.csmijo.probbugtags.utils.IOUtils;
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.BuildConfig;
+import com.probe.probbugtags.utils.IOUtils;
+import com.probe.probbugtags.utils.Logger;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;

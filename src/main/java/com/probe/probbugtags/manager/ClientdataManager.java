@@ -11,14 +11,14 @@
  * @since       Version 0.1
  * @filesource 
  */
-package com.csmijo.probbugtags.manager;
+package com.probe.probbugtags.manager;
 
 import android.content.Context;
 
-import com.csmijo.probbugtags.baseData.AppInfo;
-import com.csmijo.probbugtags.baseData.DeviceInfo;
-import com.csmijo.probbugtags.performance.GetMemory;
-import com.csmijo.probbugtags.utils.CommonUtil;
+import com.probe.probbugtags.baseData.AppInfo;
+import com.probe.probbugtags.baseData.DeviceInfo;
+import com.probe.probbugtags.performance.GetMemory;
+import com.probe.probbugtags.utils.CommonUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;

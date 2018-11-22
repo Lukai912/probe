@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.manager.hookManager;
+package com.probe.probbugtags.manager.hookManager;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -12,7 +12,7 @@
  * @since Version 0.1
  */
 
-package com.csmijo.probbugtags;
+package com.probe.probbugtags;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,20 +20,20 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.HandlerThread;
 
-import com.csmijo.probbugtags.baseData.AppInfo;
-import com.csmijo.probbugtags.baseData.DeviceInfo;
-import com.csmijo.probbugtags.manager.ClientdataManager;
-import com.csmijo.probbugtags.manager.ConfigManager;
-import com.csmijo.probbugtags.manager.MyCrashHandler;
-import com.csmijo.probbugtags.manager.UploadHistoryLog;
-import com.csmijo.probbugtags.manager.UploadLeakDumpHistory;
-import com.csmijo.probbugtags.manager.UsinglogManager;
-import com.csmijo.probbugtags.service.UploadCommonReortService;
-import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.Constants;
-import com.csmijo.probbugtags.utils.IOUtils;
-import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.SharedPrefUtil;
+import com.probe.probbugtags.baseData.AppInfo;
+import com.probe.probbugtags.baseData.DeviceInfo;
+import com.probe.probbugtags.manager.ClientdataManager;
+import com.probe.probbugtags.manager.ConfigManager;
+import com.probe.probbugtags.manager.MyCrashHandler;
+import com.probe.probbugtags.manager.UploadHistoryLog;
+import com.probe.probbugtags.manager.UploadLeakDumpHistory;
+import com.probe.probbugtags.manager.UsinglogManager;
+import com.probe.probbugtags.service.UploadCommonReortService;
+import com.probe.probbugtags.utils.CommonUtil;
+import com.probe.probbugtags.utils.Constants;
+import com.probe.probbugtags.utils.IOUtils;
+import com.probe.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;

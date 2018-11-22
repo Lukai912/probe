@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.utils;
+package com.probe.probbugtags.utils;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -17,7 +17,7 @@ public class SharedPrefUtil {
             return;
         }
         ContentResolver resolver = context.getContentResolver();
-        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
+        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.probe.datacontentprovider/info");
         ContentValues values = new ContentValues();
         values.put(key, value);
 
@@ -50,7 +50,7 @@ public class SharedPrefUtil {
             return;
         }
         ContentResolver resolver = context.getContentResolver();
-        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
+        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.probe.datacontentprovider/info");
 
         ContentValues values = new ContentValues();
         values.put(key, value);
@@ -81,7 +81,7 @@ public class SharedPrefUtil {
             return;
         }
         ContentResolver resolver = context.getContentResolver();
-        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
+        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.probe.datacontentprovider/info");
         int insertValue = 0;
         if (value) {
             insertValue = 1;
@@ -117,7 +117,7 @@ public class SharedPrefUtil {
             return 0;
         }
         ContentResolver resolver = context.getContentResolver();
-        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
+        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.probe.datacontentprovider/info");
         Logger.i("sharedPrefUtil", "getValue");
         Cursor cursor = resolver.query(uri, new String[]{key}, key + " IS NOT NULL", null, "id desc");
         long value = defaultValue;
@@ -138,7 +138,7 @@ public class SharedPrefUtil {
             return "";
         }
         ContentResolver resolver = context.getContentResolver();
-        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
+        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.probe.datacontentprovider/info");
         Logger.i("sharedPrefUtil", "getValue");
         Cursor cursor = resolver.query(uri, new String[]{key}, key + " IS NOT NULL", null, "id desc");
         String value = defaultValue;
@@ -159,7 +159,7 @@ public class SharedPrefUtil {
             return false;
         }
         ContentResolver resolver = context.getContentResolver();
-        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
+        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.probe.datacontentprovider/info");
         Cursor cursor = resolver.query(uri, new String[]{key}, key + " IS NOT NULL", null, "id desc");
         boolean value = defaultValue;
         if (cursor != null) {
@@ -184,7 +184,7 @@ public class SharedPrefUtil {
             return;
         }
         ContentResolver resolver = context.getContentResolver();
-        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
+        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.probe.datacontentprovider/info");
 
         resolver.delete(uri, key, null);
     }
@@ -194,7 +194,7 @@ public class SharedPrefUtil {
             return;
         }
         ContentResolver resolver = context.getContentResolver();
-        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.csmijo.datacontentprovider/info");
+        Uri uri = Uri.parse("content://"+context.getPackageName() + ".com.probe.datacontentprovider/info");
 
         resolver.delete(uri, null, null);
     }

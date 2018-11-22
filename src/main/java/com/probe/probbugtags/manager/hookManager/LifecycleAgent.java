@@ -1,14 +1,15 @@
-package com.csmijo.probbugtags.manager.hookManager;
+package com.probe.probbugtags.manager.hookManager;
 
 import android.app.Activity;
 import android.app.Application;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.BugTagAgentReal;
-import com.csmijo.probbugtags.service.LeakService;
-import com.csmijo.probbugtags.utils.Logger;
+
+import com.probe.probbugtags.ApplicationInit;
+import com.probe.probbugtags.BugTagAgentReal;
+import com.probe.probbugtags.service.LeakService;
+import com.probe.probbugtags.utils.Logger;
 import com.squareup.leakcanary.AndroidExcludedRefs;
 import com.squareup.leakcanary.ExcludedRefs;
 import com.squareup.leakcanary.LeakCanary;

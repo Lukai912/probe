@@ -1,15 +1,15 @@
-package com.csmijo.probbugtags.service;
+package com.probe.probbugtags.service;
 
 import android.app.IntentService;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 
-import com.csmijo.probbugtags.http.CallbackListner;
-import com.csmijo.probbugtags.http.HttpConfig;
-import com.csmijo.probbugtags.http.HttpSender;
-import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.http.CallbackListner;
+import com.probe.probbugtags.http.HttpConfig;
+import com.probe.probbugtags.http.HttpSender;
+import com.probe.probbugtags.utils.CommonUtil;
+import com.probe.probbugtags.utils.Logger;
 
 import org.json.JSONException;
 import org.json.JSONObject;

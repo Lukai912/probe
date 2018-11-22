@@ -1,12 +1,12 @@
-package com.csmijo.probbugtags.manager;
+package com.probe.probbugtags.manager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.csmijo.probbugtags.service.UploadFileReportService;
-import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.service.UploadFileReportService;
+import com.probe.probbugtags.utils.CommonUtil;
+import com.probe.probbugtags.utils.Logger;
 import com.squareup.leakcanary.DefaultLeakDirectoryProvider;
 
 import java.io.File;

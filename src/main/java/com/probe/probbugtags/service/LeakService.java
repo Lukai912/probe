@@ -1,18 +1,18 @@
-package com.csmijo.probbugtags.service;
+package com.probe.probbugtags.service;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.util.Log;
 
-import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.BugTagAgentReal;
-import com.csmijo.probbugtags.baseData.AppInfo;
-import com.csmijo.probbugtags.manager.ClientdataManager;
-import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.IOUtils;
-import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.ZipCompress;
+import com.probe.probbugtags.ApplicationInit;
+import com.probe.probbugtags.BugTagAgentReal;
+import com.probe.probbugtags.baseData.AppInfo;
+import com.probe.probbugtags.manager.ClientdataManager;
+import com.probe.probbugtags.utils.CommonUtil;
+import com.probe.probbugtags.utils.IOUtils;
+import com.probe.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.ZipCompress;
 import com.squareup.leakcanary.AnalysisResult;
 import com.squareup.leakcanary.DisplayLeakService;
 import com.squareup.leakcanary.HeapDump;

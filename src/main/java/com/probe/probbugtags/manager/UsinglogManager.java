@@ -12,19 +12,19 @@
  * @since Version 0.1
  */
 
-package com.csmijo.probbugtags.manager;
+package com.probe.probbugtags.manager;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
-import com.csmijo.probbugtags.ApplicationInit;
-import com.csmijo.probbugtags.BugTagAgentReal;
-import com.csmijo.probbugtags.baseData.AppInfo;
-import com.csmijo.probbugtags.service.UploadCommonReortService;
-import com.csmijo.probbugtags.utils.CommonUtil;
-import com.csmijo.probbugtags.utils.Logger;
-import com.csmijo.probbugtags.utils.SharedPrefUtil;
+import com.probe.probbugtags.ApplicationInit;
+import com.probe.probbugtags.BugTagAgentReal;
+import com.probe.probbugtags.baseData.AppInfo;
+import com.probe.probbugtags.service.UploadCommonReortService;
+import com.probe.probbugtags.utils.CommonUtil;
+import com.probe.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.SharedPrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;

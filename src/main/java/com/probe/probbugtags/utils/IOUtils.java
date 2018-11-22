@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.utils;
+package com.probe.probbugtags.utils;
 
 /**
  * Created by chengqianqian-xy on 2016/10/14.
@@ -9,7 +9,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import com.android.internal.util.Predicate;
-import com.csmijo.probbugtags.collector.BoundedLinkedList;
+import com.probe.probbugtags.collector.BoundedLinkedList;
 
 import java.io.BufferedReader;
 import java.io.Closeable;

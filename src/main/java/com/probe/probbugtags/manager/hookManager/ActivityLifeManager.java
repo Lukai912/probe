@@ -1,9 +1,9 @@
-package com.csmijo.probbugtags.manager.hookManager;
+package com.probe.probbugtags.manager.hookManager;
 
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

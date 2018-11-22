@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.csmijo.probbugtags">
+          package="com.probe.probbugtags">
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -29,8 +29,8 @@
         <service android:name=".service.UploadCommonReortService" />
 
         <provider
-            android:name="com.csmijo.probbugtags.utils.DataContentProvider"
-            android:authorities="${applicationId}.com.csmijo.datacontentprovider"
+            android:name="com.probe.probbugtags.utils.DataContentProvider"
+            android:authorities="${applicationId}.com.probe.datacontentprovider"
             android:enabled="true"
             android:exported="true"/>
     </application>

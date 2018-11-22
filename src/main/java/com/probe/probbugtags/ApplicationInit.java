@@ -1,11 +1,11 @@
-package com.csmijo.probbugtags;
+package com.probe.probbugtags;
 
 import android.app.Activity;
 import android.app.Application;
 
-import com.csmijo.probbugtags.manager.ActivityCrumbsManager;
-import com.csmijo.probbugtags.manager.hookManager.LifecycleAgent;
-import com.csmijo.probbugtags.utils.Constants;
+import com.probe.probbugtags.manager.ActivityCrumbsManager;
+import com.probe.probbugtags.manager.hookManager.LifecycleAgent;
+import com.probe.probbugtags.utils.Constants;
 
 import java.io.FileInputStream;
 import java.io.IOException;

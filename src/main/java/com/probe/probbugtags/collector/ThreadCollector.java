@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.collector;
+package com.probe.probbugtags.collector;
 
 import android.support.annotation.Nullable;
 

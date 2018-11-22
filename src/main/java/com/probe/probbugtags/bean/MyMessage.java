@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.bean;
+package com.probe.probbugtags.bean;
 
 /**
  * Created by chengqianqian-xy on 2016/7/4.

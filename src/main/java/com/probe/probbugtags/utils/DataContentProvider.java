@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.utils;
+package com.probe.probbugtags.utils;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -17,7 +17,7 @@ public class DataContentProvider extends ContentProvider {
 
     DBHelper mDBHelper;
 
-    public static final String AUTHORITY = "com.csmijo.datacontentprovider";
+    public static final String AUTHORITY = "com.probe.datacontentprovider";
 
     private static UriMatcher uriMatcher;
 
@@ -119,9 +119,9 @@ public class DataContentProvider extends ContentProvider {
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)) {
             case INFO_DIR:
-                return "vnd.android.cursor.dir/vnd.com.csmijo.datacontentprovider.info";
+                return "vnd.android.cursor.dir/vnd.com.probe.datacontentprovider.info";
             case INFO_ITEM:
-                return "vnd.android.cursor.item/vnd.com.csmijo.datacontentprovider.info";
+                return "vnd.android.cursor.item/vnd.com.probe.datacontentprovider.info";
         }
         return null;
     }

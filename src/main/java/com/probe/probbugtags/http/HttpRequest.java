@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.csmijo.probbugtags.http;
+package com.probe.probbugtags.http;
 
 import android.support.annotation.NonNull;
 

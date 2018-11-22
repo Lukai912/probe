@@ -1,6 +1,6 @@
-package com.csmijo.probbugtags.utils;
+package com.probe.probbugtags.utils;
 
-import com.csmijo.probbugtags.baseData.AppInfo;
+import com.probe.probbugtags.baseData.AppInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;

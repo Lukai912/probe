@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags;
+package com.probe.probbugtags;
 
 import android.app.Activity;
 

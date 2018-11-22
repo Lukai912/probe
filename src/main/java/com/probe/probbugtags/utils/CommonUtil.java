@@ -1,4 +1,4 @@
-package com.csmijo.probbugtags.utils;
+package com.probe.probbugtags.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -14,9 +14,9 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.telephony.TelephonyManager;
 
-import com.csmijo.probbugtags.BugTagAgentReal;
-import com.csmijo.probbugtags.baseData.AppInfo;
-import com.csmijo.probbugtags.baseData.DeviceInfo;
+import com.probe.probbugtags.BugTagAgentReal;
+import com.probe.probbugtags.baseData.AppInfo;
+import com.probe.probbugtags.baseData.DeviceInfo;
 
 import org.json.JSONArray;
 import org.json.JSONException;

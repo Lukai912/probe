@@ -12,7 +12,7 @@
  * @filesource 
  */
 
-package com.csmijo.probbugtags.baseData;
+package com.probe.probbugtags.baseData;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -20,7 +20,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 
-import com.csmijo.probbugtags.utils.Logger;
+import com.probe.probbugtags.utils.Logger;
 
 public class AppInfo {
 
