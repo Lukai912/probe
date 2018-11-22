@@ -1,3 +1,4 @@
+
 build/  
 .gradle/  
 */build/  
@@ -81,4 +82,4 @@ out
   
 build.xml  
   
-proguard-project.txt  
+proguard-project.txt
