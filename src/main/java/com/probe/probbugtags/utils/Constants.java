@@ -72,5 +72,4 @@ public class Constants {
     public static String cacheUrlExt = "ums/uploadLog/";
     public static String leackCanaryUrlExt = "ums/postLeakcanryLog";
     public static String configUrlExt = "ums/getOnlineConfiguration";
-
 }

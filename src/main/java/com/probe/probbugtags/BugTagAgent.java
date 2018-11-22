@@ -8,6 +8,7 @@ import android.app.Activity;
 
 public class BugTagAgent {
 
+
     public static void onResume(Activity activity) {
 
     }

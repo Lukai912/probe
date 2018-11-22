@@ -2,12 +2,10 @@ package com.csmijo.probbugtags;
 
 import android.app.Activity;
 import android.app.Application;
-import android.util.Log;
 
 import com.csmijo.probbugtags.manager.ActivityCrumbsManager;
 import com.csmijo.probbugtags.manager.hookManager.LifecycleAgent;
 import com.csmijo.probbugtags.utils.Constants;
-import com.csmijo.probbugtags.utils.Logger;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -30,14 +28,13 @@ public class ApplicationInit {
 
 //                BugTagAgentReal.startPerformService(mApplication.getApplicationContext());
 //                BugTagAgentReal.startBugTagFab(mApplication.getApplicationContext());
+
             }
 
             BugTagAgentReal.init(mApplication.getApplicationContext());
             LifecycleAgent.init(mApplication);
         }
-
     }
-
     /**
      * 返回当前的进程名
      *
