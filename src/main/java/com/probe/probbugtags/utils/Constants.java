@@ -62,7 +62,7 @@ public class Constants {
     //Server URL prefix
     //for debug
    // public static String urlPrefix = "http://10.16.12.45/tanzhen_client/";
-    public static String urlPrefix = "http://42.236.102.84/";
+    public static String urlPrefix = "http://106.75.13.156:8082/";
     //public static String urlPrefix = "http://10.18.61.46:8080/";
     //for release
 //    public static String urlPrefix = "http://211.151.122.244:80/";

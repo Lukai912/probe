@@ -33,7 +33,6 @@ public class ConfigManager {
 	}
 
 	JSONObject prepareConfigJSON() throws JSONException {
-		AppInfo.init(this.context);
 		JSONObject jsonConfig = new JSONObject();
 		jsonConfig.put("appkey", AppInfo.getAppKey());
 		return jsonConfig;

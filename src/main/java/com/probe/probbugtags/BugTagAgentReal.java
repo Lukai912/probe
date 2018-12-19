@@ -62,9 +62,9 @@ public class BugTagAgentReal implements AnrInspector.ANRListener {
 
     }
 
-    public static void init(final Context context) {
+    public static void init(final Context context, String key) {
         mContext = context.getApplicationContext();
-        AppInfo.init(mContext);
+        AppInfo.init(mContext, key);
         DeviceInfo.init(mContext);
         BugTagAgentReal.onError(mContext);
         anrCollector.execute(new AnrInspector().setANRListener(new BugTagAgentReal()));

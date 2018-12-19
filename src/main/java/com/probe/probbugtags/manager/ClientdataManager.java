@@ -65,7 +65,10 @@ public class ClientdataManager {
 		// package info
 		jsonClientdata.put("versionCode", AppInfo.getAppVersionCode());
 		jsonClientdata.put("sdk_version", AppInfo.getSdkVersion());
-
+		jsonClientdata.put("buildId",AppInfo.getBuildId());
+		jsonClientdata.put("buildDes",AppInfo.getBuildDes());
+		jsonClientdata.put("submitId",AppInfo.getSubmitId());
+		jsonClientdata.put("buildTag",AppInfo.getBuildTag());
 		
 	/*	if (Constants.mProvideGPSData) {
 			jsonClientdata.put("latitude", DeviceInfo.getLatitude());

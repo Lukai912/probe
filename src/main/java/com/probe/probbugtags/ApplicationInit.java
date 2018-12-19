@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class ApplicationInit {
 
-    public static void onCreateInit(Application mApplication) {
+    public static void onCreateInit(Application mApplication,String key) {
 
         String processName = getCurrentProcessName();
 
@@ -25,14 +25,13 @@ public class ApplicationInit {
                 BugTagAgentReal.setDebugLevel(Constants.Verbose);
                 BugTagAgentReal.updateOnlineConfig(mApplication.getApplicationContext());
                 BugTagAgentReal.postOnInit(mApplication.getApplicationContext());
-
 //                BugTagAgentReal.startPerformService(mApplication.getApplicationContext());
 //                BugTagAgentReal.startBugTagFab(mApplication.getApplicationContext());
 
             }
 
-            BugTagAgentReal.init(mApplication.getApplicationContext());
-            LifecycleAgent.init(mApplication);
+            BugTagAgentReal.init(mApplication.getApplicationContext(),key);
+            //LifecycleAgent.init(mApplication);
         }
     }
     /**

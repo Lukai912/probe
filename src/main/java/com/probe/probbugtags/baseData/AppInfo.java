@@ -22,38 +22,30 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.probe.probbugtags.utils.Logger;
 
+import java.lang.reflect.Field;
+
 public class AppInfo {
 
 	private static Context context;
+	private static String APP_KEY="";
 	private static final String TAG = "AppInfo";
 	private static final String UMS_APPKEY = "UMS_APPKEY";
 	private static final String SDK_VERSION = "1.0";
 
-	public static void init(Context context) {
+	public static void init(Context context,String key) {
 		AppInfo.context = context;
+		AppInfo.APP_KEY = key;
 	}
 
 	public static String getSdkVersion() {
 		return SDK_VERSION;
 	}
 	public static String getAppKey() {
-		String umsAppkey = "";
-		try {
-			PackageManager pm = context.getPackageManager();
-			ApplicationInfo ai = pm.getApplicationInfo(
-					context.getPackageName(), PackageManager.GET_META_DATA);
-			if (ai != null) {
-				umsAppkey = ai.metaData.getString(UMS_APPKEY);
-				if (umsAppkey == null)
-					Logger.e(TAG,
-							"Could not read UMS_APPKEY meta-data from AndroidManifest.xml.");
-			}
-		} catch (Exception e) {
+		if(APP_KEY.isEmpty()){
 			Logger.e(TAG,
 					"Could not read UMS_APPKEY meta-data from AndroidManifest.xml.");
-			Logger.e(TAG, e);
 		}
-		return umsAppkey;
+		return APP_KEY;
 	}
 
 	public static String getAppVersion() {
@@ -82,5 +74,32 @@ public class AppInfo {
 			e.printStackTrace();
 		}
 		return versionCode;
+	}
+	private static String getBuildConfigValue(String fieldName) {
+		String tmp = "null";
+		try {
+			Class<?> clazz = Class.forName(context.getPackageName() + ".BuildConfig");
+			Field field = clazz.getField(fieldName);
+			tmp = (String)field.get(null);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return tmp;
+	}
+	public static String getBuildTag(){
+		return getBuildConfigValue("buildTag");
+	}
+	public static String getBuildId(){
+		return getBuildConfigValue("buildId");
+	}
+	public static String getBuildDes(){
+		return getBuildConfigValue("buildDes");
+	}
+	public static String getSubmitId(){
+		return getBuildConfigValue("submitId");
 	}
 }
