@@ -32,9 +32,10 @@ android {
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:+'
     compile files('libs/haha.jar')
 }
+apply plugin: 'com.github.dcendents.android-maven'
+
 
 buildscript {
     repositories {
@@ -50,5 +51,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }
