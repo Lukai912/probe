@@ -31,7 +31,7 @@ public class ApplicationInit {
             }
 
             BugTagAgentReal.init(mApplication.getApplicationContext(),key);
-            //LifecycleAgent.init(mApplication);
+            LifecycleAgent.init(mApplication);
         }
     }
     /**
