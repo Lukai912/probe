@@ -33,26 +33,8 @@ public final class ActivityRefWatcher {
     new ActivityRefWatcher(application, refWatcher).watchActivities();
   }
 
-  private final Application.ActivityLifecycleCallbacks lifecycleCallbacks =
-      new Application.ActivityLifecycleCallbacks() {
-        @Override public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-        }
-
-        @Override public void onActivityStarted(Activity activity) {
-        }
-
-        @Override public void onActivityResumed(Activity activity) {
-        }
-
-        @Override public void onActivityPaused(Activity activity) {
-        }
-
-        @Override public void onActivityStopped(Activity activity) {
-        }
-
-        @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
-        }
-
+  private final ActivityLifecycleCallbacksAdapter lifecycleCallbacks =
+      new ActivityLifecycleCallbacksAdapter() {
         @Override public void onActivityDestroyed(Activity activity) {
           ActivityRefWatcher.this.onActivityDestroyed(activity);
         }
