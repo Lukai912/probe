@@ -19,6 +19,8 @@ public class ApplicationInit {
         if (null != processName) {
             boolean defaultProcess = processName.equalsIgnoreCase(mApplication
                     .getPackageName());
+            BugTagAgentReal.init(mApplication.getApplicationContext(),key);
+            LifecycleAgent.init(mApplication);
             if (defaultProcess) {
 
                 BugTagAgentReal.setDebugEnabled(true);
@@ -29,9 +31,6 @@ public class ApplicationInit {
 //                BugTagAgentReal.startBugTagFab(mApplication.getApplicationContext());
 
             }
-
-            BugTagAgentReal.init(mApplication.getApplicationContext(),key);
-            LifecycleAgent.init(mApplication);
         }
     }
     /**

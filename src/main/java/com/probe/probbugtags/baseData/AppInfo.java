@@ -29,7 +29,6 @@ public class AppInfo {
 	private static Context context;
 	private static String APP_KEY="";
 	private static final String TAG = "AppInfo";
-	private static final String UMS_APPKEY = "UMS_APPKEY";
 	private static final String SDK_VERSION = "1.0";
 
 	public static void init(Context context,String key) {
