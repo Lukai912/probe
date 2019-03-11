@@ -16,7 +16,7 @@ public interface FragmentRefWatcher {
     final class Helper {
 
         private static final String SUPPORT_FRAGMENT_REF_WATCHER_CLASS_NAME =
-                "com.squareup.leakcanary.internal.SupportFragmentRefWatcher";
+                "com.squareup.leakcanary.SupportFragmentRefWatcher";
 
         public static void install(Context context, RefWatcher refWatcher) {
             List<FragmentRefWatcher> fragmentRefWatchers = new ArrayList<>();
