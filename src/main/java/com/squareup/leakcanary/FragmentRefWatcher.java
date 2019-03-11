@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -35,6 +36,7 @@ public interface FragmentRefWatcher {
             }
 
             if (fragmentRefWatchers.size() == 0) {
+                Log.d("probe","fragmentRefWatchers=0");
                 return;
             }
 

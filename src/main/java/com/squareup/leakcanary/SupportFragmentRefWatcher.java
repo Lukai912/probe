@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.View;
 
 public class SupportFragmentRefWatcher implements FragmentRefWatcher {
@@ -18,11 +19,13 @@ public class SupportFragmentRefWatcher implements FragmentRefWatcher {
                 @Override public void onFragmentViewDestroyed(FragmentManager fm, Fragment fragment) {
                     View view = fragment.getView();
                     if (view != null) {
+                        Log.d("probe","viewDestroyWatch:"+fragment.getClass().getName());
                         refWatcher.watch(view);
                     }
                 }
 
                 @Override public void onFragmentDestroyed(FragmentManager fm, Fragment fragment) {
+                    Log.d("probe","fragmentDesWatch:"+fragment.getClass().getName());
                     refWatcher.watch(fragment);
                 }
             };
