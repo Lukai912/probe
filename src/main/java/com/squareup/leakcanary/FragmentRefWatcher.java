@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -32,9 +33,11 @@ public interface FragmentRefWatcher {
                         (FragmentRefWatcher) constructor.newInstance(refWatcher);
                 fragmentRefWatchers.add(supportFragmentRefWatcher);
             } catch (Exception ignored) {
+                ignored.printStackTrace();
             }
 
             if (fragmentRefWatchers.size() == 0) {
+                Log.e("probe","fragmentRefWatchers=0");
                 return;
             }
 
@@ -47,6 +50,7 @@ public interface FragmentRefWatcher {
         private final Application.ActivityLifecycleCallbacks activityLifecycleCallbacks =
                 new ActivityLifecycleCallbacksAdapter() {
                     @Override public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                        Log.d("probe","fragment");
                         for (FragmentRefWatcher watcher : fragmentRefWatchers) {
                             watcher.watchFragments(activity);
                         }
