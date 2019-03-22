@@ -6,7 +6,6 @@ package com.probe.probbugtags;
  */
 
 import android.os.Looper;
-import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.io.PrintWriter;
@@ -108,7 +107,7 @@ public class ANRError extends Error {
     }
 
     //获取当前线程调用堆栈
-    public String getStackTrace(@Nullable String msg, @Nullable Throwable th) {
+    public String getStackTrace(String msg, Throwable th) {
         final Writer result = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(result);
 
