@@ -86,7 +86,7 @@ public abstract class AbstractUploadReportService extends IntentService {
                 try {
                     JSONObject resObject = new JSONObject(responseBody);
                     int errno = resObject.getInt("errno");
-                    //增加服务端返回值判断，服务端处理异常要保留本地cache
+                    //增加服务端返回值判断，服务端处理异常要保 留本地cache
                     if (errno == 0) {
                         logFile.delete();
 
